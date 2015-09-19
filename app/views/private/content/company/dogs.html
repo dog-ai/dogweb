@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<div id="dogs-view">
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <form role="form">
+        <p class="form-group">
+          <label>Last seen:</label>
+          <br/><span am-time-ago="dog.last_seen_date"></span>
+
+        </p>
+
+        <p class="form-group">
+          <label>Timezone:</label>
+          <br/>{{dog.timezone}}
+        </p>
+      </form>
+
+    </div>
+  </div>
+
+</div>

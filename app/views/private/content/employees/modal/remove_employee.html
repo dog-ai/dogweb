@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<form role="form">
+  <div class="modal-header">
+    <h4 class="modal-title">Are you sure?</h4>
+  </div>
+
+  <div class="modal-body">
+    <p>Are you sure you want to remove {{employee.full_name}}?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+    <button type="button" class="btn btn-danger" ng-click="removeEmployee(employee)">Yes, I am sure!</button>
+  </div>
+</form>

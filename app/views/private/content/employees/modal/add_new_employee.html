@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<form role="form">
+  <div class="modal-header">
+    <h4 class="modal-title">Add new employee</h4>
+  </div>
+
+  <div class="modal-body">
+    <p class="form-group">
+      <label>Name</label>
+      <input type="text" name="name" ng-model="employee.full_name" class="form-control"/>
+    </p>
+
+    <p class="form-group">
+      <label>Picture URL</label>
+      <input type="text" name="name" ng-model="employee.picture_url" class="form-control"/>
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+    <button type="button" class="btn btn-primary" ng-click="addNewEmployee(employee)">Yes, add</button>
+  </div>
+</form>

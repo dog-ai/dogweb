@@ -1,0 +1,109 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<div ng-hide="devices.length">
+  <form name="newDeviceForm" role="form">
+
+    <wizard name="add_new_device_to_employee" hide-indicators="true"
+            on-finish="addNewDeviceToEmployee(device, employee)">
+      <wz-step title="step1">
+        <div class="modal-header">
+          <h4 class="modal-title">No available devices for {{employee.full_name.split(' ')[0]}}</h4>
+        </div>
+
+        <div class="modal-body">
+          <p>Fortunately, there are new devices that can be added. Continue to add a new device.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+          <a type="button" class="btn btn-primary" wz-next>Yes, continue</a>
+        </div>
+      </wz-step>
+      <wz-step title="step2" canexit="validateNewDevice(device)">
+        <div class="modal-header">
+          <h4 class="modal-title">Add new device to {{employee.full_name.split(' ')[0]}}</h4>
+        </div>
+
+        <div class="modal-body">
+          <p class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" ng-model="device.name"
+                   ng-init="newDevice.name=employee.full_name.split(' ')[0] + '\'s device'" class="form-control"
+                   required/>
+          </p>
+
+          <p class="form-group">
+            <label>MAC address</label><br/>
+            <select name="macAddresses" ng-model="device.mac_addresses" multiple
+                    ng-options="mac_address.$id as mac_address.address group by mac_address.vendor for mac_address in mac_addresses"
+                    required/>
+          </p>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+          <button type="button" class="btn btn-default" wz-previous>Go back</button>
+          <button type="button" class="btn btn-primary" wz-next>Continue</button>
+        </div>
+      </wz-step>
+      <wz-step title="step3">
+        <div class="modal-header">
+          <h4 class="modal-title">Add new device to {{employee.full_name.split(' ')[0]}}</h4>
+        </div>
+
+        <div class="modal-body">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+          <button type="button" class="btn btn-default" wz-previous>No, go back</button>
+          <button type="button" class="btn btn-primary" wz-finish>Yes, add new device</button>
+        </div>
+      </wz-step>
+    </wizard>
+  </form>
+</div>
+
+<div ng-show="devices.length">
+  <form name="deviceForm" role="form">
+    <wizard name="add_device_to_employee" hide-indicators="true">
+      <wz-step title="step1" canexit="validateDevice(device.existingDevice)">
+        <div class="modal-header">
+          <h4 class="modal-title">Select a device to add to {{employee.full_name.split(' ')[0]}}</h4>
+        </div>
+
+        <div class="modal-body">
+          <p class="form-group">
+            <label>Devices</label><br/>
+            <select name="device" ng-model="device.existingDevice"
+                    ng-options="device as device.name for device in devices" required/>
+          </p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+          <a type="button" class="btn btn-primary" wz-next>Yes, continue</a>
+        </div>
+      </wz-step>
+      <wz-step title="step2">
+        <div class="modal-header">
+          <h4 class="modal-title">Add device to {{employee.full_name.split(' ')[0]}}</h4>
+        </div>
+
+        <div class="modal-body">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+          <button type="button" class="btn btn-default" wz-previous>No, go back</button>
+          <button type="button" class="btn btn-primary" ng-click="addDeviceToEmployee(device.existingDevice, employee)"
+                  wz-finish>Yes, add device
+          </button>
+        </div>
+      </wz-step>
+    </wizard>
+  </form>
+</div>

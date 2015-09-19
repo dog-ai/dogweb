@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<div id="employees-view">
+
+  <div class="row">
+
+    <div class="col-md-2">
+      <button class="btn btn-primary btn-block" ng-click="openAddNewEmployeeModal()">Add employee</button>
+    </div>
+
+    <div class="col-md-2" ng-repeat-start="employee in employees">
+      <div class="thumbnail">
+
+        <div class="btn-group pull-right" dropdown>
+          <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
+            <span class="glyphicon glyphicon-cog"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+            <li role="menuitem"><a href="" ng-click="openRemoveDeviceFromEmployeeModal(employee)"><span
+              class="glyphicon glyphicon-trash"></span> Remove</a></li>
+          </ul>
+        </div>
+
+        <a href="#/employees/{{employee.$id}}">
+          <img ng-src="{{employee.picture_url}}" alt="{{employee.full_name}}" class="img-circle" width="160"
+               height="160"/>
+
+          <div class="caption">
+            <h3>{{employee.full_name}}</h3>
+
+            <p>{{employee.is_present ? 'Online' : 'Offline'}}</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="clearfix" ng-if="$index == 4 || ($index != 5 && $index % 6 == 5)"></div>
+    <div ng-repeat-end=""></div>
+
+  </div>
+
+</div>

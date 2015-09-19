@@ -1,0 +1,72 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<div id="signin-view">
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="col-md-2 col-md-offset-3">
+        <fieldset>
+          <legend>OAuth</legend>
+          <ul class="list-unstyled">
+            <li>
+              <button class="btn btn-primary" ng-click="anonymousLogin()" disabled="disabled">Anonymous</button>
+            </li>
+            <li>
+              <button class="btn btn-primary" ng-click="oauthLogin('facebook')" disabled="disabled">Facebook</button>
+            </li>
+            <li>
+              <button class="btn btn-primary" ng-click="oauthLogin('google')" disabled="disabled">Google</button>
+            </li>
+            <li>
+              <button class="btn btn-primary" ng-click="oauthLogin('twitter')" disabled="disabled">Twitter</button>
+            </li>
+            <li>
+              <button class="btn btn-primary" ng-click="oauthLogin('github')" disabled="disabled">GitHub</button>
+            </li>
+          </ul>
+        </fieldset>
+      </div>
+
+      <div class="col-md-1 text-center">
+        <p>or</p>
+      </div>
+
+      <div class="col-md-3">
+        <legend>Account</legend>
+        <form role="form" novalidate>
+          <p class="form-group">
+            <label for="loginEmail">E-mail</label>
+            <input id="loginEmail" required name="email" type="email" ng-model="email" class="form-control"/>
+          </p>
+
+          <p class="form-group">
+            <label for="loginPass">Password</label>
+            <input id="loginPass" required name="pass" type="password" ng-model="pass" class="form-control"/>
+          </p>
+
+          <p class="form-group" ng-cloak ng-show="createMode">
+            <label for="loginConfirm">confirm pass</label>
+            <input id="loginConfirm" required name="confirm" type="password" ng-model="confirm" class="form-control"/>
+          </p>
+
+          <p>
+            <button class="btn btn-primary btn-block" ng-click="passwordLogin(email, pass)" ng-hide="createMode">Login
+            </button>
+            <!--<button  class="btn btn-default" ng-click="createMode = true" ng-hide="createMode" disabled="disabled">Register</button>
+            <button  class="btn btn-primary" ng-cloak ng-show="createMode" ng-click="createAccount(email, pass, confirm)">Create Account</button>
+            <button  class="btn btn-default" ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>-->
+          </p>
+        </form>
+        <p ng-show="err" class="bg-danger">{{err}}</p>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
