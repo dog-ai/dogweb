@@ -65,7 +65,9 @@ angular.module('dogwebApp')
 
   })
 
-  .controller('InviteUserModalController', function ($rootScope, $scope, user, company, companyInvitesRef, $q, Ref, $firebaseObject, $state, $stateParams, $timeout, $modalInstance) {
+  .controller('InviteUserModalController', function ($rootScope, $scope, user, company, companyInvitesRef, $q, Ref,
+                                                     $firebaseObject, $state, $stateParams, $timeout, $modalInstance,
+                                                     $base64, $location, sendGridService) {
 
     $scope.invite = {};
 
@@ -96,19 +98,25 @@ angular.module('dogwebApp')
     };
 
     function _createInvite(invite) {
-      return companyInvitesRef.$add(invite);
+      return companyInvitesRef.$add(invite).then(function (inviteRef) {
+        return inviteRef.key();
+      });
     }
 
     function _encodeInvite(inviteId) {
       var def = $q.defer();
 
-      var encodedInvite = "fsdfsdfds";
-
       $timeout(function () {
-        if (false) {
-          def.reject(false);
-        } else {
+        try {
+          var envelope = {
+            company: {id: company.$id},
+            invite: {id: inviteId}
+          };
+
+          var encodedInvite = encodeURIComponent($base64.encode(unescape(encodeURIComponent(JSON.stringify(envelope)))));
           def.resolve(encodedInvite);
+        } catch (error) {
+          def.reject(error);
         }
       });
 
@@ -122,6 +130,24 @@ angular.module('dogwebApp')
         if (false) {
           def.reject(error);
         } else {
+
+          var url = $location.protocol() + "://" +
+            $location.host() + ":" +
+            ($location.port() == 80 ? '' : $location.port()) +
+            '/#/signup?envelope=' +
+            encodedInvite;
+
+          console.log(url);
+
+          /*sendGridService.$send(
+           'dogweb',
+           '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',
+           user.email_address,
+           user.full_name,
+           user.full_name + ' sent you an invite for joining ' + company.name,
+           'Click here: ' + url,
+           'noreply@dog.ai');*/
+
           def.resolve();
         }
       });

@@ -27,5 +27,7 @@ angular.module('dogwebApp', [
   'ui.router',
   'ui.bootstrap',
   'mgo-angular-wizard',
-  'gridshore.c3js.chart'
+  'gridshore.c3js.chart',
+  'base64',
+  'dcbImgFallback'
 ]);

@@ -11,10 +11,15 @@
  * Manages authentication to any active providers.
  */
 angular.module('dogwebApp')
-  .controller('SignUpController', function ($scope, Auth, $location, $q, Ref, $timeout, lodash) {
+  .controller('SignUpController', function ($scope, invite, Auth, $location, $q, Ref, $timeout, lodash) {
 
-    $scope.user = {};
-    $scope.company = {};
+    $scope.invite = invite;
+    $scope.user = {
+      email_address: invite && invite.email_address || undefined
+    };
+    $scope.company = {
+      id: invite && invite.$ref().parent().key() || undefined
+    };
 
     $scope.register = function (user, company) {
       if ($scope.form.$invalid) {
@@ -25,7 +30,12 @@ angular.module('dogwebApp')
         .then(function (userRef) {
           return _createOrRetrieveCompany(company)
             .then(function (companyRef) {
-              return _addUserToCompany(userRef, companyRef);
+              return _addUserToCompany(userRef, companyRef)
+                .then(function () {
+                  if (invite) {
+                    return _deleteCompanyInvite(companyRef, invite);
+                  }
+                });
             });
         })
         .then(_redirect, _showError);
@@ -64,8 +74,12 @@ angular.module('dogwebApp')
     function _createOrRetrieveCompany(company) {
       var def = $q.defer();
       if (company.id !== undefined) {
-        return def.resolve(Ref.child('companies/' + company.id));
+        $timeout(function () {
+          def.resolve(Ref.child('companies/' + company.id));
+        });
       } else {
+        delete company.id;
+
         var companiesRef = Ref.child('companies');
         var companyRef = companiesRef.push(company, function (error) {
           $timeout(function () {
@@ -94,12 +108,16 @@ angular.module('dogwebApp')
             }
           });
         });
-        return def.promise
+        return def.promise;
       }).then(_updateCompany);
 
       function _updateUser() {
         var def = $q.defer();
-        userRef.update({updated_date: moment().format(), company_id: companyRef.key()}, function (error) {
+
+        var data = {updated_date: moment().format(), companies: {}};
+        data.companies[companyRef.key()] = true;
+
+        userRef.update(data, function (error) {
           $timeout(function () {
             if (error) {
               def.reject(error);
@@ -114,7 +132,7 @@ angular.module('dogwebApp')
 
       function _updateCompany() {
         var def = $q.defer();
-        userRef.update({updated_date: moment().format()}, function (error) {
+        companyRef.update({updated_date: moment().format()}, function (error) {
           $timeout(function () {
             if (error) {
               def.reject(error);
@@ -126,6 +144,10 @@ angular.module('dogwebApp')
         });
         return def.promise;
       }
+    }
+
+    function _deleteCompanyInvite(companyRef, invite) {
+      return Ref.child('company_invites/' + companyRef.key() + '/' + invite.$id).remove();
     }
 
     function _redirect() {

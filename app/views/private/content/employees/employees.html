@@ -24,8 +24,10 @@
         </div>
 
         <a href="#/employees/{{employee.$id}}">
-          <img ng-src="{{employee.picture_url}}" alt="{{employee.full_name}}" class="img-circle" width="160"
-               height="160"/>
+          <img ng-src="{{employee.picture_url || '//:0'}}" fallback-src="{{'images/person.png'}}"
+               alt="{{employee.full_name}}"
+               class="img-circle"
+               width="160" height="160"/>
 
           <div class="caption">
             <h3>{{employee.full_name}}</h3>

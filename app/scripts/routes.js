@@ -17,7 +17,7 @@ angular.module('dogwebApp')
         templateUrl: "/views/public.html"
       })
       .state('public.signup', {
-        url: "/signup",
+        url: "/signup?envelope",
         views: {
           'header': {
             templateUrl: '/views/public/navigation.html'
@@ -32,6 +32,16 @@ angular.module('dogwebApp')
                     $state.go('private.content.dashboard');
                   }
                 });
+              }],
+              invite: ['$stateParams', '$base64', 'Ref', '$firebaseObject', function ($stateParams, $base64, Ref, $firebaseObject) {
+                if ($stateParams.envelope !== undefined) {
+                  try {
+                    var envelope = JSON.parse(decodeURIComponent(escape($base64.decode(decodeURIComponent($stateParams.envelope)))));
+                    return $firebaseObject(Ref.child('company_invites/' + envelope.company.id + '/' + envelope.invite.id)).$loaded();
+                  } catch (error) {
+                  }
+                }
+                return undefined;
               }]
             }
           }

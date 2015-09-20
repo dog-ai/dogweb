@@ -16,6 +16,10 @@ angular.module('dogwebApp')
     };
 
     $scope.openSwitchCompanyModal = function () {
+      if (userCompaniesRef.length <= 1) {
+        return;
+      }
+
       $modal.open({
         animation: true,
         templateUrl: 'views/private/modal/switch-company.html',

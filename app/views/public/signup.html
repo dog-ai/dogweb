@@ -21,9 +21,10 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" ng-hide="invite">
             <label for="email">E-mail <span>*</span></label>
-            <input id="email" required name="email" type="email" ng-model="user.email_address" class="form-control"/>
+            <input id="email" ng-required="!invite" name="email" type="email" ng-model="user.email_address"
+                   class="form-control"/>
 
             <div class="help-block" ng-messages="form.email.$error"
                  ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
@@ -44,9 +45,9 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" ng-hide="invite">
             <label for="companyName">Company name <span>*</span></label>
-            <input id="companyName" required name="companyName" type="text" ng-model="company.name"
+            <input id="companyName" ng-required="!invite" name="companyName" type="text" ng-model="company.name"
                    class="form-control"/>
 
             <div class="help-block" ng-messages="form.companyName.$error"
