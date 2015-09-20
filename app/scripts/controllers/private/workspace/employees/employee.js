@@ -16,7 +16,7 @@ angular.module('dogwebApp')
 
     $scope.employee = employee;
     $scope.devices = [];
-    //employee.$bindTo($scope, 'employee');
+    employee.$bindTo($scope, 'employee');
 
     devices.$watch(function (event) {
       switch (event.event) {
@@ -47,7 +47,7 @@ angular.module('dogwebApp')
     }
 
     $scope.openRemoveDeviceFromEmployeeModal = function (device, employee) {
-      var modalInstance = $modal.open({
+      $modal.open({
         animation: true,
         templateUrl: 'views/private/content/employees/modal/remove_device_from_employee.html',
         controller: 'RemoveDeviceFromEmployeeModalController',
@@ -59,15 +59,12 @@ angular.module('dogwebApp')
           },
           employee: employee
         }
-      });
-
-      modalInstance.result.then(function () {
-      }, function () {
+      }).result.finally(function () {
       });
     };
 
     $scope.openAddDeviceToEmployeeModal = function () {
-      var modalInstance = $modal.open({
+      $modal.open({
         animation: true,
         templateUrl: 'views/private/content/employees/modal/add_device_to_employee.html',
         controller: 'AddDeviceToEmployeeModalController',
@@ -86,10 +83,7 @@ angular.module('dogwebApp')
             });
           }]
         }
-      });
-
-      modalInstance.result.then(function () {
-      }, function () {
+      }).result.then(function () {
       });
     };
 
@@ -200,7 +194,7 @@ angular.module('dogwebApp')
     };
 
     $scope.cancel = function () {
-      $modalInstance.close();
+      $modalInstance.dismiss();
     };
 
     function _retrieveDevice(deviceId) {

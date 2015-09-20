@@ -1,0 +1,22 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<form name="form" role="form">
+  <div class="modal-header">
+    <h4 class="modal-title">Which company do you want to switch to?</h4>
+  </div>
+
+  <div class="modal-body">
+    <p class="form-group">
+      <label>Companies</label><br/>
+      <select name="company" ng-model="selectedCompany"
+              ng-options="company as company.name for company in companies" required/>
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+    <a type="button" class="btn btn-primary" ng-click="switchCompany(selectedCompany)">Yes, switch</a>
+  </div>
+</form>

@@ -2,6 +2,9 @@
  * Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
  */
 
+$navbar-default-bg: white;
+$navbar-border-radius: none;
+
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
@@ -16,6 +19,42 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 body {
   padding: 0;
+}
+
+.gravatar {
+  padding: 9px 9px !important;
+}
+
+.thumbnail {
+  a {
+    img {
+      height: 160px;
+    }
+  }
+
+  .caption {
+    h3 {
+      font-size: 20px;
+    }
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

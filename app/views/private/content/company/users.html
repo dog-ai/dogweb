@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<div id="users-view">
+
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+      <div class="row">
+        <div class="col-md-12">
+          <legend>Users</legend>
+          <table class="table">
+            <tr>
+              <th>Name</th>
+              <th>E-mail</th>
+              <th>Date added</th>
+            </tr>
+            <tr ng-repeat="user in users">
+              <td>{{user.full_name}}</td>
+              <td>{{user.email_address}}</td>
+              <td am-time-ago="user.created_date"></td>
+            </tr>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn btn-primary" ng-click="openInviteUserModal()">Invite user</button>
+        </div>
+      </div>
+
+      <div class="row" ng-show="invites.length" ng-cloak>
+        <div class="col-md-12">
+          <legend>Invites</legend>
+          <table class="table">
+            <tr>
+              <th>E-mail</th>
+              <th>Date invited</th>
+              <th></th>
+            </tr>
+            <tr ng-repeat="invite in invites">
+              <td>{{invite.email_address}}</td>
+              <td am-time-ago="invite.created_date"></td>
+              <td>
+                <div class="btn-group pull-right" dropdown>
+                  <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a href="" ng-click="deleteInvite(invite)"><span
+                      class="glyphicon glyphicon-trash"></span> Remove</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

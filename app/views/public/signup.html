@@ -1,0 +1,80 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<div id="signup-view">
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <legend>Sign Up</legend>
+        <form name="form" role="form" novalidate>
+
+          <div class="form-group">
+            <label for="name">Name <span>*</span></label>
+            <input id="name" required name="name" type="text" ng-model="user.full_name" class="form-control"/>
+
+            <div class="help-block" ng-messages="form.name.$error"
+                 ng-show="(form.$submitted || form.name.$touched) && form.name.$invalid" ng-cloak>
+              <p ng-message="required">Your name is required.</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail <span>*</span></label>
+            <input id="email" required name="email" type="email" ng-model="user.email_address" class="form-control"/>
+
+            <div class="help-block" ng-messages="form.email.$error"
+                 ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
+              <p ng-message="required">Your e-mail is required.</p>
+
+              <p ng-message="email">Your e-mail is invalid.</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password <span>*</span></label>
+            <input id="password" required name="password" type="password" ng-model="user.password"
+                   class="form-control"/>
+
+            <div class="help-block" ng-messages="form.password.$error"
+                 ng-show="(form.$submitted || form.password.$touched) && form.password.$invalid" ng-cloak>
+              <p ng-message="required">Your password is required.</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="companyName">Company name <span>*</span></label>
+            <input id="companyName" required name="companyName" type="text" ng-model="company.name"
+                   class="form-control"/>
+
+            <div class="help-block" ng-messages="form.companyName.$error"
+                 ng-show="(form.$submitted || form.companyName.$touched) && form.companyName.$invalid" ng-cloak>
+              <p ng-message="required">Your company name is required.</p>
+            </div>
+          </div>
+
+          <p>
+            * required information
+          </p>
+
+          <div class="row">
+            <div class="col-md-6">
+              <p>
+                <button class="btn btn-primary btn-block" ng-click="register(user, company)">Sign
+                  up
+                </button>
+              </p>
+            </div>
+          </div>
+        </form>
+        <p ng-show="error" class="bg-danger">{{error}}</p>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+

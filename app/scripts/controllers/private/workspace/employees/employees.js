@@ -130,7 +130,7 @@ angular.module('dogwebApp')
 
     $scope.removeEmployee = function (employee) {
       _removeEmployeeFromCompany(employee.$id, company.$id).then(function () {
-        _destroyEmployee(employee).then(function () {
+        _deleteEmployee(employee).then(function () {
         });
         $modalInstance.close();
       });
@@ -140,7 +140,7 @@ angular.module('dogwebApp')
       $modalInstance.dismiss();
     };
 
-    function _destroyEmployee(employee) {
+    function _deleteEmployee(employee) {
       return employee.$remove();
     }
 

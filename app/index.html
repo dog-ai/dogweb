@@ -6,7 +6,7 @@
 <html class="no-js">
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>dog.ai</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -68,6 +68,7 @@
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-base64/angular-base64.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-messages/angular-messages.js"></script>
@@ -98,12 +99,16 @@
 <script src="scripts/angularfire/auth.js"></script>
 <script src="scripts/directives/ngShowAuth.js"></script>
 <script src="scripts/directives/ngHideAuth.js"></script>
+<script src="scripts/directives/gravatarImage.js"></script>
 <script src="scripts/routes.js"></script>
-<script src="scripts/controllers/public/login.js"></script>
+<script src="scripts/controllers/public/LogInController.js"></script>
+<script src="scripts/controllers/public/ForgotPasswordController.js"></script>
+<script src="scripts/controllers/public/SignUpController.js"></script>
 <script src="scripts/controllers/private/navigation.js"></script>
 <script src="scripts/controllers/private/workspace/user/preferences.js"></script>
-<script src="scripts/controllers/private/workspace/company/dogs.js"></script>
-<script src="scripts/controllers/private/workspace/company/devices.js"></script>
+<script src="scripts/controllers/private/workspace/company/DogsController.js"></script>
+<script src="scripts/controllers/private/workspace/company/DevicesController.js"></script>
+<script src="scripts/controllers/private/workspace/company/UsersController.js"></script>
 <script src="scripts/controllers/private/workspace/employees/employees.js"></script>
 <script src="scripts/controllers/private/workspace/employees/employee.js"></script>
 <!-- endbuild -->

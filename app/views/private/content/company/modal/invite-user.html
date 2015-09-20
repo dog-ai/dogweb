@@ -1,0 +1,51 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<form name="form" role="form" novalidate>
+
+  <wizard name="invite-user" hide-indicators="true">
+    <wz-step title="invite-form" canexit="validateInvite()">
+      <div class="modal-header">
+        <h4 class="modal-title">Which e-mail address do you want to send the invite to?</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input id="email" required name="email" type="email" ng-model="invite.email_address" class="form-control"/>
+
+          <div class="help-block" ng-messages="form.email.$error"
+               ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
+            <p ng-message="required">Your e-mail is required.</p>
+
+            <p ng-message="email">Your e-mail is invalid.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+        <a type="button" class="btn btn-primary" wz-next>Yes, continue</a>
+      </div>
+    </wz-step>
+
+    <wz-step title="invite-confirm">
+      <div class="modal-header">
+        <h4 class="modal-title">Are you sure you want to send the invite?</h4>
+      </div>
+
+      <div class="modal-body">
+        <p>If yes, we'll be sending an invite to {{invite.email_address}}.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-default" wz-previous>No, go back</button>
+        <button type="button" class="btn btn-primary" ng-click="sendInvite(invite)"
+                wz-finish>Yes, send
+        </button>
+      </div>
+    </wz-step>
+  </wizard>
+</form>
