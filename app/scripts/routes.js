@@ -296,7 +296,7 @@ angular.module('dogwebApp')
     function ($rootScope, $location, Auth, $state, $timeout, $window) {
       // watch for login status changes and redirect if appropriate
       Auth.$onAuth(function (auth) {
-        if (!auth && $state.current.name.startsWith('private')) {
+        if (!auth && $state.current && $state.current.name && $state.current.name.startsWith('private')) {
           $state.go('public.login');
         }
       });

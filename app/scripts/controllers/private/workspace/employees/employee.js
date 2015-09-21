@@ -88,7 +88,7 @@ angular.module('dogwebApp')
     };
 
     $scope.datapoints = [];
-    $scope.datacolumns = [{"id": "top-1", "type": "area-step", "name": "Today"}];
+    $scope.datacolumns = [{"id": "top-1", "type": "area-step", "name": "Yesterday"}];
     $scope.datax = {"id": "x"};
     $scope.ticks = [moment(), moment().add(1, 'hour')];
 
@@ -97,27 +97,90 @@ angular.module('dogwebApp')
       return moment(tick).format('HH:mm');
     };
 
-    var date = moment().subtract(2, 'day');
+    var date = moment().subtract(3, 'day');
 
     $firebaseArray(Ref.child('employee_performances/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded().then(function (presences) {
       $scope.presences = presences;
 
+      /*
       var startOfDay = moment(date).startOf('day');
       $scope.startOfDay = startOfDay.toDate();
       var endOfDay = moment(date).endOf('day');
       $scope.endOfDay = endOfDay.toDate();
       var hour = startOfDay;
+       var i = 0;
       while (hour <= endOfDay) {
         $scope.ticks.push(hour);
         hour = hour.clone().add(1, 'h');
+
+       if (i == 5 || i == 7) {
+       $scope.datapoints.push({"x": hour, "top-1": i == 5 ? 1 : 0});
+       }
+
+       i++;
       }
       $scope.ticks.push(hour.subtract(1, 's'));
+       */
 
       angular.forEach(presences, function (presence) {
-        $scope.datapoints.push({"x": moment(presence.created_date), "top-1": presence.is_present ? 1 : 0});
+        //$scope.datapoints.push({"x": moment(presence.created_date), "top-1": presence.is_present ? 1 : 0});
+        //console.log($scope.datapoints);
+        presence.created_date = moment(presence.created_date);
+      });
+
+      var presence = presences[0];
+      presences = [{
+        created_date: moment(presence.created_date).startOf('day'),
+        is_present: !presence.is_present
+      }].concat(presences);
+
+      presence = presences[presences.length - 1];
+      presences.push({
+        created_date: moment(presence.created_date).endOf('day'),
+        is_present: presence.is_present
       });
 
 
+      angular.forEach(presences, function (presence) {
+        //$scope.datapoints.push({"x": moment(presence.created_date), "top-1": presence.is_present ? 1 : 0});
+        //console.log($scope.datapoints);
+        presence.created_date = moment(presence.created_date);
+      });
+
+
+      $scope.hugo = c3.generate({
+        bindto: '#hugo',
+        data: {
+          json: presences,
+          keys: {
+            x: 'created_date', // it's possible to specify 'x' when category axis
+            value: ['is_present'],
+          },
+          types: {
+            is_present: 'area-step',
+          }
+        },
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: function (tick) {
+                return moment(tick).format('HH:mm');
+              },
+              fit: true,
+              count: presences.length,
+            }
+          },
+          y: {
+            show: false
+          }
+        },
+        line: {
+          step: {
+            type: 'step-after'
+          }
+        }
+      });
     });
 
   })

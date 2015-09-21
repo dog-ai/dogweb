@@ -39,8 +39,7 @@
       <div class="list-group" ng-repeat="mac_address in mac_addresses">
         <div class="list-group-item">
           <div class="list-group-item-heading">
-            <h4 style="display:inline;">{{mac_address.address}}</h4>
-
+            <h4 style="display:inline;">{{mac_address.vendor}}</h4>
             <div class="btn-group pull-right" dropdown>
               <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
                 <span class="glyphicon glyphicon-cog"></span>
@@ -53,6 +52,7 @@
           </div>
           <p class="list-group-item-text">
 
+          <p>{{mac_address.address}}</p>
           <p>First seen: <span am-time-ago="mac_address.created_date"></span></p>
 
           <p>Last seen: <span am-time-ago="mac_address.last_presence_date"></span></p>

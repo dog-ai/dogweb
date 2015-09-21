@@ -65,13 +65,16 @@
       <c3chart bindto-id="chart" chart-data="datapoints" chart-columns="datacolumns" chart-x="datax">
         <chart-axis>
           <chart-axis-x axis-id="x" axis-type="timeseries">
-            <chart-axis-x-tick tick-fit="false" tick-format-function="format"/>
+            <chart-axis-x-tick tick-fit="true" tick-format-function="format" tick-count="5"/>
           </chart-axis-x>
           <chart-axis-y show="false"/>
         </chart-axis>
         <chart-legend show-legend="true"/>
         <chart-size/>
       </c3chart>
+
+      <div id="hugo"></div>
+
 
       <c3chart bindto-id="gauge-plot1-chart">
         <chart-column column-id="Data 1"
@@ -81,11 +84,11 @@
                      max="75"
                      units=" hours"
                      width="39"/>
-
           
         <chart-size chart-height="140" chart-width="140"/>
       </c3chart>
     </div>
+
 
   </div>
 </div>
