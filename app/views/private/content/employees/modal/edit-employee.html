@@ -23,6 +23,11 @@
       <oi-select id="employeeDevices" name="employeeDevices"
                  oi-options="device.name for device in companyDevices track by device.$id"
                  ng-model="employeeDevices"
+                 oi-select-options="{
+                    newItem: true,
+                    saveTrigger: 'enter, blur',
+                    newItemModel: {$id: null, name: $query}
+                }"
                  multiple
         ></oi-select>
     </div>

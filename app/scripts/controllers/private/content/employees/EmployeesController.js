@@ -58,6 +58,7 @@ angular.module('dogwebApp')
         controller: 'EditEmployeeModalController',
         size: null,
         resolve: {
+          company: company,
           employee: employee,
           employeeDevices: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
             return $firebaseArray(Ref.child('employees/' + employee.$id + '/devices')).$loaded();
@@ -143,7 +144,7 @@ angular.module('dogwebApp')
     }
   })
 
-  .controller('EditEmployeeModalController', function ($scope, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $modalInstance, lodash) {
+  .controller('EditEmployeeModalController', function ($scope, company, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $modalInstance, lodash) {
     $scope.employee = employee;
     $scope.employeeDevices = [];
     $scope.companyDevices = [];
@@ -188,7 +189,9 @@ angular.module('dogwebApp')
 
     angular.forEach(companyDevices, function (device) {
       _retrieveDevice(device.$id).then(function (device) {
-        $scope.companyDevices.push(device);
+        if (device.employee_id === undefined || device.employee_id == employee.$id) {
+          $scope.companyDevices.push(device);
+        }
       });
     });
 
@@ -208,6 +211,45 @@ angular.module('dogwebApp')
       employee.$save().then(function () {
         if ($scope.form.employeeDevices.$dirty) {
 
+          var devicesToRemove = lodash.filter(employeeDevices, function (device) {
+            return !lodash.findWhere($scope.employeeDevices, {$id: device.$id});
+          });
+
+          angular.forEach(devicesToRemove, function (device) {
+            _removeDeviceFromEmployee(device.$id).then(function () {
+              _updateDevice(device.$id, {updated_date: now.format(), employee_id: null});
+            });
+          });
+
+          var devicesToAdd = lodash.filter($scope.employeeDevices, function (device) {
+            return !lodash.findWhere(employeeDevices, {$id: device.$id});
+          });
+
+          angular.forEach(devicesToAdd, function (device) {
+            if (device.$id === null) {
+              return;
+            }
+            _addDeviceToEmployee(device.$id, employee.$id).then(function () {
+              _updateDevice(device.$id, {updated_date: now.format(), employee_id: employee.$id});
+            });
+          });
+
+          var devicesToCreate = lodash.filter($scope.employeeDevices, {$id: null});
+
+          angular.forEach(devicesToCreate, function (device) {
+            delete device.$id;
+
+            device.created_date = now.format();
+            device.updated_date = now.format();
+            device.company_id = company.$id;
+            device.employee_id = employee.$id;
+
+            _createDevice(device).then(function (deviceId) {
+              _addDeviceToCompany(deviceId, device.company_id);
+              _addDeviceToEmployee(deviceId, employee.$id);
+            });
+          });
+
           $modalInstance.close();
         }
       });
@@ -217,10 +259,70 @@ angular.module('dogwebApp')
       $modalInstance.dismiss();
     };
 
+    function _createDevice(device) {
+      var devicesRef = Ref.child('devices'), def = $q.defer();
+      var deviceRef = devicesRef.push(device, function (error) {
+        $timeout(function () {
+          if (error) {
+            def.reject(error);
+          } else {
+            def.resolve(deviceRef.key());
+          }
+        });
+      });
+      return def.promise;
+    }
+
     function _retrieveDevice(deviceId) {
       return $firebaseObject(Ref.child('devices/' + deviceId)).$loaded().then(function (device) {
         return device;
       });
+    }
+
+    function _addDeviceToEmployee(deviceId, employeeId) {
+      var employeeDeviceRef = Ref.child('employees/' + employeeId + '/devices/' + deviceId), def = $q.defer();
+      employeeDeviceRef.set(true, function (error) {
+        $timeout(function () {
+          if (error) {
+            def.reject(error);
+          } else {
+            def.resolve();
+          }
+        });
+      });
+      return def.promise;
+    }
+
+    function _addDeviceToCompany(deviceId, companyId) {
+      var companyDeviceRef = Ref.child('companies/' + companyId + '/devices/' + deviceId), def = $q.defer();
+      companyDeviceRef.set(true, function (error) {
+        $timeout(function () {
+          if (error) {
+            def.reject(error);
+          } else {
+            def.resolve();
+          }
+        });
+      });
+      return def.promise;
+    }
+
+    function _removeDeviceFromEmployee(deviceId) {
+      return employeeDevices.$remove(lodash.find(employeeDevices, {$id: deviceId}));
+    }
+
+    function _updateDevice(deviceId, device) {
+      var deviceRef = Ref.child('devices/' + deviceId), def = $q.defer();
+      deviceRef.update(device, function (error) {
+        $timeout(function () {
+          if (error) {
+            def.reject(error);
+          } else {
+            def.resolve();
+          }
+        });
+      });
+      return def.promise;
     }
 
     /*
