@@ -3,6 +3,7 @@
   -->
 
 <div id="devices-view">
+
   <div class="row">
 
     <div class="alert alert-warning alert-dismissible" role="alert" ng-show="mac_addresses.length">
@@ -13,53 +14,49 @@
 
     <div class="col-md-4 col-md-offset-1">
 
-      <div class="list-group" ng-repeat="device in devices">
-        <div class="list-group-item">
-          <div class="list-group-item-heading">
-            <h4 style="display:inline;">{{device.name}}</h4>
-
-            <div class="btn-group pull-right" dropdown>
+      <table class="table table-bordered">
+        <tr>
+          <th>Name</th>
+          <th>Present</th>
+          <th></th>
+        </tr>
+        <tr ng-repeat="device in devices">
+          <td>{{device.name}}</td>
+          <td>{{device.is_present}}</td>
+          <td>
+            <div class="btn-group" dropdown>
               <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
                 <span class="glyphicon glyphicon-cog"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem"><a href="" ng-click=""><span class="glyphicon glyphicon-trash"></span> Remove from
-                  {{employee.full_name.split(' ')[0]}}</a></li>
+                <li role="menuitem"><a href="" ng-click=""><span class="glyphicon glyphicon-trash"></span> Remove</a>
+                </li>
               </ul>
             </div>
-          </div>
-          <p class="list-group-item-text">{{device.is_present ? 'Online' : 'Offline'}}</p>
-        </div>
-      </div>
+          </td>
+        </tr>
+      </table>
 
     </div>
 
-    <div class="col-md-4 col-md-offset-1">
+    <div class="col-md-6">
 
-      <div class="list-group" ng-repeat="mac_address in mac_addresses">
-        <div class="list-group-item">
-          <div class="list-group-item-heading">
-            <h4 style="display:inline;">{{mac_address.vendor}}</h4>
-            <div class="btn-group pull-right" dropdown>
-              <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
-                <span class="glyphicon glyphicon-cog"></span>
-              </button>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem"><a href="" ng-click=""><span class="glyphicon glyphicon-trash"></span> Remove from
-                  {{employee.full_name.split(' ')[0]}}</a></li>
-              </ul>
-            </div>
-          </div>
-          <p class="list-group-item-text">
-
-          <p>{{mac_address.address}}</p>
-          <p>First seen: <span am-time-ago="mac_address.created_date"></span></p>
-
-          <p>Last seen: <span am-time-ago="mac_address.last_presence_date"></span></p>
-          </p>
-        </div>
-      </div>
+      <table class="table table-bordered">
+        <tr>
+          <th>Vendor</th>
+          <th>Address</th>
+          <th>First seen</th>
+          <th>Last seen</th>
+        </tr>
+        <tr ng-repeat="mac_address in mac_addresses">
+          <td>{{mac_address.vendor}}</td>
+          <td>{{mac_address.address}}</td>
+          <td am-time-ago="mac_address.created_date"></td>
+          <td am-time-ago="mac_address.last_presence_date">
+        </tr>
+      </table>
 
     </div>
   </div>
+
 </div>

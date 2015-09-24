@@ -3,16 +3,19 @@
   -->
 
 <form name="form" role="form">
+
   <div class="modal-header">
     <h4 class="modal-title">Which company do you want to switch to?</h4>
   </div>
 
   <div class="modal-body">
-    <p class="form-group">
-      <label>Companies</label><br/>
-      <select name="company" ng-model="selectedCompany"
-              ng-options="company as company.name for company in companies" required/>
-    </p>
+    <div class="form-group">
+      <label>Companies</label>
+      <oi-select id="selectedCompany" name="selectedCompany"
+                 oi-options="company as company.name for company in companies"
+                 ng-model="selectedCompany"
+        ></oi-select>
+    </div>
   </div>
 
   <div class="modal-footer">

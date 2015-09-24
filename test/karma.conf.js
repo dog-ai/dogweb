@@ -48,9 +48,12 @@ module.exports = function (config) {
       'bower_components/d3/d3.js',
       'bower_components/c3/c3.js',
       'bower_components/c3-angular/c3-angular.min.js',
+      'bower_components/bootstrap-daterangepicker/daterangepicker.js',
+      'bower_components/ng-bs-daterangepicker/src/ng-bs-daterangepicker.js',
       'bower_components/ng-lodash/build/ng-lodash.js',
-      'bower_components/mockfirebase/browser/mockfirebase.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/oi.select/dist/select-tpls.min.js',
+      'bower_components/mockfirebase/browser/mockfirebase.js',
       // endbower
       "app/scripts/**/*.js",
       "test/mock/**/*.js",

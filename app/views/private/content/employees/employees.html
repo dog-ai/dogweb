@@ -18,6 +18,9 @@
             <span class="glyphicon glyphicon-cog"></span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+            <li role="menuitem"><a href="" ng-click="openEditEmployeeModal(employee)"><span
+              class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+            <li role="separator" class="divider"></li>
             <li role="menuitem"><a href="" ng-click="openRemoveEmployeeModal(employee)"><span
               class="glyphicon glyphicon-trash"></span> Remove</a></li>
           </ul>
@@ -32,7 +35,7 @@
           <div class="caption">
             <h3>{{employee.full_name}}</h3>
 
-            <p>{{employee.is_present ? 'Online' : 'Offline'}}</p>
+            <span class="label label-default" ng-show="{{employee.is_present}}">Present</span>
           </div>
         </a>
 

@@ -150,6 +150,7 @@ angular.module('dogwebApp')
       .state('private.content.dashboard', {
         url: "/dashboard",
         templateUrl: "/views/private/content/dashboard.html",
+        controller: 'DashboardController'
       })
 
       .state('private.content.user', {
@@ -238,58 +239,9 @@ angular.module('dogwebApp')
             return $firebaseObject(Ref.child('employees/' + $stateParams.id)).$loaded().then(function (employee) {
               return employee;
             });
-          }],
-          devices: ['user', 'Ref', '$stateParams', '$firebaseArray', function (user, Ref, $stateParams, $firebaseArray) {
-            return $firebaseArray(Ref.child('employees/' + $stateParams.id + '/devices')).$loaded().then(function (devices) {
-              return devices;
-            });
           }]
         }
       });
-    /*.state("private.content.employee.modal", {
-        abstract: true,
-        onEnter: ['$modal', '$state', '$timeout', function ($modal, $state) {
-          $modal.open({
-            animation: true,
-            templateUrl: 'views/private/content/modal.html',
-            controller: ['$scope', '$modalInstance', function ($scope, $modalInstance) {
-              $scope.close = function () {
-                $modalInstance.close();
-              };
-
-              $scope.dismiss = function () {
-                $modalInstance.dismiss();
-              }
-            }]
-          }).result.finally(function () {
-              $state.go('private.content.employee');
-            });
-        }],
-        onExit: function () {
-        }
-      })
-      .state("private.content.employee.modal.add_device_to_employee", {
-        views: {
-          "modal@": {
-            templateUrl: "views/private/content/employees/modal/add_device_to_employee.html",
-            controller: 'AddDeviceToEmployeeModalController',
-            resolve: {
-              devices: ['Ref', '$firebaseArray', 'company', function (Ref, $firebaseArray, company) {
-                return $firebaseArray(Ref.child('companies/' + company.$id + '/devices')).$loaded().then(function (devices) {
-                  return devices;
-                });
-              }]
-            }
-          }
-        }
-      })
-      .state("private.content.employee.modal.add_new_device", {
-        views: {
-          "modal@": {
-            templateUrl: "views/private/content/employees/modal/add_new_device.html"
-          }
-        }
-     })*/
   }])
 
   .run(['$rootScope', '$location', 'Auth', '$state', '$timeout', '$window',
