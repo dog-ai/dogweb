@@ -27,10 +27,8 @@ angular.module('dogwebApp')
     };
 
     $scope.$watch('daterange', function (daterange) {
-      console.log(daterange);
 
       if (daterange === undefined || daterange === null || daterange.startDate === null) {
-        console.log("aqui");
         return
       }
 
@@ -60,8 +58,6 @@ angular.module('dogwebApp')
 
           }
         }
-
-        console.log(presences);
 
         c3.generate({
           bindto: '#presence',
@@ -109,8 +105,6 @@ angular.module('dogwebApp')
       });
 
     });
-
-    //$scope.selectDate($scope.date);
 
   })
 ;

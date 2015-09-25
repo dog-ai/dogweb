@@ -1,0 +1,31 @@
+<!--
+  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
+<form name="form" role="form">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit device</h4>
+  </div>
+
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" required ng-model="device.name" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+      <label>Mac Addresses</label>
+      <oi-select id="deviceMacAddresses" name="deviceMacAddresses"
+                 oi-options="macAddress.address group by macAddress.vendor for macAddress in companyMacAddresses track by macAddress.$id"
+                 ng-model="deviceMacAddresses"
+                 multiple
+        ></oi-select>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+    <button type="button" class="btn btn-primary" ng-click="saveChanges(device)">Yes, save changes</button>
+  </div>
+</form>

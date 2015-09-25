@@ -6,13 +6,7 @@
 
   <div class="row">
 
-    <div class="alert alert-warning alert-dismissible" role="alert" ng-show="mac_addresses.length">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-        aria-hidden="true">&times;</span></button>
-      <strong>Warning!</strong> There are {{mac_addresses.length}} device addresses to be added.
-    </div>
-
-    <div class="col-md-4 col-md-offset-1">
+    <div class="col-md-6 col-md-offset-3">
 
       <table class="table table-bordered">
         <tr>
@@ -29,10 +23,12 @@
                 <span class="glyphicon glyphicon-cog"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem"><a href="" ng-click=""><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+                <li role="menuitem"><a href="" ng-click="openEditDeviceModal(device)"><span
+                  class="glyphicon glyphicon-pencil"></span> Edit</a>
                 </li>
                 <li role="separator" class="divider"></li>
-                <li role="menuitem"><a href="" ng-click=""><span class="glyphicon glyphicon-trash"></span> Remove</a>
+                <li role="menuitem"><a href="" ng-click="openRemoveDeviceModal(device)"><span
+                  class="glyphicon glyphicon-trash"></span> Remove</a>
                 </li>
               </ul>
             </div>
@@ -40,9 +36,15 @@
         </tr>
       </table>
 
+      <div class="row">
+        <div class="col-md-4">
+          <button class="btn btn-primary btn-block" ng-click="openAddDeviceModal()">Add device</button>
+        </div>
+      </div>
+
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 hide">
 
       <table class="table table-bordered">
         <tr>
@@ -51,11 +53,11 @@
           <th>First seen</th>
           <th>Last seen</th>
         </tr>
-        <tr ng-repeat="mac_address in mac_addresses">
-          <td>{{mac_address.vendor}}</td>
-          <td>{{mac_address.address}}</td>
-          <td am-time-ago="mac_address.created_date"></td>
-          <td am-time-ago="mac_address.last_presence_date">
+        <tr ng-repeat="companyMacAddress in companyMacAddresses">
+          <td>{{companyMacAddress.vendor}}</td>
+          <td>{{companyMacAddress.address}}</td>
+          <td am-time-ago="companyMacAddress.created_date"></td>
+          <td am-time-ago="companyMacAddress.last_presence_date">
         </tr>
       </table>
 

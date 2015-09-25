@@ -188,14 +188,14 @@ angular.module('dogwebApp')
         templateUrl: "/views/private/content/company/devices.html",
         controller: 'DevicesController',
         resolve: {
-          devices: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/devices')).$loaded().then(function (devices) {
-              return devices;
+          companyDevices: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
+            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/devices')).$loaded().then(function (companyDevices) {
+              return companyDevices;
             });
           }],
-          mac_addresses: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/mac_addresses')).$loaded().then(function (mac_addresses) {
-              return mac_addresses;
+          companyMacAddresses: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
+            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/mac_addresses')).$loaded().then(function (companyMacAddresses) {
+              return companyMacAddresses;
             });
           }]
         }

@@ -8,11 +8,11 @@
   </div>
 
   <div class="modal-body">
-    <p>Are you sure you want to remove {{device.name}} from {{employee.full_name.split(' ')[0]}}?</p>
+    <p>Are you sure you want to remove {{device.name}}?</p>
   </div>
 
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
-    <button type="button" class="btn btn-danger" ng-click="removeDeviceFromEmployee(device)">Yes, I am sure!</button>
+    <button type="button" class="btn btn-danger" ng-click="removeDevice(device)">Yes, I am sure!</button>
   </div>
 </form>

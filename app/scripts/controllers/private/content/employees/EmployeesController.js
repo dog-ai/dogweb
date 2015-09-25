@@ -51,7 +51,6 @@ angular.module('dogwebApp')
     };
 
     $scope.openEditEmployeeModal = function (employee) {
-      $scope.employee = employee;
       $modal.open({
         animation: true,
         templateUrl: 'views/private/content/employees/modal/edit-employee.html',
@@ -140,11 +139,11 @@ angular.module('dogwebApp')
         });
       });
       return def.promise;
-
     }
   })
 
   .controller('EditEmployeeModalController', function ($scope, company, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $modalInstance, lodash) {
+
     $scope.employee = employee;
     $scope.employeeDevices = [];
     $scope.companyDevices = [];
@@ -498,42 +497,7 @@ angular.module('dogwebApp')
      }
      })
 
-     .controller('RemoveDeviceFromEmployeeModalController', function ($scope, device, devices, employee, $q, Ref, $firebaseObject, $state, $timeout, $modalInstance, lodash) {
 
-     $scope.device = device;
-     $scope.employee = employee;
-
-     $scope.removeDeviceFromEmployee = function (device) {
-     _removeDeviceFromEmployee(device.$id, employee.$id).then(function () {
-     var now = new moment();
-     _updateDevice(device.$id, {updated_date: now.format(), employee_id: null});
-
-     $modalInstance.close();
-     });
-     };
-
-     $scope.cancel = function () {
-     $modalInstance.dismiss();
-     };
-
-     function _removeDeviceFromEmployee(deviceId) {
-     return devices.$remove(lodash.find(devices, {$id: deviceId}));
-     }
-
-     function _updateDevice(deviceId, device) {
-     var deviceRef = Ref.child('devices/' + deviceId), def = $q.defer();
-     deviceRef.update(device, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve();
-     }
-     });
-     });
-     return def.promise;
-     }
-     })
      */
   })
 
