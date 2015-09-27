@@ -25,13 +25,13 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
-  var firebaseConfig = grunt.file.readJSON('./firebase.json');
-
   // Define the configuration for all the tasks
   grunt.initConfig({
 
     // Project settings
     yeoman: appConfig,
+
+    firebaseConfig: firebaseConfig,
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
@@ -430,18 +430,6 @@ module.exports = function (grunt) {
       unit: {
         configFile: 'test/karma.conf.js',
         singleRun: true
-      }
-    },
-
-    firebase: {
-      options: {
-        reference: 'https://<%= firebaseConfig.firebase %>.firebaseio.com',
-        token: '<%= firebaseConfig.token %>'
-      },
-      deploy: {
-        files: [
-          {src: '<%= firebaseConfig.public %>'}
-        ]
       }
     }
   });

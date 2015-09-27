@@ -42,6 +42,9 @@ angular.module('dogwebApp')
           if (presences.length > 0) {
 
             angular.forEach(presences, function (presence) {
+              if (presence.$id == 'stats') {
+                return;
+              }
               presence.created_date = moment(presence.created_date);
               if (!lodash.some($scope.presences, {$id: presence.$id})) {
                 $scope.presences.push(presence);

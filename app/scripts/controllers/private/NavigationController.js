@@ -80,7 +80,7 @@ angular.module('dogwebApp')
 
       if (selectedCompany.$id != company.$id) {
         $rootScope.company_id = selectedCompany.$id;
-        $state.go($state.current, $stateParams, {reload: true}).then(function () {
+        $state.go('private.content.dashboard', $stateParams, {reload: true}).then(function () {
           $modalInstance.close();
         });
       } else {
