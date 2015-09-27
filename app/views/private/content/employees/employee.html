@@ -20,9 +20,43 @@
     </div>
   </div>
 
-  <div class="row">
+  <!--<div class="row">
     <div class="col-md-4 col-md-offset-2">
       <div id="presence"></div>
-      </div>
+    </div>
+  </div>-->
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-2">
+      <c3chart bindto-id="chart1"
+               padding-left="15"
+               padding-right="15"
+               chart-data="presences"
+               chart-columns="[{'id': 'is_present', 'type': 'area-step', 'name': 'Presence'}]"
+               chart-x="{'id': 'created_date'}"
+               transition-duration="1000">
+
+        <chart-size chart-height="150" chart-width="400"/>
+
+        <chart-line step-type="step-after"/>
+
+        <chart-axis>
+          <chart-axis-x axis-id="created_date"
+                        axis-min="daterange.startDate"
+                        axis-max="daterange.endDate"
+                        type="timeseries">
+
+            <chart-axis-x-tick tick-fit="false"
+                               tick-outer="true"
+                               tick-culling-max="6"
+                               tick-format-function="formatTick"/>
+
+          </chart-axis-x>
+
+          <chart-axis-y show="false"/>
+        </chart-axis>
+
+      </c3chart>
+    </div>
   </div>
 </div>

@@ -11,6 +11,24 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+.dropdown-menu {
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  border-radius: 0px !important;
+}
+
+.daterangepicker .ranges li {
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  border-radius: 0px !important;
+}
+
+.daterangepicker.opensleft:after,
+.daterangepicker.opensleft:before {
+  content: none;
+}
+
+
 .modal-content {
   -webkit-border-radius: 0px !important;
   -moz-border-radius: 0px !important;

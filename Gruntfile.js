@@ -25,6 +25,8 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  var firebaseConfig = grunt.file.readJSON('./firebase.json');
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -428,6 +430,18 @@ module.exports = function (grunt) {
       unit: {
         configFile: 'test/karma.conf.js',
         singleRun: true
+      }
+    },
+
+    firebase: {
+      options: {
+        reference: 'https://<%= firebaseConfig.firebase %>.firebaseio.com',
+        token: '<%= firebaseConfig.token %>'
+      },
+      deploy: {
+        files: [
+          {src: '<%= firebaseConfig.public %>'}
+        ]
       }
     }
   });
