@@ -1,8 +1,17 @@
-<!--
-  ~ Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
-  -->
-
 <div id="employee-view">
+
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <!--<div id="presence"></div>-->
+      <cal-heatmap config="{
+        domain:'year',
+        range:1,
+        cellSize:12,
+        tooltip: true
+      }"></cal-heatmap>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-3 col-md-offset-8">
       <div class="input-group">
@@ -19,12 +28,6 @@
       </div>
     </div>
   </div>
-
-  <!--<div class="row">
-    <div class="col-md-4 col-md-offset-2">
-      <div id="presence"></div>
-    </div>
-  </div>-->
 
   <div class="row">
     <div class="col-md-4 col-md-offset-2">

@@ -31,5 +31,6 @@ angular.module('dogwebApp', [
   'base64',
   'dcbImgFallback',
   'oi.select',
-  'ngBootstrap'
+  'ngBootstrap',
+  'calHeatmap'
 ]);

@@ -31,8 +31,6 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
-    firebaseConfig: firebaseConfig,
-
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -336,18 +334,19 @@ module.exports = function (grunt) {
     htmlmin: {
       dist: {
         options: {
+          removeComments: true,
           collapseWhitespace: true,
           conservativeCollapse: true,
           collapseBooleanAttributes: true,
           removeCommentsFromCDATA: true,
-          removeOptionalTags: true
+
+          processScripts: ['text/ng-template']
         },
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
           src: [
-            '*.html',
-            'views/**/*.html',
+            '*.html'
           ],
           dest: '<%= yeoman.dist %>'
         }]
@@ -386,7 +385,6 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/**/*.html',
             'images/**/*.{webp}',
             'styles/fonts/**/*.*'
           ]
@@ -431,6 +429,24 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    inline_angular_templates: {
+      dist: {
+        options: {
+          base: 'app',
+          prefix: '/',
+          unescape: {
+            '&lt;': '<',
+            '&gt;': '>',
+            '&apos;': '\'',
+            '&amp;': '&'
+          }
+        },
+        files: {
+          'dist/index.html': ['app/views/**/*.html']
+        }
+      }
     }
   });
 
@@ -473,6 +489,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'inline_angular_templates',
     'cdnify',
     'cssmin',
     'uglify',
