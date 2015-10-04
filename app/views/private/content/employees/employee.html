@@ -17,13 +17,46 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-2 col-md-offset-1">
+  <div class="row" style="margin-top: 60px;">
+    <div class="col-md-1 col-md-offset-1">
       <button id="heatmap-previous" class="btn btn-secondary btn-small">Previous</button>
 
     </div>
-    <div class="col-md-7">
-      <cal-heatmap config="heatmap"></cal-heatmap>
+    <div class="col-md-8">
+      <cal-heatmap
+        domain="month"
+        sub-domain="x_day"
+        range="5"
+        cell-size="16"
+        cal-heatmap-tooltip="true"
+        domain-dynamic-dimension="true"
+        domain-gutter="12"
+
+        display-legend="true"
+        legend="{{heatmap.legend}}"
+
+        item-name="hour"
+        sub-domain-text-format="%d"
+
+        data="heatmap.data"
+        start="{{heatmap.start | amDateFormat:'YYYY/MM/DD'}}"
+        min-date="{{heatmap.minDate | amDateFormat:'YYYY/MM/DD'}}"
+        max-date="{{heatmap.maxDate | amDateFormat:'YYYY/MM/DD'}}"
+        consider-missing-data-as-zero="false"
+        highlight="daterange.startDate"
+
+        animation-duration="200"
+        item-namespace="domainDynamicDimension"
+        next-selector="#heatmap-next"
+        previous-selector="#heatmap-previous"
+
+        on-click="heatmap.onClick(date, value)"
+        on-complete="heatmap.onComplete()"
+        after-load-data="heatmap.afterLoadData(data)"
+        on-min-domain-reached="heatmap.onMinDomainReached(reached)"
+        on-max-domain-reached="heatmap.onMaxDomainReached(reached)"
+        >
+      </cal-heatmap>
     </div>
 
     <div class="col-md-2">
@@ -32,7 +65,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row hide">
     <div class="col-md-2 col-md-offset-2">
       <p>Single day: none</p>
 
@@ -50,8 +83,8 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-7 col-md-offset-3">
+  <div class="row" style="margin-top: 60px;">
+    <div class="col-md-8 col-md-offset-2">
       <c3chart bindto-id="chart1"
                padding-left="15"
                padding-right="15"
@@ -60,7 +93,7 @@
                chart-x="{'id': 'created_date'}"
                transition-duration="0">
 
-        <chart-size chart-height="150" chart-width="600"/>
+        <chart-size chart-height="150" chart-width="700"/>
 
         <chart-line step-type="step-after"/>
 
@@ -84,7 +117,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row hide">
     <div class="col-md-2 col-md-offset-2">
       <p>Single day: total_duration</p>
 

@@ -11,6 +11,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+.cal-heatmap-container {
+  margin: auto;
+}
+
 .nav .img-circle {
   margin-right: 5px;
 }

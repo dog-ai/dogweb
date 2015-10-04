@@ -28,7 +28,10 @@ angular.module('dogwebApp')
     };
 
     $scope.$watch('daterange', function (daterange) {
+      $scope.selectDaterange(daterange);
+    });
 
+    $scope.selectDaterange = function (daterange) {
       if (daterange === undefined || daterange === null || daterange.startDate === null) {
         return
       }
@@ -79,7 +82,7 @@ angular.module('dogwebApp')
 
         date = date.clone().add(1, 'day');
       }
-    });
+    };
 
     $scope.formatTick = function (tick) {
       return moment(tick).format('HH:mm');
@@ -87,43 +90,38 @@ angular.module('dogwebApp')
 
 
     $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
-      console.log(_stats);
+      $scope.heatmap.data = _stats._total_duration_by_day;
 
     });
 
-    $scope.miguel = function () {
-      $scope.daterange = {startDate: moment().startOf('day'), endDate: moment().endOf('day')};
-    };
-
-    $scope.hugo = function (data, value) {
-      $scope.miguel();
-    };
-
     $scope.heatmap = {
-      itemName: 'hour',
-      start: moment().subtract(7, 'month').startOf('month').toDate(),
-      minDate: moment().subtract(12, 'month').startOf('month').toDate(),
-      maxDate: moment().endOf('month').toDate(),
-      domain: 'month',
-      subDomain: 'day',
-      range: 8,
-      cellSize: 12,
-      displayLegend: true,
-      legend: [2 * 60 * 60, 4 * 60 * 60, 6 * 60 * 60, 8 * 60 * 60, 10 * 60 * 60],
-      domainDynamicDimension: true,
-      tooltip: true,
-      animationDuration: 200,
-      considerMissingDataAsZero: false,
-      label: {
-        position: "top"
+      start: moment().subtract(4, 'month').startOf('month'),
+      minDate: moment().subtract(12, 'month').startOf('month'),
+      maxDate: moment().endOf('month'),
+      legend: [2, 4, 6, 8, 10],
+      onClick: function (date, value) {
+        $scope.daterange = {startDate: moment(date).startOf('day'), endDate: moment(date).endOf('day')};
+        $scope.selectDaterange($scope.daterange);
       },
-      nextSelector: "#heatmap-next",
-      previousSelector: "#heatmap-previous",
-      itemNamespace: "domainDynamicDimension",
-      onClick: $scope.hugo,
-      data: {
-        '1443823200': 7150
+      onComplete: function () {
+      },
+      afterLoadData: function (data) {
+
+        if (lodash.isEmpty(data)) {
+          data = $scope.heatmap.data; // TODO: some kind of weird behaviour here
+        } else {
+          angular.forEach(data, function (value, key) {
+            data[key] = Math.round(moment.duration(value, 'seconds').asHours() * 10) / 10;
+          });
+        }
+
+        return data;
+      },
+      onMinDomainReached: function (reached) {
+      },
+      onMaxDomainReached: function (reached) {
       }
     };
+
   })
 ;
