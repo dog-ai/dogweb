@@ -42,6 +42,9 @@
       "dependencies": {
         "bootstrap-daterangepicker": "1.3.17"
       }
+    },
+    "angular-cal-heatmap-directive": {
+      "main": "dist/1.3.0/calHeatmap.min.js"
     }
   }
 }

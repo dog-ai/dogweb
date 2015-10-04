@@ -22,7 +22,7 @@ angular.module('dogwebApp')
 
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/modal/switch-company.html',
+        templateUrl: '/views/private/modal/switch-company.html',
         controller: 'SwitchCompanyModalController',
         size: 'sm',
         resolve: {

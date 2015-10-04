@@ -11,6 +11,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+.nav .img-circle {
+  margin-right: 5px;
+}
+
 .dropdown-menu {
   -webkit-border-radius: 0px !important;
   -moz-border-radius: 0px !important;

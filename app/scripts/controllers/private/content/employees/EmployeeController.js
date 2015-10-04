@@ -42,7 +42,7 @@ angular.module('dogwebApp')
           if (presences.length > 0) {
 
             angular.forEach(presences, function (presence) {
-              if (presence.$id == 'stats') {
+              if (presence.$id.indexOf('_') == 0) {
                 return;
               }
               presence.created_date = moment(presence.created_date);
@@ -52,15 +52,26 @@ angular.module('dogwebApp')
             });
 
             if (startDate.isSame(moment().startOf('day')) && $scope.presences[$scope.presences.length - 1]._last === undefined) {
+
               var presence = $scope.presences[presences.length - 1];
               if (presence.is_present) {
-                $scope.presences.push({
-                  _last: true,
-                  created_date: moment(),
-                  is_present: !presence.is_present
-                });
+
+                if (employee.is_present) {
+                  $scope.presences.push({
+                    _last: true,
+                    created_date: moment(),
+                    is_present: false
+                  });
+                } else {
+                  $scope.presences.push({
+                    _last: true,
+                    created_date: moment(employee.updated_date),
+                    is_present: false
+                  });
+                }
 
               }
+
             }
           }
 
@@ -72,6 +83,47 @@ angular.module('dogwebApp')
 
     $scope.formatTick = function (tick) {
       return moment(tick).format('HH:mm');
+    };
+
+
+    $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
+      console.log(_stats);
+
+    });
+
+    $scope.miguel = function () {
+      $scope.daterange = {startDate: moment().startOf('day'), endDate: moment().endOf('day')};
+    };
+
+    $scope.hugo = function (data, value) {
+      $scope.miguel();
+    };
+
+    $scope.heatmap = {
+      itemName: 'hour',
+      start: moment().subtract(7, 'month').startOf('month').toDate(),
+      minDate: moment().subtract(12, 'month').startOf('month').toDate(),
+      maxDate: moment().endOf('month').toDate(),
+      domain: 'month',
+      subDomain: 'day',
+      range: 8,
+      cellSize: 12,
+      displayLegend: true,
+      legend: [2 * 60 * 60, 4 * 60 * 60, 6 * 60 * 60, 8 * 60 * 60, 10 * 60 * 60],
+      domainDynamicDimension: true,
+      tooltip: true,
+      animationDuration: 200,
+      considerMissingDataAsZero: false,
+      label: {
+        position: "top"
+      },
+      nextSelector: "#heatmap-next",
+      previousSelector: "#heatmap-previous",
+      itemNamespace: "domainDynamicDimension",
+      onClick: $scope.hugo,
+      data: {
+        '1443823200': 7150
+      }
     };
   })
 ;

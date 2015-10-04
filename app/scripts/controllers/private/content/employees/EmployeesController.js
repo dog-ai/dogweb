@@ -41,7 +41,7 @@ angular.module('dogwebApp')
     $scope.openAddNewEmployeeModal = function () {
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/employees/modal/add-employee.html',
+        templateUrl: '/views/private/content/employees/modal/add-employee.html',
         controller: 'AddEmployeeModalController',
         size: null,
         resolve: {
@@ -53,7 +53,7 @@ angular.module('dogwebApp')
     $scope.openEditEmployeeModal = function (employee) {
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/employees/modal/edit-employee.html',
+        templateUrl: '/views/private/content/employees/modal/edit-employee.html',
         controller: 'EditEmployeeModalController',
         size: null,
         resolve: {
@@ -72,7 +72,7 @@ angular.module('dogwebApp')
     $scope.openRemoveEmployeeModal = function (employee) {
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/employees/modal/remove-employee.html',
+        templateUrl: '/views/private/content/employees/modal/remove-employee.html',
         controller: 'RemoveEmployeeModalController',
         size: 'sm',
         resolve: {

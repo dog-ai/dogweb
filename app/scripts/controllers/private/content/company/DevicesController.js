@@ -68,7 +68,7 @@ angular.module('dogwebApp')
 
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/company/modal/add-device.html',
+        templateUrl: '/views/private/content/company/modal/add-device.html',
         controller: 'AddDeviceModalController',
         size: null,
         resolve: {
@@ -87,7 +87,7 @@ angular.module('dogwebApp')
 
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/company/modal/edit-device.html',
+        templateUrl: '/views/private/content/company/modal/edit-device.html',
         controller: 'EditDeviceModalController',
         size: null,
         resolve: {
@@ -105,7 +105,7 @@ angular.module('dogwebApp')
     $scope.openRemoveDeviceModal = function (device) {
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/company/modal/remove-device.html',
+        templateUrl: '/views/private/content/company/modal/remove-device.html',
         controller: 'RemoveDeviceModalController',
         size: 'sm',
         resolve: {

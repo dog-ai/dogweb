@@ -35,7 +35,7 @@ angular.module('dogwebApp')
     $scope.openInviteUserModal = function () {
       $modal.open({
         animation: true,
-        templateUrl: 'views/private/content/company/modal/invite-user.html',
+        templateUrl: '/views/private/content/company/modal/invite-user.html',
         controller: 'InviteUserModalController',
         size: null,
         resolve: {

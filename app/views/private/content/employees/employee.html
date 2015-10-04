@@ -1,18 +1,6 @@
 <div id="employee-view">
 
   <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <!--<div id="presence"></div>-->
-      <cal-heatmap config="{
-        domain:'year',
-        range:1,
-        cellSize:12,
-        tooltip: true
-      }"></cal-heatmap>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col-md-3 col-md-offset-8">
       <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
@@ -30,16 +18,49 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4 col-md-offset-2">
+    <div class="col-md-2 col-md-offset-1">
+      <button id="heatmap-previous" class="btn btn-secondary btn-small">Previous</button>
+
+    </div>
+    <div class="col-md-7">
+      <cal-heatmap config="heatmap"></cal-heatmap>
+    </div>
+
+    <div class="col-md-2">
+      <button id="heatmap-next" class="btn btn-secondary btn-small">Next</button>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2 col-md-offset-2">
+      <p>Single day: none</p>
+
+      <p>Range of days: number of work days</p>
+    </div>
+    <div class="col-md-2">
+      <p>Single day: none</p>
+
+      <p>Range of days: number of uninterruptable working days</p>
+    </div>
+    <div class="col-md-2">
+      <p>Single day: none</p>
+
+      <p>Range of days: number of absent days</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7 col-md-offset-3">
       <c3chart bindto-id="chart1"
                padding-left="15"
                padding-right="15"
                chart-data="presences"
                chart-columns="[{'id': 'is_present', 'type': 'area-step', 'name': 'Presence'}]"
                chart-x="{'id': 'created_date'}"
-               transition-duration="1000">
+               transition-duration="0">
 
-        <chart-size chart-height="150" chart-width="400"/>
+        <chart-size chart-height="150" chart-width="600"/>
 
         <chart-line step-type="step-after"/>
 
@@ -62,4 +83,23 @@
       </c3chart>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-2 col-md-offset-2">
+      <p>Single day: total_duration</p>
+
+      <p>Range of days: Average of total_durations</p>
+    </div>
+    <div class="col-md-2">
+      <p>Single day: start hour</p>
+
+      <p>Range of days: average start hour</p>
+    </div>
+    <div class="col-md-2">
+      <p>Single day: finish hour</p>
+
+      <p>Range of days: Average finish hour</p>
+    </div>
+  </div>
+
 </div>
