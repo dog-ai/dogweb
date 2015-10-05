@@ -44,7 +44,7 @@
       }
     },
     "angular-cal-heatmap-directive": {
-      "main": "dist/1.3.0/calHeatmap.min.js"
+      "main": "app/scripts/calHeatmap.js"
     }
   }
 }

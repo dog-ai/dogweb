@@ -88,15 +88,9 @@ angular.module('dogwebApp')
       return moment(tick).format('HH:mm');
     };
 
-
-    $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
-      $scope.heatmap.data = _stats._total_duration_by_day;
-
-    });
-
     $scope.heatmap = {
-      start: moment().subtract(4, 'month').startOf('month'),
-      minDate: moment().subtract(12, 'month').startOf('month'),
+      start: moment().subtract(1, 'month').startOf('month'),
+      minDate: moment().subtract(1, 'month').startOf('month'),
       maxDate: moment().endOf('month'),
       legend: [2, 4, 6, 8, 10],
       onClick: function (date, value) {
@@ -107,13 +101,9 @@ angular.module('dogwebApp')
       },
       afterLoadData: function (data) {
 
-        if (lodash.isEmpty(data)) {
-          data = $scope.heatmap.data; // TODO: some kind of weird behaviour here
-        } else {
-          angular.forEach(data, function (value, key) {
-            data[key] = Math.round(moment.duration(value, 'seconds').asHours() * 10) / 10;
-          });
-        }
+        angular.forEach(data, function (value, key) {
+          data[key] = Math.round(moment.duration(value, 'seconds').asHours() * 10) / 10;
+        });
 
         return data;
       },
@@ -122,6 +112,11 @@ angular.module('dogwebApp')
       onMaxDomainReached: function (reached) {
       }
     };
+
+    $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
+      $scope.heatmap.data = _stats._total_duration_by_day;
+
+    });
 
   })
 ;

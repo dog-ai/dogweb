@@ -33,7 +33,7 @@ module.exports = function (config) {
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/d3/d3.js',
       'bower_components/cal-heatmap/cal-heatmap.js',
-      'bower_components/angular-cal-heatmap-directive/dist/1.3.0/calHeatmap.min.js',
+      'bower_components/angular-cal-heatmap-directive/app/scripts/calHeatmap.js',
       'bower_components/angular-cookies/angular-cookies.js',
       'bower_components/angular-messages/angular-messages.js',
       'bower_components/moment/moment.js',
