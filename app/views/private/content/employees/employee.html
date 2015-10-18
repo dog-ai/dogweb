@@ -19,7 +19,7 @@
 
   <div class="row" style="margin-top: 60px;">
     <div class="col-md-1 col-md-offset-1">
-      <button id="heatmap-previous" class="btn btn-secondary btn-small">Previous</button>
+      <button id="heatmap-previous" class="btn btn-secondary btn-small hide">Previous</button>
 
     </div>
     <div class="col-md-8">
@@ -27,7 +27,7 @@
         domain="month"
         sub-domain="x_day"
         range="2"
-        cell-size="16"
+        cell-size="21"
         cal-heatmap-tooltip="true"
         domain-dynamic-dimension="true"
         domain-gutter="12"
@@ -60,7 +60,7 @@
     </div>
 
     <div class="col-md-2">
-      <button id="heatmap-next" class="btn btn-secondary btn-small">Next</button>
+      <button id="heatmap-next" class="btn btn-secondary btn-small hide">Next</button>
 
     </div>
   </div>
@@ -104,14 +104,17 @@
                         type="timeseries">
 
             <chart-axis-x-tick tick-fit="false"
-                               tick-outer="true"
-                               tick-culling-max="6"
+                               tick-values="tickValues"
                                tick-format-function="formatTick"/>
 
           </chart-axis-x>
 
           <chart-axis-y show="false"/>
         </chart-axis>
+
+        <chart-tooltip
+          title-format-function="formatTooltipTitle"
+          value-format-function="formatTooltipValue"/>
 
       </c3chart>
     </div>

@@ -35,9 +35,30 @@ angular.module('dogwebApp')
       if (daterange === undefined || daterange === null || daterange.startDate === null) {
         return
       }
-
       var startDate = moment(daterange.startDate);
       var endDate = moment(daterange.endDate);
+
+      if (endDate.diff(startDate, 'days') < 1) {
+        $scope.tickValues = [
+          startDate.clone().startOf('day').toDate(),
+          startDate.clone().startOf('day').add(4, 'hour').toDate(),
+          startDate.clone().startOf('day').add(8, 'hour').toDate(),
+          startDate.clone().startOf('day').add(12, 'hour').toDate(),
+          startDate.clone().startOf('day').add(16, 'hour').toDate(),
+          startDate.clone().startOf('day').add(20, 'hour').toDate(),
+          endDate.clone().endOf('day').toDate()];
+      } else {
+        $scope.tickValues = [];
+
+        var date = startDate.clone();
+
+        while (date.isSame(startDate) || date.isAfter(startDate) && date.isBefore(endDate) || date.isSame(endDate)) {
+          $scope.tickValues.push(date.clone().startOf('day').toDate());
+          date = date.clone().add(1, 'day');
+        }
+      }
+
+
       var date = startDate.clone();
 
       while (date.isSame(startDate) || date.isAfter(startDate) && date.isBefore(endDate) || date.isSame(endDate)) {
@@ -85,7 +106,26 @@ angular.module('dogwebApp')
     };
 
     $scope.formatTick = function (tick) {
-      return moment(tick).format('HH:mm');
+      var startDate = moment($scope.daterange.startDate);
+      var endDate = moment($scope.daterange.endDate);
+
+      if (endDate.diff(startDate, 'days') < 1) {
+        return moment(tick).format('HH:mm');
+
+      } else if (endDate.diff(startDate, 'weeks') < 1) {
+        return moment(tick).format('dddd');
+      } else {
+        return moment(tick).format('D');
+      }
+
+    };
+
+    $scope.formatTooltipValue = function (data) {
+      return data == 1;
+    };
+
+    $scope.formatTooltipTitle = function (data) {
+      return moment(data).format('HH:mm');
     };
 
     $scope.heatmap = {
