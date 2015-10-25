@@ -12,8 +12,21 @@
  * Controller of the dogwebApp
  */
 angular.module('dogwebApp')
+  .filter('secondsToDateTime', [function () {
+    return function (seconds) {
+      return moment().startOf('day').toDate().setSeconds(seconds);
+    };
+  }])
+
+  .filter('performanceIndicatorValuePeriod', [function () {
+    return function (_stats) {
+      return moment(_stats.created_date).format('MMM DD, YYYY') + ' - ' + moment(_stats.updated_date).format('MMM DD, YYYY');
+    };
+  }])
+
   .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $modal) {
 
+    $scope.yesterday = moment().subtract(1, 'day').toDate();
     $scope.employees = [];
 
     employees.$watch(function (event) {
@@ -87,7 +100,14 @@ angular.module('dogwebApp')
 
     function _retrieveEmployee(employeeId) {
       return $firebaseObject(Ref.child('employees/' + employeeId)).$loaded().then(function (employee) {
-        return employee;
+        return $firebaseObject(Ref.child('employee_performances/' + employeeId + '/presence/_stats')).$loaded().then(function (_stats) {
+          return _stats.$value !== null ? lodash.extend(employee, {
+            performances_collapsed: true,
+            performances: {
+              presence: _stats
+            }
+          }) : employee;
+        })
       });
     }
 

@@ -11,11 +11,13 @@
               <th>Name</th>
               <th>E-mail</th>
               <th>Date added</th>
+              <th>Last seen</th>
             </tr>
             <tr ng-repeat="user in users">
               <td>{{user.full_name}}</td>
               <td>{{user.email_address}}</td>
               <td am-time-ago="user.created_date"></td>
+              <td am-time-ago="user.last_seen_date"></td>
             </tr>
             </tr>
           </table>

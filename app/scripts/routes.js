@@ -109,13 +109,18 @@ angular.module('dogwebApp')
         templateUrl: "/views/private.html",
 
         resolve: {
-          auth: ["Auth", function (Auth) {
-            return Auth.$requireAuth();
+          auth: ['$rootScope', 'Auth', function ($rootScope, Auth) {
+            return Auth.$requireAuth().then(function (auth) {
+              if ($rootScope.user_id === undefined) {
+                $rootScope.user_id = auth.uid;
+              }
+              return auth;
+            });
           }],
           user: ['$rootScope', 'auth', 'Ref', '$firebaseObject', 'lodash', function ($rootScope, auth, Ref, $firebaseObject, lodash) {
             return $firebaseObject(Ref.child('users/' + auth.uid)).$loaded().then(function (user) {
               if ($rootScope.company_id === undefined) {
-                $rootScope.company_id = lodash.keys(user.companies)[0];
+                $rootScope.company_id = lodash.keys(user.companies)[lodash.keys(user.companies).length > 0 ? lodash.keys(user.companies).length - 1 : 0];
               }
               return user;
             });
@@ -244,12 +249,17 @@ angular.module('dogwebApp')
       });
   }])
 
-  .run(['$rootScope', '$location', 'Auth', '$state', '$timeout', '$window',
-    function ($rootScope, $location, Auth, $state, $timeout, $window) {
+  .run(['$rootScope', '$location', 'Auth', '$state', '$timeout', '$window', 'Ref',
+    function ($rootScope, $location, Auth, $state, $timeout, $window, Ref) {
       // watch for login status changes and redirect if appropriate
       Auth.$onAuth(function (auth) {
         if (!auth && $state.current && $state.current.name && $state.current.name.startsWith('private')) {
           $state.go('public.login');
+        }
+
+        if (auth) {
+          var userRef = Ref.child('/users/' + auth.uid);
+          userRef.update({last_seen_date: moment().format()});
         }
       });
 
@@ -258,6 +268,7 @@ angular.module('dogwebApp')
           $state.go('public.login');
         }
       });
+
 
     }
   ])

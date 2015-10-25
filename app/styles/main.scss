@@ -5,6 +5,8 @@
 $navbar-default-bg: white;
 $navbar-border-radius: none;
 $border-radius-base: none;
+$border-radius-large: none;
+$border-radius-small: none;
 
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
@@ -56,8 +58,13 @@ body {
 
 
 .thumbnail {
+  button {
+    color: #aaa;
+  }
+
   a {
     img {
+      margin-top: 10px;
       height: 160px;
     }
   }
@@ -66,6 +73,80 @@ body {
     h3 {
       text-align: center;
       font-size: 20px;
+    }
+  }
+
+  .performance-indicator {
+    //background-color: #eee;
+    border: 1px solid #ddd;
+    margin: -5px;
+    padding: 10px 0px 2px 0px;
+    color: #aaa;
+    font-size: 16px;
+    text-align: center;
+
+    small {
+      font-size: 70%;
+    }
+
+    .performance-indicator-previous {
+      display: inline-block;
+      float: left;
+      margin-left: 5px;
+      margin-top: 23px;
+    }
+
+    .performance-indicator-next {
+      display: inline-block;
+      float: right;
+      margin-right: 5px;
+      margin-top: 23px;
+    }
+
+    .performance-indicator-slide {
+      display: inline-block;
+      max-width: 70%;
+      margin: auto;
+
+      .slick-slider {
+        margin-bottom: 15px;
+      }
+    }
+
+    .performance-indicator-value {
+      color: #666;
+      font-size: 17px;
+      margin-top: 3px;
+
+      &.average-total-duration {
+        .glyphicon-arrow-up {
+          color: darkgreen;
+        }
+
+        .glyphicon-arrow-down {
+          color: darkred;
+        }
+      }
+
+      &.average-start-time {
+        .glyphicon-arrow-up {
+          color: darkred;
+        }
+
+        .glyphicon-arrow-down {
+          color: darkgreen;
+        }
+      }
+
+      &.average-end-time {
+        .glyphicon-arrow-up {
+          color: darkgreen;
+        }
+
+        .glyphicon-arrow-down {
+          color: darkred;
+        }
+      }
     }
   }
 }
@@ -133,4 +214,8 @@ cal-heatmap {
 .cal-heatmap-container text.now {
   fill: #444;
   font-weight: 800
+}
+
+.slick-loading .slick-list {
+  background: none;
 }

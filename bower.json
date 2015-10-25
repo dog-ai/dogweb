@@ -5,13 +5,14 @@
     "angular": "^1.3.0",
     "angular-animate": "^1.3.0",
     "angular-base64": "^2.0.5",
-    "angular-bootstrap": "^0.13.4",
+    "angular-bootstrap": "^0.14.2",
     "angular-cal-heatmap": "^0.0.1",
     "angular-cookies": "^1.3.0",
     "angular-messages": "^1.3.0",
     "angular-moment": "^0.10.3",
     "angular-resource": "^1.3.0",
     "angular-sanitize": "^1.3.0",
+    "angular-slick-carousel": "~3.1.0",
     "angular-touch": "^1.3.0",
     "angular-ui-router": "^0.2.15",
     "angular-wizard": "^0.5.4",
@@ -40,6 +41,12 @@
       "dependencies": {
         "bootstrap-daterangepicker": "1.3.17"
       }
+    },
+    "slick-carousel": {
+      "main": [
+        "slick/slick.js",
+        "slick/slick.css"
+      ]
     }
   }
 }

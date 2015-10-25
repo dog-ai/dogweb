@@ -32,5 +32,6 @@ angular.module('dogwebApp', [
   'dcbImgFallback',
   'oi.select',
   'ngBootstrap',
-  'calHeatmap'
+  'calHeatmap',
+  'slickCarousel'
 ]);

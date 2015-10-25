@@ -337,7 +337,6 @@ module.exports = function (grunt) {
           removeComments: true,
           collapseWhitespace: true,
           conservativeCollapse: true,
-          collapseBooleanAttributes: true,
           removeCommentsFromCDATA: true,
 
           processScripts: ['text/ng-template']
@@ -499,8 +498,8 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
+    //'newer:jshint',
+    //'test',
     'build'
   ]);
 };
