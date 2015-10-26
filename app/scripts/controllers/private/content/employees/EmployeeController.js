@@ -153,9 +153,12 @@ angular.module('dogwebApp')
       }
     };
 
-    $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
-      $scope.heatmap.data = _stats._total_duration_by_day;
+    $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (currentMonthStats) {
 
+      $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.clone().subtract(1, 'month').format('YYYY/MM') + '/_stats')).$loaded().then(function (previousMonthStats) {
+        $scope.heatmap.data = lodash.extend(currentMonthStats.total_duration_by_day, previousMonthStats.total_duration_by_day);
+
+      });
     });
 
   })
