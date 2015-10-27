@@ -77,7 +77,7 @@ angular.module('dogwebApp')
 
             if (startDate.isSame(moment().startOf('day')) && $scope.presences[$scope.presences.length - 1]._last === undefined) {
 
-              var presence = $scope.presences[presences.length - 1];
+              var presence = $scope.presences[$scope.presences.length - 1];
               if (presence.is_present) {
 
                 if (employee.is_present) {

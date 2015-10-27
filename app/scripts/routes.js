@@ -258,8 +258,12 @@ angular.module('dogwebApp')
         }
 
         if (auth) {
+          var now = moment().format();
           var userRef = Ref.child('/users/' + auth.uid);
-          userRef.update({last_seen_date: moment().format()});
+          userRef.update({
+            updated_date: now,
+            last_seen_date: now
+          });
         }
       });
 
