@@ -12,7 +12,7 @@
  * Controller of the dogwebApp
  */
 angular.module('dogwebApp')
-  .controller('EmployeeController', function ($scope, user, company, employee, Ref, $firebaseObject, $firebaseArray, lodash) {
+  .controller('EmployeeController', function ($scope, user, company, employee, alltimeStats, Ref, $firebaseObject, $firebaseArray, lodash) {
 
     $scope.employee = employee;
     $scope.presences = [];
@@ -129,7 +129,7 @@ angular.module('dogwebApp')
     };
 
     $scope.heatmap = {
-      start: moment().subtract(1, 'month').startOf('month'),
+      start: moment().subtract(2, 'month').startOf('month'),
       minDate: moment().subtract(1, 'month').startOf('month'),
       maxDate: moment().endOf('month'),
       legend: [2, 4, 6, 8, 10],
@@ -142,7 +142,9 @@ angular.module('dogwebApp')
       afterLoadData: function (data) {
 
         angular.forEach(data, function (value, key) {
-          data[key] = Math.round(moment.duration(value, 'seconds').asHours() * 10) / 10;
+          if (value % 1 === 0) {
+            data[key] = Math.round(moment.duration(value, 'seconds').asHours() * 10) / 10;
+          }
         });
 
         return data;
@@ -153,13 +155,18 @@ angular.module('dogwebApp')
       }
     };
 
-    $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.format('YYYY/MM') + '/_stats')).$loaded().then(function (currentMonthStats) {
+    $scope.heatmap.range = Math.ceil(moment().endOf('month').diff(moment(alltimeStats.started_date), 'months', true));
+    $scope.heatmap.data = {};
 
-      $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + $scope.daterange.startDate.clone().subtract(1, 'month').format('YYYY/MM') + '/_stats')).$loaded().then(function (previousMonthStats) {
-        $scope.heatmap.data = lodash.extend(currentMonthStats.total_duration_by_day, previousMonthStats.total_duration_by_day);
+    var date = moment(alltimeStats.started_date);
+    while (date.isBefore(moment(), 'month') || date.isSame(moment(), 'month')) {
 
+      $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + date.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
+        lodash.extend($scope.heatmap.data, _stats.total_duration_by_day);
       });
-    });
+
+      date = date.clone().add(1, 'month');
+    }
 
   })
 ;
