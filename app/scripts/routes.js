@@ -240,13 +240,13 @@ angular.module('dogwebApp')
         templateUrl: "/views/private/content/employees/employee.html",
         controller: 'EmployeeController',
         resolve: {
-          employee: ['Ref', '$stateParams', '$firebaseObject', function (Ref, $stateParams, $firebaseObject) {
-            return $firebaseObject(Ref.child('employees/' + $stateParams.id)).$loaded().then(function (employee) {
+          employee: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', function ($rootScope, Ref, $stateParams, $firebaseObject) {
+            return $firebaseObject(Ref.child('company_employees/' + $rootScope.company_id + '/' + $stateParams.id)).$loaded().then(function (employee) {
               return employee;
             });
           }],
-          alltimeStats: ['Ref', '$stateParams', '$firebaseObject', function (Ref, $stateParams, $firebaseObject) {
-            return $firebaseObject(Ref.child('employee_performances/' + $stateParams.id + '/presence/_stats')).$loaded().then(function (_stats) {
+          alltimeStats: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', function ($rootScope, Ref, $stateParams, $firebaseObject) {
+            return $firebaseObject(Ref.child('company_employee_performances/' + $rootScope.company_id + '/' + $stateParams.id + '/presence/_stats')).$loaded().then(function (_stats) {
               return _stats;
             });
           }],

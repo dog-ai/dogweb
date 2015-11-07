@@ -73,7 +73,7 @@ angular.module('dogwebApp')
           company: company,
           employee: employee,
           employeeDevices: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('employees/' + employee.$id + '/devices')).$loaded();
+            return $firebaseArray(Ref.child('company_employees/' + company.$id + '/' + employee.$id + '/devices')).$loaded();
           }],
           companyDevices: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
             return $firebaseArray(Ref.child('companies/' + company.$id + '/devices')).$loaded();
@@ -99,8 +99,8 @@ angular.module('dogwebApp')
     };
 
     function _retrieveEmployee(employeeId) {
-      return $firebaseObject(Ref.child('employees/' + employeeId)).$loaded().then(function (employee) {
-        return $firebaseObject(Ref.child('employee_performances/' + employeeId + '/presence/_stats')).$loaded().then(function (_stats) {
+      return $firebaseObject(Ref.child('company_employees/' + company.$id + '/' + employeeId)).$loaded().then(function (employee) {
+        return $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + employeeId + '/presence/_stats')).$loaded().then(function (_stats) {
           return _stats.$value !== null ? lodash.extend(employee, {
             performances_collapsed: true,
             performances: {
@@ -134,7 +134,7 @@ angular.module('dogwebApp')
     };
 
     function _createEmployee(employee) {
-      var employeesRef = Ref.child('employees'), def = $q.defer();
+      var employeesRef = Ref.child('company_employees/' + company.$id), def = $q.defer();
       var employeeRef = employeesRef.push(employee, function (error) {
         $timeout(function () {
           if (error) {
@@ -279,7 +279,7 @@ angular.module('dogwebApp')
     };
 
     function _createDevice(device) {
-      var devicesRef = Ref.child('devices'), def = $q.defer();
+      var devicesRef = Ref.child('company_devices/' + company.$id), def = $q.defer();
       var deviceRef = devicesRef.push(device, function (error) {
         $timeout(function () {
           if (error) {
@@ -293,13 +293,13 @@ angular.module('dogwebApp')
     }
 
     function _retrieveDevice(deviceId) {
-      return $firebaseObject(Ref.child('devices/' + deviceId)).$loaded().then(function (device) {
+      return $firebaseObject(Ref.child('company_devices/' + company.$id + deviceId)).$loaded().then(function (device) {
         return device;
       });
     }
 
     function _addDeviceToEmployee(deviceId, employeeId) {
-      var employeeDeviceRef = Ref.child('employees/' + employeeId + '/devices/' + deviceId), def = $q.defer();
+      var employeeDeviceRef = Ref.child('company_employees/' + company.$id + '/' + employeeId + '/devices/' + deviceId), def = $q.defer();
       employeeDeviceRef.set(true, function (error) {
         $timeout(function () {
           if (error) {
@@ -331,7 +331,7 @@ angular.module('dogwebApp')
     }
 
     function _updateDevice(deviceId, device) {
-      var deviceRef = Ref.child('devices/' + deviceId), def = $q.defer();
+      var deviceRef = Ref.child('company_devices/' + company.$id + '/' + deviceId), def = $q.defer();
       deviceRef.update(device, function (error) {
         $timeout(function () {
           if (error) {

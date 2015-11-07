@@ -62,7 +62,7 @@ angular.module('dogwebApp')
       var date = startDate.clone();
 
       while (date.isSame(startDate) || date.isAfter(startDate) && date.isBefore(endDate) || date.isSame(endDate)) {
-        $firebaseArray(Ref.child('employee_performances/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded().then(function (presences) {
+        $firebaseArray(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded().then(function (presences) {
           if (presences.length > 0) {
 
             angular.forEach(presences, function (presence) {
@@ -142,7 +142,7 @@ angular.module('dogwebApp')
       afterLoadData: function (data) {
 
         angular.forEach(data, function (value, key) {
-          if (value % 1 === 0) {
+          if (value > 24) {
             data[key] = Math.round(moment.duration(value, 'seconds').asHours() * 10) / 10;
           }
         });
@@ -161,7 +161,7 @@ angular.module('dogwebApp')
     var date = moment(alltimeStats.started_date);
     while (date.isBefore(moment(), 'month') || date.isSame(moment(), 'month')) {
 
-      $firebaseObject(Ref.child('employee_performances/' + employee.$id + '/presence/' + date.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
+      $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {
         lodash.extend($scope.heatmap.data, _stats.total_duration_by_day);
       });
 

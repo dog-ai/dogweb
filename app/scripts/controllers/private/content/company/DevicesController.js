@@ -91,9 +91,10 @@ angular.module('dogwebApp')
         controller: 'EditDeviceModalController',
         size: null,
         resolve: {
+          company: company,
           device: device,
           deviceMacAddresses: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('devices/' + device.$id + '/mac_addresses')).$loaded();
+            return $firebaseArray(Ref.child('company_devices/' + company.$id + '/' + device.$id + '/mac_addresses')).$loaded();
           }],
           companyMacAddresses: function () {
             return $scope.companyMacAddresses;
@@ -109,25 +110,26 @@ angular.module('dogwebApp')
         controller: 'RemoveDeviceModalController',
         size: 'sm',
         resolve: {
+          company: company,
           device: device,
           companyDevices: function () {
             return companyDevices;
           },
           deviceMacAddresses: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('devices/' + device.$id + '/mac_addresses')).$loaded();
+            return $firebaseArray(Ref.child('company_devices/' + company.$id + '/' + device.$id + '/mac_addresses')).$loaded();
           }],
         }
       });
     };
 
     function _retrieveDevice(deviceId) {
-      return $firebaseObject(Ref.child('devices/' + deviceId)).$loaded().then(function (device) {
+      return $firebaseObject(Ref.child('company_devices/' + company.$id + '/' + deviceId)).$loaded().then(function (device) {
         return device;
       });
     }
 
     function _retrieveMacAddress(macAddressId) {
-      return $firebaseObject(Ref.child('mac_addresses/' + macAddressId)).$loaded().then(function (mac_address) {
+      return $firebaseObject(Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId)).$loaded().then(function (mac_address) {
         return mac_address;
       });
     }
@@ -164,7 +166,7 @@ angular.module('dogwebApp')
     };
 
     function _createDevice(device) {
-      var devicesRef = Ref.child('devices'), def = $q.defer();
+      var devicesRef = Ref.child('company_devices/' + company.$id), def = $q.defer();
       var deviceRef = devicesRef.push(device, function (error) {
         $timeout(function () {
           if (error) {
@@ -178,7 +180,7 @@ angular.module('dogwebApp')
     }
 
     function _addMacAddressToDevice(macAddressId, deviceId) {
-      var deviceMacAddressRef = Ref.child('devices/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
+      var deviceMacAddressRef = Ref.child('company_devices/' + company.$id + '/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
       deviceMacAddressRef.set(true, function (error) {
         $timeout(function () {
           if (error) {
@@ -206,7 +208,7 @@ angular.module('dogwebApp')
     }
 
     function _updateMacAddress(macAddressId, macAddress) {
-      var deviceRef = Ref.child('mac_addresses/' + macAddressId), def = $q.defer();
+      var deviceRef = Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId), def = $q.defer();
       deviceRef.update(macAddress, function (error) {
         $timeout(function () {
           if (error) {
@@ -220,7 +222,7 @@ angular.module('dogwebApp')
     }
   })
 
-  .controller('EditDeviceModalController', function ($scope, device, deviceMacAddresses, companyMacAddresses, $q, Ref, $firebaseObject, $timeout, $modalInstance, lodash) {
+  .controller('EditDeviceModalController', function ($scope, company, device, deviceMacAddresses, companyMacAddresses, $q, Ref, $firebaseObject, $timeout, $modalInstance, lodash) {
 
     $scope.device = device;
     $scope.deviceMacAddresses = [];
@@ -294,7 +296,7 @@ angular.module('dogwebApp')
     };
 
     function _addMacAddressToDevice(macAddressId, deviceId) {
-      var deviceMacAddressRef = Ref.child('devices/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
+      var deviceMacAddressRef = Ref.child('company_devices/' + company.$id + '/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
       deviceMacAddressRef.set(true, function (error) {
         $timeout(function () {
           if (error) {
@@ -312,7 +314,7 @@ angular.module('dogwebApp')
     }
 
     function _updateMacAddress(macAddressId, macAddress) {
-      var deviceRef = Ref.child('mac_addresses/' + macAddressId), def = $q.defer();
+      var deviceRef = Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId), def = $q.defer();
       deviceRef.update(macAddress, function (error) {
         $timeout(function () {
           if (error) {
@@ -326,14 +328,14 @@ angular.module('dogwebApp')
     }
 
     function _retrieveMacAddress(macAddressId) {
-      return $firebaseObject(Ref.child('mac_addresses/' + macAddressId)).$loaded().then(function (mac_address) {
+      return $firebaseObject(Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId)).$loaded().then(function (mac_address) {
         return mac_address;
       });
     }
 
   })
 
-  .controller('RemoveDeviceModalController', function ($scope, device, companyDevices, deviceMacAddresses, $q, Ref, $firebaseObject, $state, $timeout, $modalInstance, lodash) {
+  .controller('RemoveDeviceModalController', function ($scope, company, device, companyDevices, deviceMacAddresses, $q, Ref, $firebaseObject, $state, $timeout, $modalInstance, lodash) {
 
     $scope.device = device;
 
@@ -373,7 +375,7 @@ angular.module('dogwebApp')
     }
 
     function _removeDeviceFromEmployee(deviceId, employeeId) {
-      var deviceRef = Ref.child('employees/' + employeeId + '/devices/' + deviceId), def = $q.defer();
+      var deviceRef = Ref.child('company_employees/' + company.$id + '/' + employeeId + '/devices/' + deviceId), def = $q.defer();
       deviceRef.remove(function (error) {
         $timeout(function () {
           if (error) {
@@ -391,7 +393,7 @@ angular.module('dogwebApp')
     }
 
     function _updateMacAddress(macAddressId, macAddress) {
-      var deviceRef = Ref.child('mac_addresses/' + macAddressId), def = $q.defer();
+      var deviceRef = Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId), def = $q.defer();
       deviceRef.update(macAddress, function (error) {
         $timeout(function () {
           if (error) {
