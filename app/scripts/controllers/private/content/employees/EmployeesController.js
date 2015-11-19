@@ -293,7 +293,7 @@ angular.module('dogwebApp')
     }
 
     function _retrieveDevice(deviceId) {
-      return $firebaseObject(Ref.child('company_devices/' + company.$id + deviceId)).$loaded().then(function (device) {
+      return $firebaseObject(Ref.child('company_devices/' + company.$id + '/' + deviceId)).$loaded().then(function (device) {
         return device;
       });
     }
