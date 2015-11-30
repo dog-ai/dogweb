@@ -129,7 +129,7 @@ angular.module('dogwebApp')
     };
 
     $scope.heatmap = {
-      start: moment().subtract(2, 'month').startOf('month'),
+      start: moment().subtract(3, 'month').startOf('month'),
       minDate: moment().subtract(1, 'month').startOf('month'),
       maxDate: moment().endOf('month'),
       legend: [2, 4, 6, 8, 10],

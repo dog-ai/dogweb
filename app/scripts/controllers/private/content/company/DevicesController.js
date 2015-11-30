@@ -146,6 +146,7 @@ angular.module('dogwebApp')
       device.created_date = now.format();
       device.updated_date = now.format();
       device.company_id = company.$id;
+      device.is_manual = true;
 
       _createDevice(device).then(function (deviceId) {
         angular.forEach(deviceMacAddresses, function (macAddress) {
