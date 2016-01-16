@@ -7,12 +7,20 @@
       <table class="table table-bordered">
         <tr>
           <th>Name</th>
-          <th>Present</th>
+          <th hidden>Type</th>
+          <th hidden>OS</th>
+          <th>Last seen</th>
           <th></th>
         </tr>
         <tr ng-repeat="device in devices">
           <td>{{device.name}}</td>
-          <td>{{device.is_present}}</td>
+          <td hidden>{{device.type}}</td>
+          <td hidden>{{device.os}}</td>
+          <td>
+            <div ng-if="device.is_present">Right now</div>
+            <div ng-if="!device.is_present"><span am-time-ago="device.last_presence_date"></span></div>
+          </td>
+          <td hidden am-time-ago="device.last_presence_date">
           <td>
             <div class="btn-group" dropdown>
               <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
@@ -39,6 +47,8 @@
       </div>
 
     </div>
+
+    Unrecognized MAC addresses: {{companyMacAddresses.length}}
 
     <div class="col-md-6 hide">
       Total: {{companyMacAddresses.length}}

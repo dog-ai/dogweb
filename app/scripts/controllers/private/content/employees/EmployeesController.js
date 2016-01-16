@@ -20,7 +20,9 @@ angular.module('dogwebApp')
 
   .filter('performanceIndicatorValuePeriod', [function () {
     return function (_stats) {
-      return moment(_stats.started_date).format('MMM DD, YYYY') + ' - ' + moment(_stats.ended_date).format('MMM DD, YYYY');
+      if (_stats !== undefined && _stats.started_date !== undefined && _stats.ended_date !== undefined) {
+        return moment(_stats.started_date).format('MMM DD, YYYY') + ' - ' + moment(_stats.ended_date).format('MMM DD, YYYY');
+      }
     };
   }])
 

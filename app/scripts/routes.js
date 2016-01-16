@@ -117,16 +117,13 @@ angular.module('dogwebApp')
               return auth;
             });
           }],
-          user: ['$rootScope', 'auth', 'Ref', '$firebaseObject', 'lodash', function ($rootScope, auth, Ref, $firebaseObject, lodash) {
+          user: ['$rootScope', 'auth', 'Ref', '$firebaseObject', function ($rootScope, auth, Ref, $firebaseObject) {
             return $firebaseObject(Ref.child('users/' + auth.uid)).$loaded().then(function (user) {
-              if ($rootScope.company_id === undefined) {
-                $rootScope.company_id = lodash.keys(user.companies)[lodash.keys(user.companies).length > 0 ? lodash.keys(user.companies).length - 1 : 0];
-              }
               return user;
             });
           }],
-          company: ['$rootScope', 'user', 'Ref', '$firebaseObject', function ($rootScope, user, Ref, $firebaseObject) {
-            return $firebaseObject(Ref.child('companies/' + $rootScope.company_id)).$loaded().then(function (company) {
+          company: ['$rootScope', 'user', 'Ref', '$firebaseObject', 'lodash', function ($rootScope, user, Ref, $firebaseObject, lodash) {
+            return $firebaseObject(Ref.child('companies/' + (lodash.keys(user.companies).length > 0 ? user.primary_company : lodash.keys(user.companies)[0]))).$loaded().then(function (company) {
               return company;
             });
           }]
@@ -137,14 +134,7 @@ angular.module('dogwebApp')
         views: {
           'header': {
             templateUrl: '/views/private/navigation.html',
-            controller: 'NavigationController',
-            resolve: {
-              userCompaniesRef: ['user', 'Ref', '$firebaseArray', function (user, Ref, $firebaseArray) {
-                return $firebaseArray(Ref.child('users/' + user.$id + '/companies')).$loaded().then(function (userCompaniesRef) {
-                  return userCompaniesRef;
-                });
-              }]
-            }
+            controller: 'NavigationController'
           },
           'content': {
             templateUrl: "/views/private/content.html",
@@ -193,13 +183,13 @@ angular.module('dogwebApp')
         templateUrl: "/views/private/content/company/devices.html",
         controller: 'DevicesController',
         resolve: {
-          companyDevices: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/devices')).$loaded().then(function (companyDevices) {
+          companyDevices: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
+            return $firebaseArray(Ref.child('companies/' + company.$id + '/devices')).$loaded().then(function (companyDevices) {
               return companyDevices;
             });
           }],
-          companyMacAddresses: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/mac_addresses')).$loaded().then(function (companyMacAddresses) {
+          companyMacAddresses: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
+            return $firebaseArray(Ref.child('companies/' + company.$id + '/mac_addresses')).$loaded().then(function (companyMacAddresses) {
               return companyMacAddresses;
             });
           }]
@@ -210,13 +200,13 @@ angular.module('dogwebApp')
         templateUrl: "/views/private/content/company/users.html",
         controller: 'UsersController',
         resolve: {
-          companyUsersRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/users')).$loaded().then(function (companyUsersRef) {
+          companyUsersRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
+            return $firebaseArray(Ref.child('companies/' + company.$id + '/users')).$loaded().then(function (companyUsersRef) {
               return companyUsersRef;
             });
           }],
-          companyInvitesRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('company_invites/' + $rootScope.company_id)).$loaded().then(function (companyInvitesRef) {
+          companyInvitesRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
+            return $firebaseArray(Ref.child('company_invites/' + company.$id)).$loaded().then(function (companyInvitesRef) {
               return companyInvitesRef;
             });
           }]
@@ -228,8 +218,8 @@ angular.module('dogwebApp')
         templateUrl: "/views/private/content/employees/employees.html",
         controller: 'EmployeesController',
         resolve: {
-          employees: ['$rootScope', 'user', 'Ref', '$firebaseArray', function ($rootScope, user, Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('companies/' + $rootScope.company_id + '/employees')).$loaded().then(function (employees) {
+          employees: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
+            return $firebaseArray(Ref.child('companies/' + company.$id + '/employees')).$loaded().then(function (employees) {
               return employees;
             });
           }]
@@ -240,13 +230,13 @@ angular.module('dogwebApp')
         templateUrl: "/views/private/content/employees/employee.html",
         controller: 'EmployeeController',
         resolve: {
-          employee: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', function ($rootScope, Ref, $stateParams, $firebaseObject) {
-            return $firebaseObject(Ref.child('company_employees/' + $rootScope.company_id + '/' + $stateParams.id)).$loaded().then(function (employee) {
+          employee: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', 'user', 'company', function ($rootScope, Ref, $stateParams, $firebaseObject, user, company) {
+            return $firebaseObject(Ref.child('company_employees/' + company.$id + '/' + $stateParams.id)).$loaded().then(function (employee) {
               return employee;
             });
           }],
-          alltimeStats: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', function ($rootScope, Ref, $stateParams, $firebaseObject) {
-            return $firebaseObject(Ref.child('company_employee_performances/' + $rootScope.company_id + '/' + $stateParams.id + '/presence/_stats')).$loaded().then(function (_stats) {
+          alltimeStats: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', 'user', 'company', function ($rootScope, Ref, $stateParams, $firebaseObject, user, company) {
+            return $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + $stateParams.id + '/presence/_stats')).$loaded().then(function (_stats) {
               return _stats;
             });
           }],

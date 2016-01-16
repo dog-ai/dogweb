@@ -151,6 +151,13 @@ body {
   }
 }
 
+#performance-chart {
+  svg {
+    display: block;
+    margin: auto;
+  }
+}
+
 /*
 html {
   position: relative;
@@ -216,6 +223,29 @@ cal-heatmap {
   font-weight: 800
 }
 
+.cal-heatmap-previous,
+.cal-heatmap-next {
+  color: #aaa;
+  border: 1px solid #ddd;
+  min-height: 140px;
+}
+
+.cal-heatmap-previous {
+  float: right;
+}
+
+
+
 .slick-loading .slick-list {
   background: none;
+}
+
+#add-employee {
+  min-height: 404px;
+
+  color: #adadad;
+
+  i {
+    font-size: 108px;
+  }
 }

@@ -360,6 +360,14 @@ angular.module('dogwebApp')
         });
       } else {
         _removeDeviceFromCompany(device.$id, device.company_id).then(function () {
+
+          angular.forEach(deviceMacAddresses, function (macAddress) {
+            _removeMacAddressFromDevice(macAddress.$id).then(function () {
+              var now = moment();
+              _updateMacAddress(macAddress.$id, {updated_date: now.format(), device_id: null});
+            });
+          });
+
           device.$remove().then(function () {
             $modalInstance.close();
           });

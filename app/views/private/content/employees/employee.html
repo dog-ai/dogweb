@@ -19,9 +19,13 @@
 
   <div class="row" style="margin-top: 60px;">
     <div class="col-md-1 col-md-offset-1">
-      <button id="heatmap-previous" class="btn btn-secondary btn-small hide">Previous</button>
+
+      <button id="heatmap-previous" class="btn btn-default btn-small cal-heatmap-previous">
+        <i class="glyphicon glyphicon-menu-left"></i>
+      </button>
 
     </div>
+
     <div class="col-md-8">
       <cal-heatmap
         domain="month"
@@ -60,12 +64,14 @@
     </div>
 
     <div class="col-md-2">
-      <button id="heatmap-next" class="btn btn-secondary btn-small hide">Next</button>
+      <button id="heatmap-next" class="btn btn-default btn-small cal-heatmap-next">
+        <i class="glyphicon glyphicon-menu-right"></i>
+      </button>
 
     </div>
   </div>
 
-  <div class="row hide">
+  <!--<div class="row hide">
     <div class="col-md-2 col-md-offset-2">
       <p>Single day: none</p>
 
@@ -81,10 +87,10 @@
 
       <p>Range of days: number of absent days</p>
     </div>
-  </div>
+  </div>-->
 
   <div class="row" style="margin-top: 60px;">
-    <div class="col-md-8 col-md-offset-2">
+    <div id="performance-chart" class="col-md-8 col-md-offset-2">
       <c3chart bindto-id="chart1"
                padding-left="15"
                padding-right="15"
@@ -120,7 +126,7 @@
     </div>
   </div>
 
-  <div class="row hide">
+  <!--<div class="row hide">
     <div class="col-md-2 col-md-offset-2">
       <p>Single day: total_duration</p>
 
@@ -136,6 +142,6 @@
 
       <p>Range of days: Average finish hour</p>
     </div>
-  </div>
+  </div>-->
 
 </div>

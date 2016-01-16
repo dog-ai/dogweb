@@ -5,18 +5,16 @@
 'use strict';
 
 angular.module('dogwebApp')
-  .controller('NavigationController', function ($scope, user, company, userCompaniesRef, Auth, $modal) {
+  .controller('NavigationController', function ($scope, user, company, Auth, $modal, lodash) {
     $scope.user = user;
     $scope.company = company;
-
-    $scope.companies = userCompaniesRef;
 
     $scope.logout = function () {
       Auth.$unauth();
     };
 
     $scope.openSwitchCompanyModal = function () {
-      if (userCompaniesRef.length <= 1) {
+      if (lodash.keys(user.companies).length <= 1) {
         return;
       }
 
@@ -26,23 +24,27 @@ angular.module('dogwebApp')
         controller: 'SwitchCompanyModalController',
         size: 'sm',
         resolve: {
+          user: user,
           company: company,
-          userCompaniesRef: function () {
-            return userCompaniesRef;
-          }
+          userCompanies: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
+            return $firebaseArray(Ref.child('users/' + user.$id + '/companies')).$loaded().then(function (userCompanies) {
+              return userCompanies;
+            });
+          }]
         }
       }).result.finally(function () {
-        });
+
+      });
     };
 
 
   })
 
-  .controller('SwitchCompanyModalController', function ($rootScope, $scope, company, userCompaniesRef, $q, Ref, $firebaseObject, $state, $stateParams, $timeout, $modalInstance, lodash) {
+  .controller('SwitchCompanyModalController', function ($scope, user, company, userCompanies, $q, Ref, $firebaseObject, $state, $stateParams, $timeout, $modalInstance, lodash) {
     $scope.companies = [];
     $scope.selectedCompany = {};
 
-    userCompaniesRef.$watch(function (event) {
+    userCompanies.$watch(function (event) {
       switch (event.event) {
         case 'child_added':
           _retrieveCompany(event.key).then(function (company) {
@@ -58,8 +60,8 @@ angular.module('dogwebApp')
       }
     });
 
-    angular.forEach(userCompaniesRef, function (userCompanyRef) {
-      _retrieveCompany(userCompanyRef.$id).then(function (companyRef) {
+    angular.forEach(userCompanies, function (userCompany) {
+      _retrieveCompany(userCompany.$id).then(function (companyRef) {
         $scope.companies.push(companyRef);
         if (companyRef.$id == company.$id) {
           $scope.selectedCompany = companyRef;
@@ -79,10 +81,15 @@ angular.module('dogwebApp')
       }
 
       if (selectedCompany.$id != company.$id) {
-        $rootScope.company_id = selectedCompany.$id;
-        $state.go('private.content.dashboard', $stateParams, {reload: true}).then(function () {
-          $modalInstance.close();
-        });
+        user.primary_company = selectedCompany.$id;
+        user.updated_date = moment().format();
+
+        user.$save()
+          .then(function () {
+            $state.go('private.content.dashboard', $stateParams, {reload: true}).then(function () {
+              $modalInstance.close();
+            });
+          });
       } else {
         $modalInstance.close();
       }
@@ -91,7 +98,6 @@ angular.module('dogwebApp')
     $scope.cancel = function () {
       $modalInstance.dismiss();
     };
-
   })
 
 ;
