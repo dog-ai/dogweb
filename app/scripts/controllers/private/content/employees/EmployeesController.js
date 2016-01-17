@@ -30,6 +30,7 @@ angular.module('dogwebApp')
 
     $scope.yesterday = moment().subtract(1, 'day').toDate();
     $scope.employees = [];
+    $scope.employeePerformances = {};
 
     employees.$watch(function (event) {
       switch (event.event) {
@@ -42,6 +43,8 @@ angular.module('dogwebApp')
           lodash.remove($scope.employees, function (employee) {
             return event.key == employee.$id;
           });
+
+          delete $scope.employeePerformances[event.key];
           break;
         default:
       }
@@ -49,6 +52,8 @@ angular.module('dogwebApp')
 
     angular.forEach(employees, function (employee) {
       _retrieveEmployee(employee.$id).then(function (employee) {
+
+
         $scope.employees.push(employee);
       });
     });
@@ -103,12 +108,16 @@ angular.module('dogwebApp')
     function _retrieveEmployee(employeeId) {
       return $firebaseObject(Ref.child('company_employees/' + company.$id + '/' + employeeId)).$loaded().then(function (employee) {
         return $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + employeeId + '/presence/_stats')).$loaded().then(function (_stats) {
-          return _stats.$value !== null ? lodash.extend(employee, {
-            performances_collapsed: true,
-            performances: {
-              presence: _stats
-            }
-          }) : employee;
+          if (_stats.$value !== null) {
+            $scope.employeePerformances[employee.$id] = {
+              performances_collapsed: true,
+              performances: {
+                presence: _stats
+              }
+            };
+          }
+
+          return employee;
         })
       });
     }

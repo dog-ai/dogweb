@@ -41,7 +41,7 @@
 
               <ul class="list-inline">
                 <li>
-                  <span class="label label-default" ng-show="{{employee.is_present}}">Present</span>
+                  <span class="label label-default" ng-show="employee.is_present">Present</span>
                 </li>
               </ul>
 
@@ -52,7 +52,7 @@
         <!--<button class="btn btn-default btn-xs" ng-click="employee.performances_collapsed = !employee.performances_collapsed">Show KPIs</button>-->
         <!--uib-collapse="employee.performances_collapsed"-->
         <div class="performance-indicator"
-             ng-show="employee.performances">
+             ng-show="employeePerformances[employee.$id].performances">
           <div class="performance-indicator-previous">
             <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-left"></i></button>
@@ -70,33 +70,38 @@
                    prev-arrow="#previous{{employee.$id}}PerformanceIndicator"
                    next-arrow="#next{{employee.$id}}PerformanceIndicator">
               <div>
-                <small>Average working hours per day</small>
+                <small>Average present hours per day</small>
                 <div class="performance-indicator-value average-total-duration">
-                  {{employee.performances.presence.average_total_duration | secondsToDateTime | date:'H'}} hours
+                  {{employeePerformances[employee.$id].performances.presence.average_total_duration | secondsToDateTime
+                  | date:'H'}} hours
                   <i class="glyphicon"
-                     ng-class="employee.performances.presence.average_total_duration > employee.performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                     ng-class="employeePerformances[employee.$id].performances.presence.average_total_duration > employeePerformances[employee.$id].performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
                 </div>
-                <small>{{employee.performances.presence | performanceIndicatorValuePeriod}}</small>
+                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                </small>
               </div>
-
               <div>
                 <small>Average check-in time</small>
                 <div class="performance-indicator-value average-start-time">
-                  {{employee.performances.presence.average_start_time | secondsToDateTime | date:'HH:mm'}}
+                  {{employeePerformances[employee.$id].performances.presence.average_start_time | secondsToDateTime |
+                  date:'HH:mm'}}
                   <i class="glyphicon"
-                     ng-class="employee.performances.presence.average_start_time > employee.performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                     ng-class="employeePerformances[employee.$id].performances.presence.average_start_time > employeePerformances[employee.$id].performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
                 </div>
-                <small>{{employee.performances.presence | performanceIndicatorValuePeriod}}</small>
+                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                </small>
               </div>
 
               <div>
                 <small>Average check-out time</small>
                 <div class="performance-indicator-value average-end-time">
-                  {{employee.performances.presence.average_end_time | secondsToDateTime | date:'HH:mm'}}
+                  {{employeePerformances[employee.$id].performances.presence.average_end_time | secondsToDateTime |
+                  date:'HH:mm'}}
                   <i class="glyphicon"
-                     ng-class="employee.performances.presence.average_end_time > employee.performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                     ng-class="employeePerformances[employee.$id].performances.presence.average_end_time > employeePerformances[employee.$id].performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
                 </div>
-                <small>{{employee.performances.presence | performanceIndicatorValuePeriod}}</small>
+                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                </small>
               </div>
             </slick>
           </div>

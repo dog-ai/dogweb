@@ -89,6 +89,14 @@ body {
       font-size: 70%;
     }
 
+    .performance-indicator-previous,
+    .performance-indicator-next {
+      button {
+        min-height: 65px;
+        margin-top: -16px;
+      }
+    }
+
     .performance-indicator-previous {
       display: inline-block;
       float: left;

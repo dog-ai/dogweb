@@ -12,12 +12,12 @@
           <th>Last seen</th>
           <th></th>
         </tr>
-        <tr ng-repeat="device in devices">
+        <tr ng-repeat="device in devices | orderBy:'-last_presence_date'">
           <td>{{device.name}}</td>
           <td hidden>{{device.type}}</td>
           <td hidden>{{device.os}}</td>
           <td>
-            <div ng-if="device.is_present">Right now</div>
+            <div ng-if="device.is_present">Just now</div>
             <div ng-if="!device.is_present"><span am-time-ago="device.last_presence_date"></span></div>
           </td>
           <td hidden am-time-ago="device.last_presence_date">

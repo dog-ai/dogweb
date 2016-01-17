@@ -123,7 +123,7 @@ angular.module('dogwebApp')
             });
           }],
           company: ['$rootScope', 'user', 'Ref', '$firebaseObject', 'lodash', function ($rootScope, user, Ref, $firebaseObject, lodash) {
-            return $firebaseObject(Ref.child('companies/' + (lodash.keys(user.companies).length > 0 ? user.primary_company : lodash.keys(user.companies)[0]))).$loaded().then(function (company) {
+            return $firebaseObject(Ref.child('companies/' + (lodash.keys(user.companies).length > 1 ? user.primary_company : lodash.keys(user.companies)[0]))).$loaded().then(function (company) {
               return company;
             });
           }]
