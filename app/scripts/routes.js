@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
  */
 
 'use strict';
@@ -208,6 +208,23 @@ angular.module('dogwebApp')
           companyInvitesRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
             return $firebaseArray(Ref.child('company_invites/' + company.$id)).$loaded().then(function (companyInvitesRef) {
               return companyInvitesRef;
+            });
+          }]
+        }
+      })
+      .state('private.content.company.apps', {
+        url: "/apps",
+        templateUrl: "/views/private/content/company/apps.html",
+        controller: 'AppsController',
+        resolve: {
+          companyAppsRef: ['$rootScope', 'company', 'Ref', '$firebaseArray', function ($rootScope, company, Ref, $firebaseArray) {
+            return $firebaseArray(Ref.child('companies/' + company.$id + '/apps')).$loaded().then(function (companyAppsRef) {
+              return companyAppsRef;
+            });
+          }],
+          appsRef: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
+            return $firebaseArray(Ref.child('apps/')).$loaded().then(function (appsRef) {
+              return appsRef;
             });
           }]
         }

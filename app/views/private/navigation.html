@@ -1,3 +1,7 @@
+<!--
+  ~ Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
 <div class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -27,9 +31,11 @@
           </a>
           <ul class="dropdown-menu">
             <li><a href="#/dogs">Dogs</a></li>
-            <li><a href="#/devices">Devices</a></li>
             <li role="separator" class="divider"></li>
+            <li><a href="#/apps">Apps</a></li>
             <li><a href="#/users">Users</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#/devices">Devices</a></li>
             <li role="separator" class="divider"></li>
             <li ng-class="{'disabled': companies.length <= 1}">
               <a href="" ng-click="openSwitchCompanyModal()">Switch

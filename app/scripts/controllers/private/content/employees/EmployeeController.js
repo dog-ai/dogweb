@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
  */
 
 'use strict';
@@ -65,15 +65,31 @@ angular.module('dogwebApp')
         $firebaseArray(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded().then(function (presences) {
           if (presences.length > 0) {
 
-            angular.forEach(presences, function (presence) {
-              if (presence.$id.indexOf('_') == 0) {
+            for (var i = 0; i < presences.length; i++) {
+              if (presences[i].$id.indexOf('_') == 0) {
                 return;
               }
-              presence.created_date = moment(presence.created_date);
-              if (!lodash.some($scope.presences, {$id: presence.$id})) {
-                $scope.presences.push(presence);
+
+              // prettify start of day by placing an opposite presence
+              if (i == 0) {
+                $scope.presences.push({
+                  created_date: moment(presences[i].created_date).startOf('day'),
+                  is_present: !presences[i].is_present
+                });
               }
-            });
+
+              presences[i].created_date = moment(presences[i].created_date);
+              if (!lodash.some($scope.presences, {$id: presences[i].$id})) {
+                $scope.presences.push(presences[i]);
+              }
+
+              if ((i == (presences.length - 1)) && presences[i].is_present && !moment(presences[i].created_date).isSame(moment(), 'day')) {
+                $scope.presences.push({
+                  created_date: moment(presences[i].created_date).endOf('day'),
+                  is_present: false
+                });
+              }
+            }
 
             if (startDate.isSame(moment().startOf('day')) && $scope.presences[$scope.presences.length - 1]._last === undefined) {
 
@@ -130,7 +146,7 @@ angular.module('dogwebApp')
 
     $scope.heatmap = {
       start: moment().subtract(3, 'month').startOf('month'),
-      minDate: moment().subtract(Math.floor(moment().endOf('month').diff(moment(alltimeStats.started_date), 'months', true)), 'month').startOf('month'),
+      minDate: moment().subtract(Math.floor(moment().endOf('month').diff(moment(alltimeStats.period_start_date), 'months', true)), 'month').startOf('month'),
       maxDate: moment().endOf('month'),
       legend: [2, 4, 6, 8, 10],
       onClick: function (date, value) {
@@ -158,7 +174,7 @@ angular.module('dogwebApp')
     $scope.heatmap.range = 4;
     $scope.heatmap.data = {};
 
-    var date = moment(alltimeStats.started_date);
+    var date = moment(alltimeStats.period_start_date);
     while (date.isBefore(moment(), 'month') || date.isSame(moment(), 'month')) {
 
       $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {

@@ -1,3 +1,7 @@
+<!--
+  ~ Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
 <div id="devices-view">
 
   <div class="row">
@@ -12,7 +16,7 @@
           <th>Last seen</th>
           <th></th>
         </tr>
-        <tr ng-repeat="device in devices | orderBy:'-last_presence_date'">
+        <tr ng-repeat="device in devices | orderBy:['-last_presence_date', 'is_present']">
           <td>{{device.name}}</td>
           <td hidden>{{device.type}}</td>
           <td hidden>{{device.os}}</td>

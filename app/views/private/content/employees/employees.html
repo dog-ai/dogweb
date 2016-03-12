@@ -1,6 +1,10 @@
+<!--
+  ~ Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+  -->
+
 <div id="employees-view">
 
-  <div class="row">
+  <div class="row employees">
 
     <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
       <button id="add-employee" class="btn btn-default btn-block" ng-click="openAddNewEmployeeModal()">
@@ -9,7 +13,8 @@
       </button>
     </div>
 
-    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" ng-repeat-start="employee in employees">
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3"
+         ng-repeat-start="employee in employees | orderBy:['-last_presence_date', 'is_present']">
       <div class="thumbnail">
 
         <div>

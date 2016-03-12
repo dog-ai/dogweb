@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
  */
 
 'use strict';
@@ -20,8 +20,8 @@ angular.module('dogwebApp')
 
   .filter('performanceIndicatorValuePeriod', [function () {
     return function (_stats) {
-      if (_stats !== undefined && _stats.started_date !== undefined && _stats.ended_date !== undefined) {
-        return moment(_stats.started_date).format('MMM DD, YYYY') + ' - ' + moment(_stats.ended_date).format('MMM DD, YYYY');
+      if (_stats !== undefined && _stats.period_start_date !== undefined && _stats.period_end_date !== undefined) {
+        return moment(_stats.period_start_date).format('MMM DD, YYYY') + ' - ' + moment(_stats.period_end_date).format('MMM DD, YYYY');
       }
     };
   }])
@@ -52,8 +52,6 @@ angular.module('dogwebApp')
 
     angular.forEach(employees, function (employee) {
       _retrieveEmployee(employee.$id).then(function (employee) {
-
-
         $scope.employees.push(employee);
       });
     });

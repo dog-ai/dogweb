@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 dog.ai, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
  */
 
 /*
@@ -12,7 +12,7 @@ angular.module('dogwebApp')
     return {
       restrict: 'AE',
       replace: true,
-      template: '<img class="img-circle" width="{{size}}" height="{{size}}" ng-src="https://www.gravatar.com/avatar/{{hash}}?s={{size}}&d=https%3A%2F%2Funitials.com%2Fmugshot%2F50%2F{{initials}}.png" />',
+      template: '<img class="img-circle" width="{{size}}" height="{{size}}" ng-src="https://www.gravatar.com/avatar/{{hash}}?s={{2*size}}&d=https%3A%2F%2Funitials.com%2Fmugshot%2F50%2F{{initials}}.png" />',
       link: function (scope, element, attrs) {
         attrs.$observe('email', function (value) {
           if (!value) {
