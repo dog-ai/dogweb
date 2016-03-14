@@ -1,0 +1,73 @@
+<div id="devices-view">
+
+  <div class="row">
+
+    <div class="col-md-6 col-md-offset-3">
+
+      <table class="table table-bordered">
+        <tr>
+          <th>Name</th>
+          <th hidden>Type</th>
+          <th hidden>OS</th>
+          <th>Last seen</th>
+          <th></th>
+        </tr>
+        <tr ng-repeat="device in devices | orderBy:['-last_presence_date', 'is_present']">
+          <td>{{device.name}}</td>
+          <td hidden>{{device.type}}</td>
+          <td hidden>{{device.os}}</td>
+          <td>
+            <div ng-if="device.is_present">Just now</div>
+            <div ng-if="!device.is_present"><span am-time-ago="device.last_presence_date"></span></div>
+          </td>
+          <td hidden am-time-ago="device.last_presence_date">
+          <td>
+            <div class="btn-group" dropdown>
+              <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
+                <span class="glyphicon glyphicon-cog"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                <li role="menuitem"><a href="" ng-click="openEditDeviceModal(device)"><span
+                  class="glyphicon glyphicon-pencil"></span> Edit</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li role="menuitem"><a href="" ng-click="openRemoveDeviceModal(device)"><span
+                  class="glyphicon glyphicon-trash"></span> Remove</a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <div class="row">
+        <div class="col-md-4">
+          <button class="btn btn-primary btn-block" ng-click="openAddDeviceModal()">Add device</button>
+        </div>
+      </div>
+
+    </div>
+
+    Unrecognized MAC addresses: {{companyMacAddresses.length}}
+
+    <div class="col-md-6 hide">
+      Total: {{companyMacAddresses.length}}
+      <table class="table table-bordered">
+        <tr>
+          <th>Vendor</th>
+          <th>Address</th>
+          <th>First seen</th>
+          <th>Last seen</th>
+        </tr>
+        <tr ng-repeat="companyMacAddress in companyMacAddresses">
+          <td>{{companyMacAddress.vendor}}</td>
+          <td>{{companyMacAddress.address}}</td>
+          <td am-time-ago="companyMacAddress.created_date"></td>
+          <td am-time-ago="companyMacAddress.last_presence_date">
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+</div>

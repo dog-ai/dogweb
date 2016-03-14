@@ -1,0 +1,40 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+@import "variables";
+@import "public";
+@import "private";
+@import "employees";
+@import "employee";
+@import "apps";
+
+.dropdown-menu {
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  border-radius: 0px !important;
+}
+
+.modal-content {
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  border-radius: 0px !important;
+}
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+body {
+  padding: 0;
+}
+
+.gravatar {
+  padding: 9px 9px !important;
+}
+
+
+

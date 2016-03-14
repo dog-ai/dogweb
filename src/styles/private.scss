@@ -1,0 +1,46 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+.private {
+  background: $gray-lighter;
+}
+
+#private-view {
+  background-color: $gray-lighter;
+
+  .navbar-default {
+    border: none;
+
+    .navbar-header a {
+      color: #ffffff;
+
+      &.navbar-brand {
+        background: url(../images/logo-white.png) center/contain no-repeat;
+        width: 80px;
+        height: 35px;
+        margin-top: 6px;
+        font-size: 0px;
+      }
+    }
+
+    .navbar-nav > li > a {
+      color: #ffffff;
+
+      &:hover {
+        background-color: $brand-primary-dark;
+
+      }
+    }
+
+    .navbar-nav > li.active > a {
+      color: $brand-primary;
+      background-color: $gray-lighter;
+    }
+
+    .navbar-nav .img-circle {
+      border: solid #ffffff 1px;
+      margin-right: 5px;
+    }
+  }
+}

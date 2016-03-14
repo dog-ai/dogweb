@@ -1,0 +1,124 @@
+<div id="employees-view">
+
+  <div class="row employees">
+
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+      <button id="add-employee" class="btn btn-default btn-block" ng-click="openAddNewEmployeeModal()">
+        <i class="glyphicon glyphicon-plus-sign"></i>
+        <p>Add employee</p>
+      </button>
+    </div>
+
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3"
+         ng-repeat-start="employee in employees | orderBy:['-last_presence_date', 'is_present']">
+      <div class="thumbnail">
+
+        <div>
+          <div class="btn-group options" dropdown>
+            <button id="single-button" type="button" class="btn btn-default" dropdown-toggle>
+              <span class="glyphicon glyphicon-cog"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+              <li role="menuitem"><a href="" ng-click="openEditEmployeeModal(employee)"><span
+                class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+              <li role="separator" class="divider"></li>
+              <li role="menuitem"><a href="" ng-click="openRemoveEmployeeModal(employee)"><span
+                class="glyphicon glyphicon-trash"></span> Remove</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <a href="#/employees/{{employee.$id}}">
+
+            <img ng-src="{{employee.picture_url || '//:0'}}"
+                 fallback-src="images/employee-placeholder.png"
+                 alt="{{employee.full_name}}"
+                 class="img-circle"
+                 width="160" height="160"/>
+
+            <div class="caption">
+              <h3>{{employee.full_name}}</h3>
+
+              <ul class="list-inline">
+                <li>
+                  <span class="label label-default" ng-show="employee.is_present">Present</span>
+                </li>
+              </ul>
+
+            </div>
+          </a>
+        </div>
+
+        <!--<button class="btn btn-default btn-xs" ng-click="employee.performances_collapsed = !employee.performances_collapsed">Show KPIs</button>-->
+        <!--uib-collapse="employee.performances_collapsed"-->
+        <div class="performance-indicator"
+             ng-show="employeePerformances[employee.$id].performances">
+          <div class="performance-indicator-previous">
+            <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
+              class="glyphicon glyphicon-menu-left"></i></button>
+          </div>
+
+          <div class="performance-indicator-slide">
+            <slick autoplay="true"
+                   autoplay-speed="3000"
+                   infinite="true"
+                   slides-to-show="1"
+                   slides-to-scroll=1"
+                   draggable="false"
+                   touch-move="false"
+                   swipe="false"
+                   prev-arrow="#previous{{employee.$id}}PerformanceIndicator"
+                   next-arrow="#next{{employee.$id}}PerformanceIndicator">
+              <div>
+                <small>Average present hours per day</small>
+                <div class="performance-indicator-value average-total-duration">
+                  {{employeePerformances[employee.$id].performances.presence.average_total_duration | secondsToDateTime
+                  | date:'H'}} hours
+                  <i class="glyphicon"
+                     ng-class="employeePerformances[employee.$id].performances.presence.average_total_duration > employeePerformances[employee.$id].performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                </div>
+                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                </small>
+              </div>
+              <div>
+                <small>Average check-in time</small>
+                <div class="performance-indicator-value average-start-time">
+                  {{employeePerformances[employee.$id].performances.presence.average_start_time | secondsToDateTime |
+                  date:'HH:mm'}}
+                  <i class="glyphicon"
+                     ng-class="employeePerformances[employee.$id].performances.presence.average_start_time > employeePerformances[employee.$id].performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                </div>
+                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                </small>
+              </div>
+
+              <div>
+                <small>Average check-out time</small>
+                <div class="performance-indicator-value average-end-time">
+                  {{employeePerformances[employee.$id].performances.presence.average_end_time | secondsToDateTime |
+                  date:'HH:mm'}}
+                  <i class="glyphicon"
+                     ng-class="employeePerformances[employee.$id].performances.presence.average_end_time > employeePerformances[employee.$id].performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                </div>
+                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                </small>
+              </div>
+            </slick>
+          </div>
+
+          <div class="performance-indicator-next">
+            <button id="next{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
+              class="glyphicon glyphicon-menu-right"></i></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="clearfix" ng-if="$index == 4 || ($index != 5 && $index % 6 == 5)"></div>
+    <div ng-repeat-end=""></div>
+
+  </div>
+
+</div>

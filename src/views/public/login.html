@@ -1,0 +1,48 @@
+<div id="login-view" class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <legend>Log In</legend>
+      <form name="form" role="form" novalidate>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input id="email" required name="email" type="email" ng-model="email" class="form-control input-lg"/>
+
+          <div class="help-block" ng-messages="form.email.$error"
+               ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
+            <p ng-message="required">Your e-mail is required.</p>
+            <p ng-message="email">Your e-mail is invalid.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" required name="password" type="password" ng-model="password"
+                 class="form-control input-lg"/>
+
+          <div class="help-block" ng-messages="form.password.$error"
+               ng-show="(form.$submitted || form.password.$touched) && form.password.$invalid" ng-cloak>
+            <p ng-message="required">Your password is required.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <p>
+              <button class="btn btn-default btn-lg btn-block" ui-sref="public.forgot">Forgot password?</button>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p>
+              <button class="btn btn-primary btn-lg btn-block" ng-click="authenticate(email, password)">Log in</button>
+            </p>
+          </div>
+        </div>
+      </form>
+      <p ng-show="error" class="bg-danger">{{error}}</p>
+    </div>
+  </div>
+
+</div>
+

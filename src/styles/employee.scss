@@ -1,0 +1,169 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+#employee-view {
+
+  .daterangepicker .ranges li {
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+
+  }
+
+  .daterangepicker.opensleft:after,
+  .daterangepicker.opensleft:before {
+    content: none;
+  }
+
+  #performance-chart {
+    svg {
+      display: block;
+      margin: auto;
+    }
+
+    .c3-axis-x {
+      path, line {
+        stroke: #cccccc;
+      }
+
+      text {
+        fill: #999999;
+      }
+    }
+
+    path {
+      &.c3-line-is-present {
+        stroke: $brand-primary !important;
+      }
+
+      &.c3-area-is-present {
+        fill: #76DCE5 !important;
+
+      }
+    }
+
+    .c3-legend-item-is-present {
+      text {
+        fill: #888888;
+
+      }
+
+      .c3-legend-item-tile {
+        fill: $brand-primary !important;
+      }
+
+    }
+  }
+
+  /*
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+
+  body {
+    margin-bottom: 60px;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+  }
+  */
+
+  cal-heatmap {
+    position: initial !important;
+  }
+
+  .cal-heatmap-container {
+    margin: auto;
+  }
+
+  .cal-heatmap-container .q1 {
+    background-color: #DDF6F8;
+    fill: #DDF6F8;
+
+    & + .subdomain-text {
+      fill: white;
+    }
+  }
+
+  .cal-heatmap-container .q2 {
+    background-color: #BAEDF2;
+    fill: #BAEDF2;
+
+    & + .subdomain-text {
+      fill: white;
+    }
+  }
+
+  .cal-heatmap-container .q3 {
+    background-color: #98E4EB;
+    fill: #98E4EB;
+
+    & + .subdomain-text {
+      fill: white;
+    }
+  }
+
+  .cal-heatmap-container .q4 {
+    background-color: #76DCE5;
+    fill: #76DCE5;
+
+    & + .subdomain-text {
+      fill: white;
+    }
+  }
+
+  .cal-heatmap-container .q5 {
+    background-color: #54D3DE;
+    fill: #54D3DE;
+
+    & + .subdomain-text {
+      fill: white;
+    }
+  }
+
+  .cal-heatmap-container .q6 {
+    background-color: #2DC9D7;
+    fill: #2DC9D7;
+
+    & + .subdomain-text {
+      fill: white;
+    }
+  }
+
+  .cal-heatmap-container rect.now {
+    stroke: #444
+  }
+
+  .cal-heatmap-container text.now {
+    fill: #444;
+    font-weight: 800
+  }
+
+  .cal-heatmap-previous,
+  .cal-heatmap-next {
+    color: #aaa;
+    border: none;
+    min-height: 140px;
+    background-color: $gray-lighter;
+
+    &:hover {
+      color: #666;
+      background-color: $gray-lighter;
+    }
+  }
+
+  .cal-heatmap-previous {
+    float: right;
+  }
+
+  .slick-loading .slick-list {
+    background: none;
+  }
+
+}

@@ -1,0 +1,32 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+$brand-primary: #2DC9D7;
+$brand-primary-dark: #27C0CE;
+$brand-success: #8BE87C;
+$brand-info: #5bc0de;
+$brand-warning: #FFB636;
+$brand-danger: #EF5F31;
+
+$gray-light: #EEEEEE;
+$gray-lighter: #FBFAF8;
+
+$navbar-default-color: #ffffff;
+$navbar-default-bg: $brand-primary;
+$navbar-default-border: #eeeeee;
+$navbar-border-radius: none;
+
+//$body-bg: $gray-lighter;
+$body-bg: white;
+
+$btn-primary-border: $brand-primary;
+$border-radius-base: none;
+$border-radius-large: none;
+$border-radius-small: none;
+
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// bower:scss
+@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap";
+// endbower
+

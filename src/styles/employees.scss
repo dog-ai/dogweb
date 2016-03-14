@@ -1,0 +1,176 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+#employees-view {
+
+  #add-employee {
+    min-height: 404px;
+
+    color: #bbbbbb;
+
+    i {
+      color: $brand-primary;
+      font-size: 108px;
+    }
+
+    &.btn-default {
+
+      border-color: #dddddd;
+      border-style: dashed;
+      border-width: 2px;
+      background-color: #fbfaf8;
+    }
+
+    &:hover {
+
+      &.btn-default {
+      }
+    }
+  }
+
+  .thumbnail {
+    background-color: white;
+    border: none;
+    //border-color: #eeeeee;
+
+    .label-default {
+      background-color: $brand-warning;
+    }
+
+    .options {
+      button {
+        color: $gray-light;
+        padding: 5px 10px;
+        font-size: 18px;
+        border: none;
+
+        i {
+          font-size: 18px;
+        }
+
+        &:hover, &:focus {
+          color: #cccccc;
+          border: none;
+          box-shadow: none;
+          background-color: white;
+        }
+      }
+    }
+
+    a {
+      &:hover {
+        text-decoration: none;
+      }
+
+      img.img-circle {
+        background-color: $brand-primary;
+        border: solid $brand-primary 3px;
+
+        margin-top: 10px;
+        height: 160px;
+      }
+    }
+
+    .caption {
+
+      h3 {
+        text-align: center;
+
+        font-size: 20px;
+        color: $brand-primary;
+      }
+    }
+
+    .performance-indicator {
+      border-top: solid $gray-lighter 0.15em;
+
+      background-color: #ffffff;
+      margin: -5px;
+      padding: 10px 0px 2px 0px;
+      color: #aaa;
+      font-size: 16px;
+      text-align: center;
+
+      small {
+        font-size: 70%;
+      }
+
+      .performance-indicator-previous,
+      .performance-indicator-next {
+        button.btn-default {
+          color: #EEEEEE;
+          background-color: #ffffff;
+          border: none;
+          min-height: 65px;
+          margin-top: -16px;
+
+          &:hover, &:focus {
+            color: #cccccc;
+            background-color: #ffffff;
+          }
+        }
+      }
+
+      .performance-indicator-previous {
+        display: inline-block;
+        float: left;
+        margin-left: 5px;
+        margin-top: 23px;
+      }
+
+      .performance-indicator-next {
+        display: inline-block;
+        float: right;
+        margin-right: 5px;
+        margin-top: 23px;
+      }
+
+      .performance-indicator-slide {
+        display: inline-block;
+        max-width: 70%;
+        margin: auto;
+
+        .slick-slider {
+          margin-bottom: 15px;
+        }
+      }
+
+      .performance-indicator-value {
+        color: #666;
+        font-size: 17px;
+        margin-top: 3px;
+
+        &.average-total-duration {
+          .glyphicon-arrow-up {
+            color: $brand-success;
+          }
+
+          .glyphicon-arrow-down {
+            color: $brand-danger;
+          }
+        }
+
+        &.average-start-time {
+          .glyphicon-arrow-up {
+            color: $brand-danger;
+          }
+
+          .glyphicon-arrow-down {
+            color: $brand-success;
+          }
+        }
+
+        &.average-end-time {
+          .glyphicon-arrow-up {
+            color: $brand-success;
+          }
+
+          .glyphicon-arrow-down {
+            color: $brand-danger;
+          }
+        }
+      }
+    }
+  }
+}
