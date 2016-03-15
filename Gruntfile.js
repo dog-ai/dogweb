@@ -42,7 +42,7 @@ module.exports = function (grunt) {
       },
       sass: {
         files: ['<%= config.app %>/styles/**/*.{scss,sass}'],
-        tasks: ['sass:server']
+        tasks: ['sass:server', 'autoprefixer:server']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -290,7 +290,13 @@ module.exports = function (grunt) {
           '<%= config.dist %>',
           '<%= config.dist %>/images',
           '<%= config.dist %>/styles'
-        ]
+        ],
+        patterns: {
+          html: [
+            [/<img[^\>]*[^\>\S]+ng-src=['"]([^'"\)#]+)(#.+)?["']/gm, 'Update the HTML with non standard ng-src attribute on img'],
+            [/<img[^\>]*[^\>\S]+fallback-src=['"]([^'"\)#]+)(#.+)?["']/gm, 'Update the HTML with non standard fallback-src attribute on img']
+          ]
+        }
       }
     },
 

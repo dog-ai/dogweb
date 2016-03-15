@@ -34,6 +34,32 @@
     border: none;
     //border-color: #eeeeee;
 
+    &.not-present {
+      opacity: 0.7;
+      filter: alpha(opacity=70);
+
+      &:hover {
+        opacity: 1;
+        filter: alpha(opacity=100);
+      }
+
+      a {
+        img {
+          filter: grayscale(100%);
+
+          &.img-circle {
+
+          }
+        }
+      }
+
+      .caption {
+        h3 {
+          color: #888888;
+        }
+      }
+    }
+
     .label-default {
       background-color: $brand-warning;
     }

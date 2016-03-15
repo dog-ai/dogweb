@@ -12,6 +12,10 @@
   .navbar-default {
     border: none;
 
+    .badge.notifications {
+      background-color: $brand-danger;
+    }
+
     .navbar-header a {
       color: #ffffff;
 

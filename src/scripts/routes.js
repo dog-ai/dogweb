@@ -134,7 +134,14 @@ angular.module('dogweb')
         views: {
           'header': {
             templateUrl: '/views/private/navigation.html',
-            controller: 'NavigationController'
+            controller: 'NavigationController',
+            resolve: {
+              companyNotifications: ['Ref', '$firebaseArray', 'company', function (Ref, $firebaseArray, company) {
+                return $firebaseArray(Ref.child('companies/' + company.$id + '/notifications')).$loaded().then(function (companyNotifications) {
+                  return companyNotifications;
+                });
+              }]
+            }
           },
           'content': {
             templateUrl: "/views/private/content.html",

@@ -5,9 +5,22 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('NavigationController', function ($scope, user, company, Auth, $modal, lodash) {
+  .controller('NavigationController', function ($scope, user, company, companyNotifications, Ref, $firebaseObject, Auth, $modal, lodash) {
     $scope.user = user;
     $scope.company = company;
+    $scope.unreadNotifications = _calculateUnreadNotifications();
+
+    $scope.notifications = [];
+
+    $scope.loadNotifications = lodash.once(_loadNotifications);
+
+    $scope.markNotificationAsRead = function (notificationId) {
+      var notification = lodash.find(companyNotifications, {$id: notificationId})
+      if (notification.$value) {
+        notification.$value = false;
+        companyNotifications.$save(0);
+      }
+    }
 
     $scope.logout = function () {
       Auth.$unauth();
@@ -37,6 +50,53 @@ angular.module('dogweb')
       });
     };
 
+    companyNotifications.$watch(function (event) {
+      switch (event.event) {
+        case 'child_changed':
+        case 'child_added':
+        case 'child_removed':
+          $scope.unreadNotifications = _calculateUnreadNotifications();
+          break;
+        default:
+      }
+    });
+
+    function _loadNotifications() {
+      angular.forEach(companyNotifications, function (notification) {
+        _retrieveNotification(notification.$id).then(function (notification) {
+          $scope.notifications.push(notification);
+        });
+      });
+
+      companyNotifications.$watch(function (event) {
+        switch (event.event) {
+          case 'child_added':
+            _retrieveNotification(event.key).then(function (notification) {
+              $scope.notifications.push(notification);
+            });
+            break;
+          case 'child_removed':
+
+            lodash.remove($scope.notifications, function (notification) {
+              return event.key == notification.$id;
+            });
+            break;
+          default:
+        }
+      });
+    }
+
+    function _calculateUnreadNotifications() {
+      return lodash.reduce(companyNotifications, function (unreadNotifications, companyNotification) {
+        return companyNotification.$value ? ++unreadNotifications : unreadNotifications;
+      }, 0)
+    }
+
+    function _retrieveNotification(notificationId) {
+      return $firebaseObject(Ref.child('company_notifications/' + company.$id + '/' + notificationId)).$loaded().then(function (notification) {
+        return notification;
+      });
+    }
 
   })
 
