@@ -67,7 +67,7 @@ angular.module('dogweb')
 
             for (var i = 0; i < presences.length; i++) {
               if (presences[i].$id.indexOf('_') == 0) {
-                return;
+                break;
               }
 
               // prettify start of day by placing an opposite presence
