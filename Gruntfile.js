@@ -23,6 +23,33 @@ module.exports = function (grunt) {
     // Project settings
     config: config,
 
+    ngconstant: {
+      options: {
+        dest: '<%= config.build %>/scripts/constants.js',
+        name: 'constants'
+      },
+      server: {
+        constants: {
+          DOG_AI: {
+            environment: 'development'
+          },
+          ROLLBAR: {}
+
+        }
+      },
+      dist: {
+        constants: {
+          DOG_AI: {
+            environment: 'production'
+          },
+          ROLLBAR: {
+            access_token: '9301a9f4397246c6b36c87fa224da83a',
+            environment: 'production'
+          }
+        }
+      }
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -45,7 +72,8 @@ module.exports = function (grunt) {
         tasks: ['sass:server', 'autoprefixer:server']
       },
       gruntfile: {
-        files: ['Gruntfile.js']
+        files: ['Gruntfile.js'],
+        tasks: ['ngconstant:server']
       },
       livereload: {
         options: {
@@ -78,8 +106,8 @@ module.exports = function (grunt) {
                 connect.static('./bower_components')
               ),
               connect().use(
-                '/app/styles',
-                connect.static('./app/styles')
+                '/src/styles',
+                connect.static('./src/styles')
               ),
               connect.static(config.app)
             ];
@@ -180,20 +208,20 @@ module.exports = function (grunt) {
         ignorePath: /\.\.\//
       },
       /*test: {
-        devDependencies: true,
-        src: '<%= karma.unit.configFile %>',
-        ignorePath: /\.\.\//,
-        fileTypes: {
-          js: {
-            block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
-            detect: {
-              js: /'(.*\.js)'/gi
-            },
-            replace: {
-              js: '\'{{filePath}}\','
-            }
-          }
-        }
+       devDependencies: true,
+       src: '<%= karma.unit.configFile %>',
+       ignorePath: /\.\.\//,
+       fileTypes: {
+       js: {
+       block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
+       detect: {
+       js: /'(.*\.js)'/gi
+       },
+       replace: {
+       js: '\'{{filePath}}\','
+       }
+       }
+       }
        },*/
       //sass: {
       //  src: ['<%= config.app %>/styles/**/*.{scss,sass}'],
@@ -203,31 +231,31 @@ module.exports = function (grunt) {
 
     // Compiles Sass to CSS and generates necessary files if requested
     /*compass: {
-      options: {
+     options: {
      sassDir: '<%= config.app %>/styles',
      cssDir: '<%= config.build %>/styles',
      generatedImagesDir: '<%= config.build %>/images/generated',
      imagesDir: '<%= config.app %>/images',
      javascriptsDir: '<%= config.app %>/scripts',
      fontsDir: '<%= config.app %>/styles/fonts',
-        importPath: './bower_components',
-        httpImagesPath: '/images',
-        httpGeneratedImagesPath: '/images/generated',
-        httpFontsPath: '/styles/fonts',
-        relativeAssets: false,
-        assetCacheBuster: false,
-        raw: 'Sass::Script::Number.precision = 10\n'
-      },
-      dist: {
-        options: {
+     importPath: './bower_components',
+     httpImagesPath: '/images',
+     httpGeneratedImagesPath: '/images/generated',
+     httpFontsPath: '/styles/fonts',
+     relativeAssets: false,
+     assetCacheBuster: false,
+     raw: 'Sass::Script::Number.precision = 10\n'
+     },
+     dist: {
+     options: {
      generatedImagesDir: '<%= config.dist %>/images/generated'
-        }
-      },
-      server: {
-        options: {
-          sourcemap: true
-        }
-      }
+     }
+     },
+     server: {
+     options: {
+     sourcemap: true
+     }
+     }
      },*/
 
     sass: {
@@ -440,7 +468,6 @@ module.exports = function (grunt) {
     }
   });
 
-
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['dist', 'connect:dist:keepalive']);
@@ -449,6 +476,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'wiredep',
+      'ngconstant:server',
       'concurrent:server',
       'autoprefixer:server',
       'connect:livereload',
@@ -468,6 +496,7 @@ module.exports = function (grunt) {
   grunt.registerTask('dist', [
     'clean:dist',
     'wiredep',
+    'ngconstant:dist',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer:dist',

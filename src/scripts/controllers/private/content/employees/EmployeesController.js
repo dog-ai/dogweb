@@ -26,7 +26,7 @@ angular.module('dogweb')
     };
   }])
 
-  .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $modal) {
+  .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $uibModal) {
 
     $scope.yesterday = moment().subtract(1, 'day').toDate();
     $scope.employees = [];
@@ -57,7 +57,7 @@ angular.module('dogweb')
     });
 
     $scope.openAddNewEmployeeModal = function () {
-      $modal.open({
+      $uibModal.open({
         animation: true,
         templateUrl: '/views/private/content/employees/modal/add-employee.html',
         controller: 'AddEmployeeModalController',
@@ -65,11 +65,13 @@ angular.module('dogweb')
         resolve: {
           company: company
         }
+      }).result.finally(function () {
+
       });
     };
 
     $scope.openEditEmployeeModal = function (employee) {
-      $modal.open({
+      $uibModal.open({
         animation: true,
         templateUrl: '/views/private/content/employees/modal/edit-employee.html',
         controller: 'EditEmployeeModalController',
@@ -84,11 +86,13 @@ angular.module('dogweb')
             return $firebaseArray(Ref.child('companies/' + company.$id + '/devices')).$loaded();
           }]
         }
+      }).result.finally(function () {
+
       });
     };
 
     $scope.openRemoveEmployeeModal = function (employee) {
-      $modal.open({
+      $uibModal.open({
         animation: true,
         templateUrl: '/views/private/content/employees/modal/remove-employee.html',
         controller: 'RemoveEmployeeModalController',
@@ -100,6 +104,8 @@ angular.module('dogweb')
           },
           employee: employee
         }
+      }).result.finally(function () {
+
       });
     };
 
@@ -122,7 +128,7 @@ angular.module('dogweb')
 
   })
 
-  .controller('AddEmployeeModalController', function ($scope, company, $q, Ref, $firebaseObject, $timeout, $modalInstance) {
+  .controller('AddEmployeeModalController', function ($scope, company, $q, Ref, $firebaseObject, $timeout, $uibModalInstance) {
 
     $scope.addNewEmployee = function (employee) {
       var now = new moment();
@@ -133,13 +139,13 @@ angular.module('dogweb')
 
       _createEmployee(employee).then(function (employeeId) {
         _addEmployeeToCompany(employeeId, company.$id).then(function () {
-          $modalInstance.close();
+          $uibModalInstance.close();
         });
       });
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
 
     function _createEmployee(employee) {
@@ -171,7 +177,7 @@ angular.module('dogweb')
     }
   })
 
-  .controller('EditEmployeeModalController', function ($scope, company, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $modalInstance, lodash) {
+  .controller('EditEmployeeModalController', function ($scope, company, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $uibModalInstance, lodash) {
 
     $scope.employee = employee;
     $scope.employeeDevices = [];
@@ -229,7 +235,7 @@ angular.module('dogweb')
       }
 
       if ($scope.form.$pristine) {
-        $modalInstance.close();
+        $uibModalInstance.close();
       }
 
       var now = moment();
@@ -278,13 +284,13 @@ angular.module('dogweb')
             });
           });
 
-          $modalInstance.close();
+          $uibModalInstance.close();
         }
       });
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
 
     function _createDevice(device) {
@@ -354,7 +360,7 @@ angular.module('dogweb')
     }
 
     /*
-     .controller('AddDeviceToEmployeeModalController', function ($scope, employee, company, availableDevices, availableMacAddresses, $q, Ref, $firebaseObject, $state, $timeout, $modalInstance, lodash) {
+     .controller('AddDeviceToEmployeeModalController', function ($scope, employee, company, availableDevices, availableMacAddresses, $q, Ref, $firebaseObject, $state, $timeout, $uibModalInstance, lodash) {
      $scope.employee = employee;
      $scope.devices = [];
      $scope.device = {};
@@ -399,7 +405,7 @@ angular.module('dogweb')
 
      _addDeviceToCompany(deviceId, device.company_id).then(function () {
      //company.updated_date = now.format();
-     $modalInstance.close();
+     $uibModalInstance.close();
      });
 
      angular.forEach(macAddressIds, function (macAddressId) {
@@ -421,12 +427,12 @@ angular.module('dogweb')
      _addDeviceToEmployee(device.$id, employee.$id).then(function () {
      employee.updated_date = now.format();
      _updateDevice(device.$id, {updated_date: now.format(), employee_id: employee.$id});
-     $modalInstance.close();
+     $uibModalInstance.close();
      });
      };
 
      $scope.cancel = function () {
-     $modalInstance.dismiss();
+     $uibModalInstance.dismiss();
      };
 
      function _retrieveDevice(deviceId) {
@@ -530,7 +536,7 @@ angular.module('dogweb')
      */
   })
 
-  .controller('RemoveEmployeeModalController', function ($scope, company, employees, employee, $modalInstance, lodash) {
+  .controller('RemoveEmployeeModalController', function ($scope, company, employees, employee, $uibModalInstance, lodash) {
 
     $scope.employee = employee;
 
@@ -538,12 +544,12 @@ angular.module('dogweb')
       _removeEmployeeFromCompany(employee.$id, company.$id).then(function () {
         _deleteEmployee(employee).then(function () {
         });
-        $modalInstance.close();
+        $uibModalInstance.close();
       });
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
 
     function _deleteEmployee(employee) {

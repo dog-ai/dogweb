@@ -5,25 +5,23 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('NavigationController', function ($scope, user, company, companyNotifications, Ref, $firebaseObject, Auth, $modal, lodash) {
+  .controller('NavigationController', function ($scope, user, company, apps, companyNotifications, Ref, $firebaseObject, Auth, $uibModal, lodash, $state) {
     $scope.user = user;
     $scope.company = company;
     $scope.unreadNotifications = _calculateUnreadNotifications();
-
     $scope.notifications = [];
-
     $scope.loadNotifications = lodash.once(_loadNotifications);
 
     $scope.markNotificationAsRead = function (notificationId) {
-      var notification = lodash.find(companyNotifications, {$id: notificationId})
-      if (notification.$value) {
-        notification.$value = false;
-        companyNotifications.$save(0);
+      var index = lodash.findIndex(companyNotifications, {$id: notificationId})
+      if (index != -1 && companyNotifications[index].$value) {
+        companyNotifications[index].$value = false;
+        companyNotifications.$save(index);
       }
     }
 
     $scope.logout = function () {
-      Auth.$unauth();
+      $state.go('public.login', {logout: true});
     };
 
     $scope.openSwitchCompanyModal = function () {
@@ -31,7 +29,7 @@ angular.module('dogweb')
         return;
       }
 
-      $modal.open({
+      $uibModal.open({
         animation: true,
         templateUrl: '/views/private/modal/switch-company.html',
         controller: 'SwitchCompanyModalController',
@@ -62,21 +60,26 @@ angular.module('dogweb')
     });
 
     function _loadNotifications() {
-      angular.forEach(companyNotifications, function (notification) {
-        _retrieveNotification(notification.$id).then(function (notification) {
+      angular.forEach(companyNotifications, function (companyNotification) {
+        _retrieveNotificationAndPopulate(companyNotification.$id).then(function (notification) {
           $scope.notifications.push(notification);
         });
       });
 
       companyNotifications.$watch(function (event) {
         switch (event.event) {
+          case 'child_changed':
+            _retrieveNotificationAndPopulate(event.key).then(function (notification) {
+              var index = lodash.findIndex($scope.notifications, {$id: notification.$id})
+              $scope.notifications[index] = notification;
+            });
+            break;
           case 'child_added':
-            _retrieveNotification(event.key).then(function (notification) {
+            _retrieveNotificationAndPopulate(event.key).then(function (notification) {
               $scope.notifications.push(notification);
             });
             break;
           case 'child_removed':
-
             lodash.remove($scope.notifications, function (notification) {
               return event.key == notification.$id;
             });
@@ -98,9 +101,30 @@ angular.module('dogweb')
       });
     }
 
+    function _retrieveNotificationAndPopulate(notificationId) {
+      return _retrieveNotification(notificationId)
+        .then(function (notification) {
+          var companyNotification = lodash.find(companyNotifications, {$id: notificationId})
+          var app = lodash.find(apps, {$id: notification.app});
+          var url;
+
+          switch (notification.app) {
+            case 'employee':
+              break;
+            default:
+          }
+
+          return lodash.extend(notification, {
+            unread: companyNotification.$value,
+            thumbnail_url: app.thumbnail_url,
+            url: '#/' + notification.module + 's/' + notification[notification.module]
+          })
+        });
+    }
+
   })
 
-  .controller('SwitchCompanyModalController', function ($scope, user, company, userCompanies, $q, Ref, $firebaseObject, $state, $stateParams, $timeout, $modalInstance, lodash) {
+  .controller('SwitchCompanyModalController', function ($scope, user, company, userCompanies, $q, Ref, $firebaseObject, $state, $stateParams, $timeout, $uibModalInstance, lodash) {
     $scope.companies = [];
     $scope.selectedCompany = {};
 
@@ -147,16 +171,16 @@ angular.module('dogweb')
         user.$save()
           .then(function () {
             $state.go('private.content.dashboard', $stateParams, {reload: true}).then(function () {
-              $modalInstance.close();
+              $uibModalInstance.close();
             });
           });
       } else {
-        $modalInstance.close();
+        $uibModalInstance.close();
       }
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
   })
 

@@ -13,6 +13,7 @@
  * Main module of the application.
  */
 angular.module('dogweb', [
+  'constants',
   'ngAnimate',
   'ngCookies',
   'ngMessages',
@@ -33,5 +34,7 @@ angular.module('dogweb', [
   'oi.select',
   'ngBootstrap',
   'calHeatmap',
-  'slickCarousel'
+  'slickCarousel',
+  'tandibar/ng-rollbar',
+  'ui.scroll'
 ]);

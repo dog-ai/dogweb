@@ -12,8 +12,20 @@
   .navbar-default {
     border: none;
 
+    .badge.brand {
+      background-color: #777777;
+      position: absolute;
+      left: 40px;
+      top: 43px;
+      font-size: 8px;
+    }
     .badge.notifications {
       background-color: $brand-danger;
+      position: absolute;
+      left: 85px;
+      top: 10px;
+      font-size: 10px;
+      line-height: 12px;
     }
 
     .navbar-header a {
@@ -46,5 +58,68 @@
       border: solid #ffffff 1px;
       margin-right: 5px;
     }
+
+    .notifications-dropdown {
+      .notifications-toggle {
+      }
+
+      .notifications-menu {
+        max-height: 286px;
+        overflow: scroll;
+        padding: 0;
+
+        .notification-item {
+          width: 320px;
+          border-top: solid #ddd 1px;
+
+          a {
+            height: 70px;
+          }
+
+          .unread {
+            background-color: #EEEEEE;
+          }
+
+          &:last-child {
+            border-bottom: solid #ddd 1px;
+
+          }
+
+          &.no-notifications {
+            height: 70px;
+            width: 320px;
+            color: #aaaaaa;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .notification-image {
+            padding: 12px 0 5px 12px;
+
+            img {
+              margin: auto;
+            }
+          }
+
+          .notification-message {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            white-space: pre;
+            word-wrap: break-word;
+          }
+
+          .notification-date {
+            display: block;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+          }
+        }
+      }
+    }
+
   }
 }

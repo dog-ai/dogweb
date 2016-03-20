@@ -6,7 +6,6 @@
 
 angular.module('dogweb')
   .controller('DashboardController', function () {
-
   })
 
 ;

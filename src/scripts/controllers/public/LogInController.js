@@ -3,23 +3,29 @@
  */
 
 'use strict';
-/**
- * @ngdoc function
- * @name dogweb.controller:LoginCtrl
- * @description
- * # LoginCtrl
- * Manages authentication to any active providers.
- */
+
 angular.module('dogweb')
-  .controller('LogInController', function ($scope, Auth, $location) {
+  .controller('LogInController', function ($scope, Auth, $location, Ref, $firebaseObject) {
 
     $scope.authenticate = function (email, password) {
       if ($scope.form.$invalid) {
         return;
       }
 
-      Auth.$authWithPassword({email: email, password: password}, {rememberMe: true}).then(redirect, error);
+      Auth.$authWithPassword({email: email, password: password}, {rememberMe: true})
+        .then(success, error);
     };
+
+    function success(auth) {
+      $firebaseObject(Ref.child('users/' + auth.uid)).$loaded().then(function (user) {
+        if (user.is_enabled) {
+          redirect();
+        } else {
+          Auth.$unauth();
+          error('We\'re sorry, but your account is not eligible for the private beta')
+        }
+      }, error);
+    }
 
     function redirect() {
       $location.path('/dashboard');

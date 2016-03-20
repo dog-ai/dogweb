@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('UsersController', function ($scope, user, company, companyUsersRef, companyInvitesRef, Ref, $firebaseObject, $modal, lodash) {
+  .controller('UsersController', function ($scope, user, company, companyUsersRef, companyInvitesRef, Ref, $firebaseObject, $uibModal, lodash) {
 
     $scope.users = [];
     $scope.invites = companyInvitesRef;
@@ -33,7 +33,7 @@ angular.module('dogweb')
     });
 
     $scope.openInviteUserModal = function () {
-      $modal.open({
+      $uibModal.open({
         animation: true,
         templateUrl: '/views/private/content/company/modal/invite-user.html',
         controller: 'InviteUserModalController',
@@ -66,7 +66,7 @@ angular.module('dogweb')
   })
 
   .controller('InviteUserModalController', function ($rootScope, $scope, user, company, companyInvitesRef, $q, Ref,
-                                                     $firebaseObject, $state, $stateParams, $timeout, $modalInstance,
+                                                     $firebaseObject, $state, $stateParams, $timeout, $uibModalInstance,
                                                      $base64, $location, sendGridService) {
 
     $scope.invite = {};
@@ -86,7 +86,7 @@ angular.module('dogweb')
         .then(_encodeInvite)
         .then(_sendInvite)
         .then(function () {
-          $modalInstance.close();
+          $uibModalInstance.close();
         }, function () {
 
         });
@@ -94,7 +94,7 @@ angular.module('dogweb')
     };
 
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
 
     function _createInvite(invite) {

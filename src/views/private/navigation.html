@@ -1,7 +1,7 @@
 <div class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
-    <div class="navbar-header">
 
+    <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
@@ -10,32 +10,57 @@
       </button>
 
       <a class="navbar-brand" href="#/">dog.ai</a>
+      <span class="badge brand">beta</span>
     </div>
 
     <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
+      <!-- Left navigation -->
       <ul class="nav navbar-nav">
         <li ui-sref-active="active"><a ui-sref="private.content.dashboard">Dashboard</a></li>
         <li ui-sref-active="active"><a ui-sref="private.content.employees">Employees</a></li>
       </ul>
 
+      <!-- Right navigation -->
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" ng-click="loadNotifications()">
-          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false">
+
+        <!-- Notifications -->
+        <li class="dropdown notifications-dropdown" ng-click="loadNotifications()">
+          <a href="" class="dropdown-toggle notifications-toggle" data-toggle="dropdown" role="button">
             Notifications <span class="badge notifications" ng-show="unreadNotifications">{{unreadNotifications}}</span>
           </a>
-          <ul class="dropdown-menu">
-            <li ng-repeat="notification in notifications">
-              <a href="" ng-click="markNotificationAsRead(notification.$id)">{{notification.message}}</a>
+          <ul class="dropdown-menu notifications-menu">
+            <li class="notification-item no-notifications" ng-hide="notifications.length">
+              No notifications so far ;(
+            </li>
+            <li class="notification-item" ng-repeat="notification in notifications | orderBy:['-created_date']">
+              <a href="{{notification.url}}" ng-click="markNotificationAsRead(notification.$id)"
+                 ng-class="{unread: notification.unread}">
+                <div class="row">
+                  <div class="col-xs-2 notification-image">
+                    <img ng-src="{{notification.thumbnail_url || '//:0'}}"
+                         fallback-src loading-src
+                         class="img-circle"
+                         width="40" height="40"/>
+                  </div>
+                  <div class="col-xs-10">
+                    <div class="notification-message">{{notification.message}}</div>
+                    <div class="notification-date">
+                      <i class="glyphicon glyphicon-time"></i>
+                      <span>{{notification.created_date | amDateFormat: 'MMMM DD HH:mm' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
             </li>
           </ul>
         </li>
 
-        <li class="dropdown">
+        <!-- Company -->
+        <li class="dropdown company-dropdown">
           <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="false">
-            {{company.name}} <span class="caret"></span>
+            {{company.name}}
           </a>
           <ul class="dropdown-menu">
             <li><a href="#/dogs">Dogs</a></li>
@@ -52,7 +77,8 @@
           </ul>
         </li>
 
-        <li class="dropdown">
+        <!-- User -->
+        <li class="dropdown user-dropdown">
           <a href="" class="dropdown-toggle gravatar" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="false">
             <gravatar-image email="{{user.email_address}}" full-name="{{user.full_name}}" size="32"></gravatar-image>
@@ -67,5 +93,6 @@
 
       </ul>
     </div>
+
   </div>
 </div>

@@ -6,7 +6,7 @@
 
 angular.module('dogweb')
 
-  .controller('AppsController', function ($scope, user, company, companyAppsRef, appsRef, Ref, $firebaseObject, $modal, lodash, $q, $timeout) {
+  .controller('AppsController', function ($scope, user, company, companyAppsRef, apps, Ref, $firebaseObject, $uibModal, lodash, $q, $timeout) {
 
     $scope.apps = [];
 
@@ -26,7 +26,7 @@ angular.module('dogweb')
     });
 
     function _mergeApp(companyApp) {
-      return lodash.merge(companyApp, lodash.find(appsRef, {'$id': companyApp.$id}))
+      return lodash.merge(companyApp, lodash.find(apps, {'$id': companyApp.$id}))
     }
 
     $scope.toggleApp = function (app) {
