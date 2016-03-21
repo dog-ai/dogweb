@@ -13,16 +13,18 @@
     border: none;
 
     .badge.brand {
-      background-color: #777777;
       position: absolute;
-      left: 40px;
-      top: 43px;
+      top: 4px;
+      left: -19px;
+      transform: rotate(-45deg);
+      width: 60px;
+      background-color: #BA55D3;
       font-size: 8px;
     }
     .badge.notifications {
       background-color: $brand-danger;
       position: absolute;
-      left: 85px;
+      left: 82px;
       top: 10px;
       font-size: 10px;
       line-height: 12px;
@@ -74,10 +76,11 @@
 
           a {
             height: 70px;
+            border-left: solid transparent 4px;
           }
 
           .unread {
-            background-color: #EEEEEE;
+            border-left-color: #EF5F31;
           }
 
           &:last-child {
@@ -96,7 +99,7 @@
           }
 
           .notification-image {
-            padding: 12px 0 5px 12px;
+            padding: 12px 0 5px 10px;
 
             img {
               margin: auto;
@@ -107,7 +110,7 @@
             display: block;
             margin-top: 8px;
             font-size: 12px;
-            white-space: pre;
+            white-space: pre-wrap;
             word-wrap: break-word;
           }
 

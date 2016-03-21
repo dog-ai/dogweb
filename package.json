@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "grunt-exec": "^0.4.6"
+  },
   "repository": {},
   "devDependencies": {
     "chalk": "^0.4.0",

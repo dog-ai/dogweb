@@ -560,5 +560,4 @@ angular.module('dogweb')
       return employees.$remove(lodash.find(employees, {$id: employeeId}));
     }
   })
-
 ;

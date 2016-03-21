@@ -169,7 +169,8 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '<%= config.build %>'
+      server: '<%= config.build %>',
+      build: '<%= config.build %>'
     },
 
     // Add vendor prefixed styles
@@ -465,6 +466,12 @@ module.exports = function (grunt) {
           'var/tmp/dist/index.html': ['src/views/**/*.html']
         }
       }
+    },
+
+    exec: {
+      deploy: {
+        command: 'firebase deploy'
+      }
     }
   });
 
@@ -510,6 +517,12 @@ module.exports = function (grunt) {
     'filerev',
     'usemin',
     'htmlmin'
+  ]);
+
+  grunt.registerTask('deploy', [
+    'dist',
+    'exec:deploy',
+    'clean:build'
   ]);
 
   grunt.registerTask('default', [

@@ -13,7 +13,7 @@
       <span class="badge brand">beta</span>
     </div>
 
-    <div class="collapse navbar-collapse" id="js-navbar-collapse">
+    <li class="collapse navbar-collapse" id="js-navbar-collapse">
 
       <!-- Left navigation -->
       <ul class="nav navbar-nav">
@@ -25,36 +25,7 @@
       <ul class="nav navbar-nav navbar-right">
 
         <!-- Notifications -->
-        <li class="dropdown notifications-dropdown" ng-click="loadNotifications()">
-          <a href="" class="dropdown-toggle notifications-toggle" data-toggle="dropdown" role="button">
-            Notifications <span class="badge notifications" ng-show="unreadNotifications">{{unreadNotifications}}</span>
-          </a>
-          <ul class="dropdown-menu notifications-menu">
-            <li class="notification-item no-notifications" ng-hide="notifications.length">
-              No notifications so far ;(
-            </li>
-            <li class="notification-item" ng-repeat="notification in notifications | orderBy:['-created_date']">
-              <a href="{{notification.url}}" ng-click="markNotificationAsRead(notification.$id)"
-                 ng-class="{unread: notification.unread}">
-                <div class="row">
-                  <div class="col-xs-2 notification-image">
-                    <img ng-src="{{notification.thumbnail_url || '//:0'}}"
-                         fallback-src loading-src
-                         class="img-circle"
-                         width="40" height="40"/>
-                  </div>
-                  <div class="col-xs-10">
-                    <div class="notification-message">{{notification.message}}</div>
-                    <div class="notification-date">
-                      <i class="glyphicon glyphicon-time"></i>
-                      <span>{{notification.created_date | amDateFormat: 'MMMM DD HH:mm' }}</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </li>
+        <li ui-view="notifications" class="dropdown notifications-dropdown" ng-click="loadNotifications()"></li>
 
         <!-- Company -->
         <li class="dropdown company-dropdown">
@@ -70,7 +41,7 @@
             <li role="separator" class="divider"></li>
             <li><a href="#/devices">Devices</a></li>
             <li role="separator" class="divider"></li>
-            <li ng-class="{'disabled': companies.length <= 1}">
+            <li ng-class="{'disabled': (user.companies | size) <= 1}">
               <a href="" ng-click="openSwitchCompanyModal()">Switch
                 company...</a>
             </li>

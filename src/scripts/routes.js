@@ -113,15 +113,9 @@ angular.module('dogweb')
         .state('public.teaser', {
           abstract: true,
           views: {
-            'header': {
-              templateUrl: '/views/public/navigation.html'
-            },
             'content': {
               templateUrl: "/views/public/teaser.html"
-            },
-            'footer': {
-              templateUrl: "/views/public/footer.html"
-            },
+            }
           }
         })
         .state('public.teaser.landing', {
@@ -145,8 +139,12 @@ angular.module('dogweb')
           abstract: true,
           views: {
             'header': {
-              templateUrl: '/views/private/navigation.html',
-              controller: 'NavigationController',
+              templateUrl: '/views/private/header/navigation.html',
+              controller: 'NavigationController'
+            },
+            'notifications@private.content': {
+              templateUrl: 'views/private/header/notifications.html',
+              controller: 'NotificationsController',
               resolve: {
                 companyNotifications: ['Ref', '$firebaseArray', 'company', function (Ref, $firebaseArray, company) {
                   return $firebaseArray(Ref.child('companies/' + company.$id + '/notifications')).$loaded().then(function (companyNotifications) {
