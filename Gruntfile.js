@@ -14,8 +14,11 @@ module.exports = function (grunt) {
 
   var config = {
     app: 'src',
-    dist: 'var/tmp/dist',
-    build: 'var/tmp/build'
+    dist: 'dist',
+    build: {
+      server: 'var/tmp/build/server',
+      dist: 'var/tmp/build/dist'
+    }
   };
 
   grunt.initConfig({
@@ -25,10 +28,12 @@ module.exports = function (grunt) {
 
     ngconstant: {
       options: {
-        dest: '<%= config.build %>/scripts/constants.js',
         name: 'constants'
       },
       server: {
+        options: {
+          dest: '<%= config.build.server %>/scripts/constants.js'
+        },
         constants: {
           DOG_AI: {
             environment: 'development'
@@ -38,6 +43,9 @@ module.exports = function (grunt) {
         }
       },
       dist: {
+        options: {
+          dest: '<%= config.build.dist %>/scripts/constants.js'
+        },
         constants: {
           DOG_AI: {
             environment: 'production'
@@ -81,7 +89,7 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= config.app %>/**/*.html',
-          '<%= config.build %>/styles/main.css',
+          '<%= config.build.server %>/styles/main.css',
           '<%= config.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -100,7 +108,7 @@ module.exports = function (grunt) {
           open: false,
           middleware: function (connect) {
             return [
-              connect.static(config.build),
+              connect.static(config.build.server),
               connect().use(
                 '/bower_components',
                 connect.static('./bower_components')
@@ -119,7 +127,7 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
-              connect.static('<%= config.build %>'),
+              connect.static('<%= config.build.server %>'),
               connect.static('test'),
               connect().use(
                 '/bower_components',
@@ -164,13 +172,12 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
-            '<%= config.build %>',
+            '<%= config.build.dist %>',
             '<%= config.dist %>'
           ]
         }]
       },
-      server: '<%= config.build %>',
-      build: '<%= config.build %>'
+      server: '<%= config.build.server %>',
     },
 
     // Add vendor prefixed styles
@@ -184,17 +191,17 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= config.build %>/styles/',
+          cwd: '<%= config.build.server %>/styles/',
           src: '**/*.css',
-          dest: '<%= config.build %>/styles/'
+          dest: '<%= config.build.server %>/styles/'
         }]
       },
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= config.build %>/styles/',
+          cwd: '<%= config.build.dist %>/styles/',
           src: '**/*.css',
-          dest: '<%= config.build %>/styles/'
+          dest: '<%= config.build.dist %>/styles/'
         }]
       }
     },
@@ -265,7 +272,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          '<%= config.build %>/styles/main.css': '<%= config.app %>/styles/main.scss'
+          '<%= config.build.dist %>/styles/main.css': '<%= config.app %>/styles/main.scss'
         }
       },
       server: {
@@ -273,7 +280,7 @@ module.exports = function (grunt) {
           sourceMap: true
         },
         files: {
-          '<%= config.build %>/styles/main.css': '<%= config.app %>/styles/main.scss'
+          '<%= config.build.server %>/styles/main.css': '<%= config.app %>/styles/main.scss'
         }
       }
     },
@@ -296,7 +303,7 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: '<%= config.app %>/index.html',
       options: {
-        staging: '<%= config.build %>',
+        staging: '<%= config.build.dist %>',
         dest: '<%= config.dist %>',
         flow: {
           html: {
@@ -378,9 +385,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= config.build %>/concat/scripts',
+          cwd: '<%= config.build.dist %>/concat/scripts',
           src: '*.js',
-          dest: '<%= config.build %>/concat/scripts'
+          dest: '<%= config.build.dist %>/concat/scripts'
         }]
       }
     },
@@ -409,7 +416,7 @@ module.exports = function (grunt) {
           ]
         }, {
           expand: true,
-          cwd: '<%= config.build %>/concat',
+          cwd: '<%= config.build.dist %>/concat',
           dest: '<%= config.dist %>',
           src: ['**/*.*']
         }, {
@@ -419,7 +426,7 @@ module.exports = function (grunt) {
           dest: '<%= config.dist %>'
         }, {
           expand: true,
-          cwd: '<%= config.build %>/styles',
+          cwd: '<%= config.build.dist %>/styles',
           dest: '<%= config.dist %>/styles',
           src: '**/*.css'
         }
@@ -463,7 +470,7 @@ module.exports = function (grunt) {
           }
         },
         files: {
-          'var/tmp/dist/index.html': ['src/views/**/*.html']
+          'dist/index.html': ['src/views/**/*.html']
         }
       }
     },
@@ -522,7 +529,6 @@ module.exports = function (grunt) {
   grunt.registerTask('deploy', [
     'dist',
     'exec:deploy',
-    'clean:build'
   ]);
 
   grunt.registerTask('default', [

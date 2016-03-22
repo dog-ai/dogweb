@@ -1,6 +1,6 @@
 {
   "firebase": "dazzling-torch-7723",
-  "public": "var/tmp/dist",
+  "public": "dist",
   "ignore": [
     "firebase.json",
     "**/.*",

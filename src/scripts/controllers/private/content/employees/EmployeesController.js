@@ -246,7 +246,7 @@ angular.module('dogweb')
         if ($scope.form.employeeDevices.$dirty) {
 
           var devicesToRemove = lodash.filter(employeeDevices, function (device) {
-            return !lodash.findWhere($scope.employeeDevices, {$id: device.$id});
+            return !lodash.find($scope.employeeDevices, {$id: device.$id});
           });
 
           angular.forEach(devicesToRemove, function (device) {
@@ -256,7 +256,7 @@ angular.module('dogweb')
           });
 
           var devicesToAdd = lodash.filter($scope.employeeDevices, function (device) {
-            return !lodash.findWhere(employeeDevices, {$id: device.$id});
+            return !lodash.find(employeeDevices, {$id: device.$id});
           });
 
           angular.forEach(devicesToAdd, function (device) {
