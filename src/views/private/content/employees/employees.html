@@ -2,7 +2,7 @@
 
   <div class="row employees">
 
-    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+    <div class="hidden-xs col-xs-12 col-sm-4 col-md-3 col-lg-3">
       <button id="add-employee" class="btn btn-default btn-block" ng-click="openAddNewEmployeeModal()">
         <i class="glyphicon glyphicon-plus-sign"></i>
         <p>Add employee</p>
@@ -31,7 +31,7 @@
         <div>
           <a href="#/employees/{{employee.$id}}">
 
-            <img ng-src="{{employee.picture_url || '//:0'}}"
+            <img ng-src="{{employee.picture_url}}"
                  fallback-src loading-src
                  alt="{{employee.full_name}}"
                  class="img-circle"
@@ -52,8 +52,7 @@
 
         <!--<button class="btn btn-default btn-xs" ng-click="employee.performances_collapsed = !employee.performances_collapsed">Show KPIs</button>-->
         <!--uib-collapse="employee.performances_collapsed"-->
-        <div class="performance-indicator"
-             ng-show="employeePerformances[employee.$id].performances">
+        <div class="performance-indicator" ng-show="employeePerformances[employee.$id].performances">
           <div class="performance-indicator-previous">
             <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-left"></i></button>

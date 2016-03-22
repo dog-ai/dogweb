@@ -9,11 +9,11 @@
         <span class="icon-bar"></span>
       </button>
 
-      <a class="navbar-brand" href="#/">dog.ai</a>
+      <a class="navbar-brand text-hide" href="#/">dog.ai</a>
       <span class="badge brand">beta</span>
     </div>
 
-    <li class="collapse navbar-collapse" id="js-navbar-collapse">
+    <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
       <!-- Left navigation -->
       <ul class="nav navbar-nav">
@@ -25,7 +25,7 @@
       <ul class="nav navbar-nav navbar-right">
 
         <!-- Notifications -->
-        <li ui-view="notifications" class="dropdown notifications-dropdown" ng-click="loadNotifications()"></li>
+        <li ui-view="notifications" class="dropdown notifications-dropdown"></li>
 
         <!-- Company -->
         <li class="dropdown company-dropdown">
@@ -61,8 +61,8 @@
             <li><a href="" ng-click="logout()">Log out</a></li>
           </ul>
         </li>
-
       </ul>
+
     </div>
 
   </div>

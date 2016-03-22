@@ -1,18 +1,25 @@
 <a href="" class="dropdown-toggle notifications-toggle" data-toggle="dropdown" role="button">
-  Notifications <span class="badge notifications" ng-show="unreadNotifications">{{unreadNotifications}}</span>
+  Notifications
+  <span class="badge notifications" ng-show="companyNotifications.getUnreadCount()">
+    {{companyNotifications.getUnreadCount()}}
+  </span>
 </a>
 
-<ul class="dropdown-menu notifications-menu">
+<ul class="dropdown-menu notifications-menu" ui-scroll-viewport>
 
-  <li class="notification-item no-notifications" ng-hide="notifications.length">No notifications so far ;(</li>
+  <li class="notification-item no-notifications" ng-hide="companyNotifications.getSize()">
+    No notifications so far ;(
+  </li>
 
-  <li class="notification-item" ng-repeat="notification in notifications | orderBy:['-created_date']">
-    <a href="{{notification.url}}" ng-click="markNotificationAsRead(notification.$id)"
-       ng-class="{unread: notification.unread}">
-      <span class="badge"></span>
+  <li class="notification-item" ui-scroll="notification in companyNotifications" buffer-size='5'
+      padding="0">
+
+    <a href="{{notification.getUrl()}}" ng-click="companyNotifications.markAsRead(notification)"
+       ng-class="{unread: companyNotifications.isUnread(notification)}">
+
       <div class="row">
         <div class="col-xs-2 notification-image">
-          <img ng-src="{{notification.thumbnail_url || '//:0'}}"
+          <img ng-src="{{}}"
                fallback-src loading-src
                class="img-circle"
                width="40" height="40"/>

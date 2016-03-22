@@ -143,14 +143,13 @@ angular.module('dogweb')
               controller: 'NavigationController'
             },
             'notifications@private.content': {
-              templateUrl: 'views/private/header/notifications.html',
+              templateUrl: '/views/private/header/notifications.html',
               controller: 'NotificationsController',
               resolve: {
-                companyNotifications: ['Ref', '$firebaseArray', 'company', function (Ref, $firebaseArray, company) {
-                  return $firebaseArray(Ref.child('companies/' + company.$id + '/notifications')).$loaded().then(function (companyNotifications) {
-                    return companyNotifications;
-                  });
+                companyNotifications: ['company', 'CompanyNotificationList', function (company, CompanyNotificationList) {
+                  return new CompanyNotificationList(company.$id);
                 }]
+
               }
             },
             'content': {
@@ -168,10 +167,8 @@ angular.module('dogweb')
                 return company;
               });
             }],
-            apps: ['Ref', 'auth', '$firebaseArray', function (Ref, auth, $firebaseArray) {
-              return $firebaseArray(Ref.child('apps/')).$loaded().then(function (appsRef) {
-                return appsRef;
-              });
+            apps: ['AppList', function (AppList) {
+              return new AppList();
             }]
           }
         })

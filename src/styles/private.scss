@@ -12,6 +12,29 @@
   .navbar-default {
     border: none;
 
+    .navbar-collapse {
+      border-color: $brand-primary;
+      box-shadow: none;
+    }
+
+    .navbar-toggle {
+      border-color: white;
+
+      .icon-bar {
+        background-color: white;
+      }
+
+      &:hover,
+      &:focus {
+        border-color: $brand-primary;
+        background-color: white;
+
+        .icon-bar {
+          background-color: $brand-primary;
+        }
+      }
+    }
+
     .badge.brand {
       position: absolute;
       top: 4px;
