@@ -52,13 +52,18 @@
 
         <!--<button class="btn btn-default btn-xs" ng-click="employee.performances_collapsed = !employee.performances_collapsed">Show KPIs</button>-->
         <!--uib-collapse="employee.performances_collapsed"-->
-        <div class="performance-indicator" ng-show="employeePerformances[employee.$id].performances">
-          <div class="performance-indicator-previous">
+        <div class="performance-indicator">
+          <div class="performance-indicator-previous" ng-show="employeePerformances[employee.$id].performances">
             <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-left"></i></button>
           </div>
 
-          <div class="performance-indicator-slide">
+          <div class="performance-indicator-slide no-performance-indicator"
+               ng-hide="employeePerformances[employee.$id].performances">
+            No performance available yet ;(
+          </div>
+
+          <div class="performance-indicator-slide" ng-show="employeePerformances[employee.$id].performances">
             <slick autoplay="true"
                    autoplay-speed="3000"
                    infinite="true"
@@ -106,7 +111,7 @@
             </slick>
           </div>
 
-          <div class="performance-indicator-next">
+          <div class="performance-indicator-next" ng-show="employeePerformances[employee.$id].performances">
             <button id="next{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-right"></i></button>
           </div>
@@ -115,7 +120,7 @@
       </div>
     </div>
 
-    <div class="clearfix" ng-if="$index == 4 || ($index != 5 && $index % 6 == 5)"></div>
+    <div class="clearfix" ng-if="$index+1 % 4 == 0 && $index+1 != 1"></div>
     <div ng-repeat-end=""></div>
 
   </div>

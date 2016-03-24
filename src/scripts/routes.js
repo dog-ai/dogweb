@@ -245,10 +245,8 @@ angular.module('dogweb')
           templateUrl: "/views/private/content/company/apps.html",
           controller: 'AppsController',
           resolve: {
-            companyAppsRef: ['$rootScope', 'company', 'Ref', '$firebaseArray', function ($rootScope, company, Ref, $firebaseArray) {
-              return $firebaseArray(Ref.child('companies/' + company.$id + '/apps')).$loaded().then(function (companyAppsRef) {
-                return companyAppsRef;
-              });
+            companyApps: ['company', 'CompanyAppList', function (company, CompanyAppList) {
+              return new CompanyAppList(company.$id);
             }]
           }
         })
@@ -328,6 +326,8 @@ angular.module('dogweb')
       $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
         if (error === "AUTH_REQUIRED") {
           $state.go('public.login');
+        } else {
+          console.error(error);
         }
       });
 

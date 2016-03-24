@@ -11,6 +11,13 @@ angular.module('dogweb')
         if (app) {
           return app.thumbnail_url;
         }
+      },
+
+      getDescriptionByName: function (name) {
+        var app = this.$getRecord(name);
+        if (app) {
+          return app.description;
+        }
       }
 
     });

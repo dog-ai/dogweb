@@ -2,28 +2,27 @@
 
   <div class="row apps">
 
-    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" ng-repeat="app in apps | orderBy:['$id']">
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" ui-scroll="companyApp in companyApps" adapter="adapter">
       <div class="thumbnail">
 
         <div>
           <a>
             <div class="image">
-              <img ng-src="{{app.thumbnail_url || '//:0'}}"
-                   alt="{{apps.$id}}"
-                   width="120" height="120"/>
+              <img ng-src="{{apps.getThumbnailUrlByName(companyApp.$id)}}" loading-src fallback-src
+                   alt="{{companyApp.$id}}" width="120" height="120"/>
             </div>
           </a>
 
           <div class="panel">
             <div class="caption">
-              <h3>{{app.$id}}</h3>
-              <p>{{app.description}}</p>
+              <h3>{{companyApp.$id}}</h3>
+              <p>{{apps.getDescriptionByName(companyApp.$id)}}</p>
             </div>
 
             <div class="switch">
-              <input id="cmn-toggle-{{app.$id}}" type="checkbox" class="cmn-toggle cmn-toggle-round"
-                     ng-model="app.is_enabled" ng-change="toggleApp(app)">
-              <label for="cmn-toggle-{{app.$id}}">
+              <input id="cmn-toggle-{{companyApp.$id}}" type="checkbox" class="cmn-toggle cmn-toggle-round"
+                     ng-model="companyApp.is_enabled" ng-change="companyApp.setEnabled(companyApp.is_enabled)">
+              <label for="cmn-toggle-{{companyApp.$id}}">
               </label>
             </div>
           </div>

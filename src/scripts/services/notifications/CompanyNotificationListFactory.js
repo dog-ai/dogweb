@@ -7,6 +7,7 @@ angular.module('dogweb')
     return function (companyId, companyNotificationsRef) {
       return $firebaseArray.$extend({
         _unreadCount: 0,
+        _adapter: undefined,
 
         $$added: function (snapshot) {
           var notification = new CompanyNotification();
@@ -15,6 +16,10 @@ angular.module('dogweb')
 
           if (notification.isUnread()) {
             this._unreadCount++;
+          }
+
+          if (this._adapter) {
+            this._adapter.prepend([notification]);
           }
 
           return notification;
@@ -70,6 +75,10 @@ angular.module('dogweb')
 
           Promise.all(promises)
             .then(callback)
+        },
+
+        setAdapter: function (adapter) {
+          this._adapter = adapter;
         }
 
       })(companyNotificationsRef);

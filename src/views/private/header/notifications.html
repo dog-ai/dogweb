@@ -11,8 +11,10 @@
     No notifications so far ;(
   </li>
 
-  <li class="notification-item" ui-scroll="notification in companyNotifications" buffer-size='5'
-      padding="0">
+  <li class="notification-item"
+      ui-scroll="notification in companyNotifications"
+      buffer-size='5'
+      adapter="adapter">
 
     <a href="{{notification.getUrl()}}" ng-click="companyNotifications.markAsRead(notification)"
        ng-class="{unread: companyNotifications.isUnread(notification)}">

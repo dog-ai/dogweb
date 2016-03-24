@@ -9,6 +9,9 @@ angular.module('dogweb')
   .controller('NotificationsController', function ($scope, apps, companyNotifications) {
     $scope.apps = apps;
     $scope.companyNotifications = companyNotifications;
+
+    $scope.adapter = {};
+    companyNotifications.setAdapter($scope.adapter);
   })
 
 ;
