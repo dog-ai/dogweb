@@ -136,9 +136,11 @@ angular.module('dogweb')
         .then(function (employeeId) {
           _addEmployeeToCompany(employeeId, company.$id)
             .then(function () {
-              employee.id = employeeId;
-              var task = {event: 'person:employee:profile:linkedin', data: {employee: {id: employeeId}}};
-              return company.addTask(task);
+              if (employee.linkedin_profile_url) {
+                employee.id = employeeId;
+                var task = {event: 'person:employee:profile:linkedin', data: {employee: {id: employeeId}}};
+                return company.addTask(task);
+              }
             })
         })
         .then($uibModalInstance.close);

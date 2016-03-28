@@ -5,7 +5,7 @@
 #employees-view {
 
   #add-employee {
-    min-height: 404px;
+    min-height: 420px;
 
     color: #bbbbbb;
 
@@ -54,7 +54,7 @@
       }
 
       .caption {
-        h3 {
+        h3.employee-name {
           color: #888888;
         }
       }
@@ -100,11 +100,31 @@
 
     .caption {
 
-      h3 {
+      h3.employee-name {
         text-align: center;
 
         font-size: 20px;
         color: $brand-primary;
+
+        margin-top: 15px;
+        margin-bottom: 5px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      h4.employee-headline {
+        font-size: 16px;
+        min-height: 17px;
+        text-align: center;
+        color: #ccc;
+        font-weight: 400;
+        margin-top: 0;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
