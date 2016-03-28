@@ -5,7 +5,8 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('LogInController', function ($scope, Auth, $location, Ref, $firebaseObject) {
+  .controller('LogInController', function ($scope, Auth, CompanyUser, $state, $stateParams) {
+    $scope.$stateParams = $stateParams;
 
     $scope.authenticate = function (email, password) {
       if ($scope.form.$invalid) {
@@ -13,25 +14,23 @@ angular.module('dogweb')
       }
 
       Auth.$authWithPassword({email: email, password: password}, {rememberMe: true})
-        .then(success, error);
+        .then(function (auth) {
+          return CompanyUser(auth.uid).$loaded();
+        })
+        .then(function (user) {
+          if (user.is_enabled) {
+            var stateName = $stateParams.to || 'private.content.dashboard';
+            $state.go(stateName, $stateParams);
+
+          } else {
+
+            Auth.$unauth();
+            $scope.error = 'We\'re sorry, but your account is not eligible for the private beta';
+          }
+        })
+        .catch(function (error) {
+          $scope.error = error;
+        })
     };
 
-    function success(auth) {
-      $firebaseObject(Ref.child('users/' + auth.uid)).$loaded().then(function (user) {
-        if (user.is_enabled) {
-          redirect();
-        } else {
-          Auth.$unauth();
-          error('We\'re sorry, but your account is not eligible for the private beta')
-        }
-      }, error);
-    }
-
-    function redirect() {
-      $location.path('/dashboard');
-    }
-
-    function error(error) {
-      $scope.error = error;
-    }
   });

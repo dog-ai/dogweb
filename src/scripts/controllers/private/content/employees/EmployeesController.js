@@ -4,13 +4,6 @@
 
 'use strict';
 
-/**
- * @ngdoc function
- * @name dogweb.controller:EmployeesCtrl
- * @description
- * # EmployeesCtrl
- * Controller of the dogweb
- */
 angular.module('dogweb')
   .filter('secondsToDateTime', [function () {
     return function (seconds) {
@@ -61,7 +54,7 @@ angular.module('dogweb')
         animation: true,
         templateUrl: '/views/private/content/employees/modal/add-employee.html',
         controller: 'AddEmployeeModalController',
-        size: null,
+        size: 'sm',
         resolve: {
           company: company
         }
@@ -75,7 +68,7 @@ angular.module('dogweb')
         animation: true,
         templateUrl: '/views/private/content/employees/modal/edit-employee.html',
         controller: 'EditEmployeeModalController',
-        size: null,
+        size: 'md',
         resolve: {
           company: company,
           employee: employee,
@@ -133,15 +126,21 @@ angular.module('dogweb')
     $scope.addNewEmployee = function (employee) {
       var now = new moment();
 
+      employee = employee || {};
       employee.created_date = now.format();
       employee.updated_date = now.format();
       employee.company_id = company.$id;
 
-      _createEmployee(employee).then(function (employeeId) {
-        _addEmployeeToCompany(employeeId, company.$id).then(function () {
-          $uibModalInstance.close();
-        });
-      });
+      _createEmployee(employee)
+        .then(function (employeeId) {
+          _addEmployeeToCompany(employeeId, company.$id)
+            .then(function () {
+              employee.id = employeeId;
+              var task = {event: 'person:employee:profile:linkedin', data: {employee: {id: employeeId}}};
+              return company.addTask(task);
+            })
+        })
+        .then($uibModalInstance.close);
     };
 
     $scope.cancel = function () {
@@ -229,7 +228,7 @@ angular.module('dogweb')
       });
     });
 
-    $scope.saveChanges = function (employee) {
+    $scope.save = function () {
       if ($scope.form.$invalid) {
         return;
       }
@@ -283,9 +282,9 @@ angular.module('dogweb')
               _addDeviceToEmployee(deviceId, employee.$id);
             });
           });
-
-          $uibModalInstance.close();
         }
+
+        $uibModalInstance.close();
       });
     };
 

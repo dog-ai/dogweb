@@ -79,6 +79,9 @@
       background-color: $gray-lighter;
     }
 
+    .navbar-nav > li.disabled > a {
+    }
+
     .navbar-nav .img-circle {
       border: solid #ffffff 1px;
       margin-right: 5px;

@@ -58,11 +58,6 @@
     h1 {
       font-size: 53px;
     }
-
-    u {
-      border-bottom: 3px dashed #666;
-      text-decoration: none;
-    }
   }
 
   .btn-default {
@@ -80,4 +75,10 @@
 
   display: flex;
   align-items: center;
+}
+
+#login-view {
+  .no-account {
+    margin-top: 30px;
+  }
 }

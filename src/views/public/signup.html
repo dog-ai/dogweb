@@ -2,7 +2,11 @@
 
   <div class="container-fluid">
 
-    <div class="row">
+    <div class="row" ng-hide="$stateParams.envelope">
+      Invite only ;(
+    </div>
+
+    <div class="row" ng-show="$stateParams.envelope">
       <div class="col-md-4 col-md-offset-4">
         <legend>Sign Up</legend>
         <form name="form" role="form" novalidate>
@@ -17,10 +21,9 @@
             </div>
           </div>
 
-          <div class="form-group" ng-hide="invite">
+          <div class="form-group" ng-hide="$stateParams.envelope">
             <label for="email">E-mail <span>*</span></label>
-            <input id="email" ng-required="!invite" name="email" type="email" ng-model="user.email_address"
-                   class="form-control"/>
+            <input id="email" name="email" type="email" ng-model="user.email_address" class="form-control"/>
 
             <div class="help-block" ng-messages="form.email.$error"
                  ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
@@ -41,17 +44,6 @@
             </div>
           </div>
 
-          <div class="form-group" ng-hide="invite">
-            <label for="companyName">Company name <span>*</span></label>
-            <input id="companyName" ng-required="!invite" name="companyName" type="text" ng-model="company.name"
-                   class="form-control"/>
-
-            <div class="help-block" ng-messages="form.companyName.$error"
-                 ng-show="(form.$submitted || form.companyName.$touched) && form.companyName.$invalid" ng-cloak>
-              <p ng-message="required">Your company name is required.</p>
-            </div>
-          </div>
-
           <p>
             * required information
           </p>
@@ -59,7 +51,7 @@
           <div class="row">
             <div class="col-md-6">
               <p>
-                <button class="btn btn-primary btn-block" ng-click="register(user, company)">Sign
+                <button class="btn btn-primary btn-lg btn-block" ng-click="register(user, company)">Sign
                   up
                 </button>
               </p>

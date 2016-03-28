@@ -33,7 +33,7 @@ angular.module('dogweb')
           templateUrl: "/views/public.html"
         })
         .state('public.signup', {
-          url: "/signup?envelope",
+          url: "/signup?to&envelope",
           views: {
             'header': {
               templateUrl: '/views/public/navigation.html'
@@ -42,29 +42,33 @@ angular.module('dogweb')
               templateUrl: "/views/public/signup.html",
               controller: 'SignUpController',
               resolve: {
-                auth: ["Auth", '$state', function (Auth, $state) {
+                auth: ["Auth", '$state', '$stateParams', function (Auth, $state, $stateParams) {
                   return Auth.$waitForAuth().then(function (auth) {
-                    if (auth !== null) {
-                      $state.go('private.content.dashboard');
+                    if (auth) {
+                      var stateName = $stateParams.to || 'private.content.dashboard';
+                      $state.go(stateName, $stateParams);
                     }
+                    return auth;
                   });
                 }],
-                invite: ['$stateParams', '$base64', 'Ref', '$firebaseObject', function ($stateParams, $base64, Ref, $firebaseObject) {
-                  if ($stateParams.envelope !== undefined) {
+                emailAddress: ['$stateParams', '$base64', 'CompanyInvite', function ($stateParams, $base64, CompanyInvite) {
+                  if ($stateParams.envelope) {
                     try {
                       var envelope = JSON.parse(decodeURIComponent(escape($base64.decode(decodeURIComponent($stateParams.envelope)))));
-                      return $firebaseObject(Ref.child('company_invites/' + envelope.company.id + '/' + envelope.invite.id)).$loaded();
-                    } catch (error) {
+                      return new CompanyInvite().$load(envelope.company.id, envelope.invite.id).then(function (companyInvite) {
+                        var invite = companyInvite.created_date ? companyInvite : {};
+                        return invite.email_address;
+                      });
+                    } catch (ignored) {
                     }
                   }
-                  return undefined;
                 }]
               }
             }
           }
         })
         .state('public.login', {
-          url: "/login?logout",
+          url: "/login?to&logout&envelope",
           views: {
             'header': {
               templateUrl: '/views/public/navigation.html'
@@ -80,7 +84,8 @@ angular.module('dogweb')
                         $stateParams.logout = undefined;
                         Auth.$unauth();
                       } else {
-                        $state.go('private.content.dashboard');
+                        var stateName = $stateParams.to || 'private.content.dashboard';
+                        $state.go(stateName, $stateParams);
                       }
                     }
                   });
@@ -157,17 +162,14 @@ angular.module('dogweb')
             }
           },
           resolve: {
-            user: ['$rootScope', 'auth', 'Ref', '$firebaseObject', function ($rootScope, auth, Ref, $firebaseObject) {
-              return $firebaseObject(Ref.child('users/' + auth.uid)).$loaded().then(function (user) {
-                return user;
-              });
+            user: ['auth', 'CompanyUser', function (auth, CompanyUser) {
+              return new CompanyUser(auth.uid).$loaded();
             }],
-            company: ['$rootScope', 'user', 'Ref', '$firebaseObject', 'lodash', function ($rootScope, user, Ref, $firebaseObject, lodash) {
-              return $firebaseObject(Ref.child('companies/' + (lodash.keys(user.companies).length > 1 ? user.primary_company : lodash.keys(user.companies)[0]))).$loaded().then(function (company) {
-                return company;
-              });
+            company: ['user', 'lodash', 'Company', function (user, lodash, Company) {
+              var companyId = lodash.keys(user.companies).length > 1 ? user.primary_company : lodash.keys(user.companies)[0];
+              return new Company(companyId);
             }],
-            apps: ['AppList', function (AppList) {
+            apps: ['auth', 'AppList', function (auth, AppList) {
               return new AppList();
             }]
           }
@@ -189,6 +191,37 @@ angular.module('dogweb')
         .state('private.content.company', {
           abstract: true,
           templateUrl: "/views/private/content/company/company.html",
+        })
+        .state('private.content.company.invite', {
+          url: "/invite?envelope",
+          templateUrl: "/views/private/content/company/invite.html",
+          controller: 'InviteController',
+          resolve: {
+            invite: ['$stateParams', '$base64', 'CompanyInvite', '$state', function ($stateParams, $base64, CompanyInvite, $state) {
+              if ($stateParams.envelope) {
+                try {
+                  var envelope = JSON.parse(decodeURIComponent(escape($base64.decode(decodeURIComponent($stateParams.envelope)))));
+                  return new CompanyInvite().$load(envelope.company.id, envelope.invite.id).then(function (companyInvite) {
+                    var invite = companyInvite.created_date ? companyInvite : undefined;
+
+                    if (!invite) {
+                      $state.go('private.content.dashboard');
+                    } else {
+                      return invite;
+                    }
+                  });
+                } catch (ignored) {
+                  $state.go('private.content.dashboard');
+                }
+              }
+            }],
+            inviteCompanyUsers: ['company', 'CompanyUserList', 'invite', function (company, CompanyUserList, invite) {
+              return new CompanyUserList(invite.company.id);
+            }],
+            inviteCompanyInvites: ['company', 'CompanyInviteList', 'invite', function (company, CompanyInviteList, invite) {
+              return new CompanyInviteList(invite.company.id);
+            }]
+          }
         })
         .state('private.content.company.dogs', {
           url: "/dogs",
@@ -228,15 +261,11 @@ angular.module('dogweb')
           templateUrl: "/views/private/content/company/users.html",
           controller: 'UsersController',
           resolve: {
-            companyUsersRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
-              return $firebaseArray(Ref.child('companies/' + company.$id + '/users')).$loaded().then(function (companyUsersRef) {
-                return companyUsersRef;
-              });
+            companyUsers: ['company', 'CompanyUserList', function (company, CompanyUserList) {
+              return new CompanyUserList(company.$id);
             }],
-            companyInvitesRef: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
-              return $firebaseArray(Ref.child('company_invites/' + company.$id)).$loaded().then(function (companyInvitesRef) {
-                return companyInvitesRef;
-              });
+            companyInvites: ['company', 'CompanyInviteList', function (company, CompanyInviteList) {
+              return new CompanyInviteList(company.$id);
             }]
           }
         })
@@ -325,12 +354,12 @@ angular.module('dogweb')
 
       $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
         if (error === "AUTH_REQUIRED") {
-          $state.go('public.login');
+          toParams.to = toState.name;
+          $state.go('public.login', toParams);
         } else {
           console.error(error);
         }
       });
-
     }
   ])
 

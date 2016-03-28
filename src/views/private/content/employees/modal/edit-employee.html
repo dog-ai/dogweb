@@ -1,4 +1,4 @@
-<form name="form" role="form">
+<form name="form" role="form" ng-submit="save()">
   <div class="modal-header">
     <h4 class="modal-title">Edit employee</h4>
   </div>
@@ -6,25 +6,34 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="fullName">Name</label>
-      <input id="fullName" name="fullName" type="text" required ng-model="employee.full_name" class="form-control"/>
+      <input id="fullName" name="fullName" type="text" class="form-control" required
+             ng-model="employee.full_name"
+             ng-model-options="{updateOn: 'submit'}"/>
     </div>
 
     <div class="form-group">
       <label for="pictureUrl">Picture URL</label>
-      <input id="pictureUrl" name="pictureUrl" type="text" ng-model="employee.picture_url" class="form-control"/>
+      <input id="pictureUrl" name="pictureUrl" type="text" class="form-control"
+             ng-model="employee.picture_url"
+             ng-model-options="{updateOn: 'submit'}"/>
     </div>
+
+    <p class="form-group">
+      <label>LinkedIn Profile URL</label>
+      <input id="linkedInProfileUrl" name="linkedin_profile_url" type="text" class="form-control"
+             ng-model="employee.linkedin_profile_url"/>
+    </p>
 
     <div class="form-group">
       <label>Devices</label>
-      <oi-select id="employeeDevices" name="employeeDevices"
-                 oi-options="device.name for device in companyDevices track by device.$id"
+      <oi-select id="employeeDevices" name="employeeDevices" multiple
                  ng-model="employeeDevices"
+                 oi-options="device.name for device in companyDevices track by device.$id"
                  oi-select-options="{
                     newItem: true,
                     saveTrigger: 'enter, blur',
                     newItemModel: {$id: null, name: $query}
                 }"
-                 multiple
         ></oi-select>
     </div>
 
@@ -32,6 +41,6 @@
 
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
-    <button type="button" class="btn btn-primary" ng-click="saveChanges(employee)">Yes, save changes</button>
+    <button type="submit" class="btn btn-primary">Yes, save changes</button>
   </div>
 </form>

@@ -8,7 +8,8 @@
         <div>
           <a>
             <div class="image">
-              <img ng-src="{{apps.getThumbnailUrlByName(companyApp.$id)}}" loading-src fallback-src
+              <img ng-src="{{apps.getThumbnailUrlByName(companyApp.$id)}}"
+                   fallback-src
                    alt="{{companyApp.$id}}" width="120" height="120"/>
             </div>
           </a>
@@ -16,7 +17,7 @@
           <div class="panel">
             <div class="caption">
               <h3>{{companyApp.$id}}</h3>
-              <p>{{apps.getDescriptionByName(companyApp.$id)}}</p>
+              <p>{{apps.getDescriptionByName(companyApp.$id) || '//:0'}}</p>
             </div>
 
             <div class="switch">

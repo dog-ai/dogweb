@@ -5,6 +5,7 @@
 angular.module('dogweb')
   .factory("CompanyNotificationList", function (Ref, CompanyNotificationListFactory) {
     return function (companyId) {
-      return new CompanyNotificationListFactory(companyId, Ref.child('companies/' + companyId + '/notifications'));
+      return new CompanyNotificationListFactory(companyId, Ref.child('companies/' + companyId + '/notifications'))
+        .$loaded();
     }
   });

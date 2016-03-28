@@ -5,32 +5,31 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('UsersController', function ($scope, user, company, companyUsersRef, companyInvitesRef, Ref, $firebaseObject, $uibModal, lodash) {
+  .controller('UsersController', function ($scope, user, company, companyUsers, companyInvites, $uibModal, lodash) {
+    $scope.companyUsers = companyUsers;
+    $scope.companyInvites = companyInvites;
 
-    $scope.users = [];
-    $scope.invites = companyInvitesRef;
+    $scope.companyUsersAdapter = {};
+    companyUsers.setAdapter($scope.companyUsersAdapter);
 
-    companyUsersRef.$watch(function (event) {
-      switch (event.event) {
-        case 'child_added':
-          _retrieveUser(event.key).then(function (user) {
-            $scope.users.push(user);
-          });
-          break;
-        case 'child_removed':
-          lodash.remove($scope.users, function (userRef) {
-            return event.key == userRef.$id;
-          });
-          break;
-        default:
-      }
-    });
+    $scope.companyInvitesAdapter = {};
+    companyInvites.setAdapter($scope.companyInvitesAdapter);
 
-    angular.forEach(companyUsersRef, function (companyUserRef) {
-      _retrieveUser(companyUserRef.$id).then(function (userRef) {
-        $scope.users.push(userRef);
+    $scope.openRemoveUserModal = function (user) {
+      $uibModal.open({
+        animation: true,
+        templateUrl: '/views/private/content/company/modal/remove-user.html',
+        controller: 'RemoveUserModalController',
+        size: 'sm',
+        resolve: {
+          companyUsers: function () {
+            return companyUsers;
+          },
+          user: user
+        }
+      }).result.finally(function () {
       });
-    });
+    };
 
     $scope.openInviteUserModal = function () {
       $uibModal.open({
@@ -41,34 +40,31 @@ angular.module('dogweb')
         resolve: {
           user: user,
           company: company,
-          companyInvitesRef: function () {
-            return companyInvitesRef;
+          companyInvites: function () {
+            return companyInvites;
           }
         }
       }).result.finally(function () {
-        });
-    };
-
-    $scope.deleteInvite = function (inviteRef) {
-      _deleteInvite(inviteRef.$id);
-    };
-
-    function _retrieveUser(userId) {
-      return $firebaseObject(Ref.child('users/' + userId)).$loaded().then(function (userRef) {
-        return userRef;
       });
-    }
+    };
 
-    function _deleteInvite(inviteId) {
-      return companyInvitesRef.$remove(lodash.find(companyInvitesRef, {$id: inviteId}));
-    }
-
+    $scope.removeInvite = function (invite) {
+      return companyInvites.$remove(lodash.find(companyInvites, {$id: invite.getId()}))
+    };
   })
 
-  .controller('InviteUserModalController', function ($rootScope, $scope, user, company, companyInvitesRef, $q, Ref,
-                                                     $firebaseObject, $state, $stateParams, $timeout, $uibModalInstance,
-                                                     $base64, $location, sendGridService) {
+  .controller('RemoveUserModalController', function ($scope, companyUsers, user, $uibModalInstance, lodash) {
+    $scope.user = user;
 
+    $scope.cancel = $uibModalInstance.dismiss;
+
+    $scope.removeUser = function (user) {
+      return companyUsers.$remove(lodash.find(companyUsers, {$id: user.$id}))
+        .then($uibModalInstance.close);
+    };
+  })
+
+  .controller('InviteUserModalController', function ($scope, CompanyInvite, user, company, companyInvites, $uibModalInstance, $location, lodash) {
     $scope.invite = {};
 
     $scope.validateInvite = function () {
@@ -76,85 +72,32 @@ angular.module('dogweb')
     };
 
     $scope.sendInvite = function (invite) {
-
       var now = moment();
 
       invite.created_date = now.format();
-      invite.user_id = user.$id;
+      invite.user = {id: user.$id, full_name: user.full_name};
+      invite.company = {id: company.$id, name: company.name};
+      invite.url = $location.protocol() + "://" + $location.host() + ":" +
+        ($location.port() == 80 ? '' : $location.port()) + '/#/invite';
 
-      _createInvite(invite)
-        .then(_encodeInvite)
-        .then(_sendInvite)
+      var companyInvite = new CompanyInvite();
+      companyInvite = lodash.extend(companyInvite, invite);
+
+      companyInvites.$add(companyInvite)
+        .then(function (companyInviteRef) {
+          invite.id = companyInviteRef.key();
+
+          var task = {event: 'user:invite', data: {invite: invite}};
+          return company.addTask(task);
+        })
         .then(function () {
           $uibModalInstance.close();
-        }, function () {
-
-        });
-
+        })
     };
 
     $scope.cancel = function () {
       $uibModalInstance.dismiss();
     };
-
-    function _createInvite(invite) {
-      return companyInvitesRef.$add(invite).then(function (inviteRef) {
-        return inviteRef.key();
-      });
-    }
-
-    function _encodeInvite(inviteId) {
-      var def = $q.defer();
-
-      $timeout(function () {
-        try {
-          var envelope = {
-            company: {id: company.$id},
-            invite: {id: inviteId}
-          };
-
-          var encodedInvite = encodeURIComponent($base64.encode(unescape(encodeURIComponent(JSON.stringify(envelope)))));
-          def.resolve(encodedInvite);
-        } catch (error) {
-          def.reject(error);
-        }
-      });
-
-      return def.promise;
-    }
-
-    function _sendInvite(encodedInvite) {
-      var def = $q.defer();
-
-      $timeout(function () {
-        if (false) {
-          def.reject(error);
-        } else {
-
-          var url = $location.protocol() + "://" +
-            $location.host() + ":" +
-            ($location.port() == 80 ? '' : $location.port()) +
-            '/#/signup?envelope=' +
-            encodedInvite;
-
-          console.log(url);
-
-          /*sendGridService.$send(
-           'dogweb',
-           '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',
-           user.email_address,
-           user.full_name,
-           user.full_name + ' sent you an invite for joining ' + company.name,
-           'Click here: ' + url,
-           'noreply@dog.ai');*/
-
-          def.resolve();
-        }
-      });
-
-      return def.promise;
-    }
-
   })
 
 ;

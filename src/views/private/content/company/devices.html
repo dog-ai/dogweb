@@ -7,15 +7,17 @@
       <table class="table table-bordered">
         <tr>
           <th>Name</th>
-          <th hidden>Type</th>
-          <th hidden>OS</th>
+          <th>Manufacturer</th>
+          <th>Type</th>
+          <th>OS</th>
           <th>Last seen</th>
           <th></th>
         </tr>
         <tr ng-repeat="device in devices | orderBy:['-last_presence_date', 'is_present']">
           <td>{{device.name}}</td>
-          <td hidden>{{device.type}}</td>
-          <td hidden>{{device.os}}</td>
+          <td>{{device.manufacturer}}</td>
+          <td>{{device.type}}</td>
+          <td>{{device.os}}</td>
           <td>
             <div ng-if="device.is_present">Just now</div>
             <div ng-if="!device.is_present"><span am-time-ago="device.last_presence_date"></span></div>

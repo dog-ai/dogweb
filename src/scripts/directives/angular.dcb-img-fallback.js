@@ -19,22 +19,21 @@ angular.module('dcbImgFallback', [])
         // Update the service with the correct missing src if present, otherwise use the default image
         var newSrc = attr.fallbackSrc ? imageService.setMissing(attr.fallbackSrc) : imageService.getMissing();
 
-        // Listen for errors on the element and if there are any replace the source with the fallback source
-        var errorHanlder = function () {
-          if (element[0].src !== newSrc) {
-            element[0].src = newSrc;
-          }
-        };
-
         // Replace the loading image with missing image if `ng-src` link was broken
-        if (element[0].src === imageService.getLoading()) {
+        if (element[0].src === imageService.getLoading() || !element[0].src) {
           element[0].src = newSrc;
         }
 
-        element.on('error', errorHanlder);
+        // Listen for errors on the element and if there are any replace the source with the fallback source
+        function error() {
+          if (element[0].src !== newSrc) {
+            element[0].src = newSrc;
+          }
+        }
 
+        element.on('error', error);
         scope.$on('$destroy', function () {
-          element.off('error', errorHanlder);
+          element.off('error', error);
         });
 
       }
