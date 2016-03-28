@@ -19,8 +19,7 @@ angular.module('dogweb')
     };
   }])
 
-  .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $uibModal) {
-
+  .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $uibModal, moment) {
     $scope.yesterday = moment().subtract(1, 'day').toDate();
     $scope.employees = [];
     $scope.employeePerformances = {};
@@ -123,6 +122,8 @@ angular.module('dogweb')
 
   .controller('AddEmployeeModalController', function ($scope, company, $q, Ref, $firebaseObject, $timeout, $uibModalInstance) {
 
+    $scope.apps = company.apps;
+
     $scope.addNewEmployee = function (employee) {
       var now = new moment();
 
@@ -178,6 +179,7 @@ angular.module('dogweb')
 
   .controller('EditEmployeeModalController', function ($scope, company, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $uibModalInstance, lodash) {
 
+    $scope.apps = company.apps;
     $scope.employee = employee;
     $scope.employeeDevices = [];
     $scope.companyDevices = [];
@@ -241,51 +243,58 @@ angular.module('dogweb')
 
       employee.updated_date = now.format();
 
-      employee.$save().then(function () {
-        if ($scope.form.employeeDevices.$dirty) {
+      employee.$save()
+        .then(function () {
+          if ($scope.form.employeeDevices.$dirty) {
 
-          var devicesToRemove = lodash.filter(employeeDevices, function (device) {
-            return !lodash.find($scope.employeeDevices, {$id: device.$id});
-          });
-
-          angular.forEach(devicesToRemove, function (device) {
-            _removeDeviceFromEmployee(device.$id).then(function () {
-              _updateDevice(device.$id, {updated_date: now.format(), employee_id: null});
+            var devicesToRemove = lodash.filter(employeeDevices, function (device) {
+              return !lodash.find($scope.employeeDevices, {$id: device.$id});
             });
-          });
 
-          var devicesToAdd = lodash.filter($scope.employeeDevices, function (device) {
-            return !lodash.find(employeeDevices, {$id: device.$id});
-          });
-
-          angular.forEach(devicesToAdd, function (device) {
-            if (device.$id === null) {
-              return;
-            }
-            _addDeviceToEmployee(device.$id, employee.$id).then(function () {
-              _updateDevice(device.$id, {updated_date: now.format(), employee_id: employee.$id});
+            angular.forEach(devicesToRemove, function (device) {
+              _removeDeviceFromEmployee(device.$id).then(function () {
+                _updateDevice(device.$id, {updated_date: now.format(), employee_id: null});
+              });
             });
-          });
 
-          var devicesToCreate = lodash.filter($scope.employeeDevices, {$id: null});
-
-          angular.forEach(devicesToCreate, function (device) {
-            delete device.$id;
-
-            device.created_date = now.format();
-            device.updated_date = now.format();
-            device.company_id = company.$id;
-            device.employee_id = employee.$id;
-
-            _createDevice(device).then(function (deviceId) {
-              _addDeviceToCompany(deviceId, device.company_id);
-              _addDeviceToEmployee(deviceId, employee.$id);
+            var devicesToAdd = lodash.filter($scope.employeeDevices, function (device) {
+              return !lodash.find(employeeDevices, {$id: device.$id});
             });
-          });
-        }
 
-        $uibModalInstance.close();
-      });
+            angular.forEach(devicesToAdd, function (device) {
+              if (device.$id === null) {
+                return;
+              }
+              _addDeviceToEmployee(device.$id, employee.$id).then(function () {
+                _updateDevice(device.$id, {updated_date: now.format(), employee_id: employee.$id});
+              });
+            });
+
+            var devicesToCreate = lodash.filter($scope.employeeDevices, {$id: null});
+
+            angular.forEach(devicesToCreate, function (device) {
+              delete device.$id;
+
+              device.created_date = now.format();
+              device.updated_date = now.format();
+              device.company_id = company.$id;
+              device.employee_id = employee.$id;
+
+              _createDevice(device).then(function (deviceId) {
+                _addDeviceToCompany(deviceId, device.company_id);
+                _addDeviceToEmployee(deviceId, employee.$id);
+              });
+            });
+          }
+
+        })
+        .then(function () {
+          if ($scope.form.linkedInProfileUrl.$dirty) {
+            var task = {event: 'person:employee:profile:linkedin', data: {employee: {id: employee.$id}}};
+            return company.addTask(task);
+          }
+        })
+        .then($uibModalInstance.close);
     };
 
     $scope.cancel = function () {

@@ -6,15 +6,22 @@ angular.module('dogweb')
   .factory("AppListFactory", function ($firebaseArray) {
     return $firebaseArray.$extend({
 
-      getThumbnailUrlByName: function (name) {
-        var app = this.$getRecord(name);
+      findNameById: function (id) {
+        var app = this.$getRecord(id);
+        if (app) {
+          return app.name;
+        }
+      },
+
+      findThumbnailUrlById: function (id) {
+        var app = this.$getRecord(id);
         if (app) {
           return app.thumbnail_url;
         }
       },
 
-      getDescriptionByName: function (name) {
-        var app = this.$getRecord(name);
+      findDescriptionById: function (id) {
+        var app = this.$getRecord(id);
         if (app) {
           return app.description;
         }

@@ -19,7 +19,7 @@ angular.module('dogweb')
           }
 
           if (this._adapter) {
-            this._adapter.prepend([notification]);
+            this._adapter.prepend([notification.$load(companyId, notification.getId())]);
           }
 
           return notification;

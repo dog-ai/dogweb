@@ -1,4 +1,7 @@
-<form name="form" role="form" ng-submit="save()">
+<form name="form" role="form"
+      ng-submit="save()"
+      ng-model-options="{updateOn: 'submit'}">
+
   <div class="modal-header">
     <h4 class="modal-title">Edit employee</h4>
   </div>
@@ -7,22 +10,22 @@
     <div class="form-group">
       <label for="fullName">Name</label>
       <input id="fullName" name="fullName" type="text" class="form-control" required
-             ng-model="employee.full_name"
-             ng-model-options="{updateOn: 'submit'}"/>
+             ng-model="employee.full_name"/>
     </div>
 
     <div class="form-group">
       <label for="pictureUrl">Picture URL</label>
       <input id="pictureUrl" name="pictureUrl" type="text" class="form-control"
-             ng-model="employee.picture_url"
-             ng-model-options="{updateOn: 'submit'}"/>
+             ng-model="employee.picture_url"/>
     </div>
 
-    <p class="form-group">
-      <label>LinkedIn Profile URL</label>
-      <input id="linkedInProfileUrl" name="linkedin_profile_url" type="text" class="form-control"
-             ng-model="employee.linkedin_profile_url"/>
-    </p>
+    <div class="form-group disabled">
+      <label for="linkedInProfileUrl">LinkedIn Profile URL</label>
+      <input id="linkedInProfileUrl" name="linkedInProfileUrl" type="text" class="form-control"
+             ng-model="employee.linkedin_profile_url"
+             ng-disabled="{{!apps['linkedin'].is_enabled}}"/>
+
+    </div>
 
     <div class="form-group">
       <label>Devices</label>
@@ -32,9 +35,8 @@
                  oi-select-options="{
                     newItem: true,
                     saveTrigger: 'enter, blur',
-                    newItemModel: {$id: null, name: $query}
-                }"
-        ></oi-select>
+                    newItemModel: {$id: null, name: $query}}">
+      </oi-select>
     </div>
 
   </div>
