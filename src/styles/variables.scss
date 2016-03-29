@@ -25,10 +25,9 @@ $border-radius-base: none;
 $border-radius-large: none;
 $border-radius-small: none;
 
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$icon-font-path: "../fonts/";
 // bower:scss
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap";
 // endbower
 
 @import '../../bower_components/spinkit/scss/spinners/1-rotating-plane';
-

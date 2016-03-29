@@ -26,7 +26,8 @@
     "ng-lodash": "0.4.0",
     "oi.select": "0.2.12",
     "ng-rollbar": "1.8.3",
-    "SpinKit": "spinkit#~1.2.5"
+    "SpinKit": "spinkit#~1.2.5",
+    "Ionicons": "ionicons#~2.0.1"
   },
   "devDependencies": {
     "mockfirebase": "0.11.0",

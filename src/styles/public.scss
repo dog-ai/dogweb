@@ -16,24 +16,26 @@
       color: $brand-primary;
     }
 
+    .navbar-header a {
+
+      &.navbar-brand {
+        background: url(../images/logo.png) center/contain no-repeat;
+        width: 80px;
+        height: 35px;
+        margin-top: 6px;
+        font-size: 0px;
+      }
+    }
+
     .navbar-nav {
       //  background: #ededed;
       width: 100%;
       text-align: center;
       > li {
-        display: inline-block;
-        float: none;
+
         > a {
           padding-left: 30px;
           padding-right: 30px;
-        }
-
-        .navbar-brand {
-          background: url(../images/logo.png) right/contain no-repeat;
-          width: 80px;
-          height: 35px;
-          margin-top: 6px;
-          font-size: 0px;
         }
 
         &.active {
@@ -80,5 +82,26 @@
 #login-view {
   .no-account {
     margin-top: 30px;
+  }
+}
+
+#signup-view {
+  .sad-message {
+    min-height: 65%;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+
+    text-align: center;
+
+    .sad-face {
+      color: $brand-primary;
+      font-size: 90px;
+    }
+
+    p {
+      font-size: 21px;
+      font-weight: 200;
+    }
   }
 }

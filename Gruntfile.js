@@ -117,6 +117,10 @@ module.exports = function (grunt) {
                 '/src/styles',
                 connect.static('./src/styles')
               ),
+              connect().use(
+                '/fonts',
+                connect.static('./bower_components/bootstrap-sass-official/assets/fonts/bootstrap') // temp solution until i remove bootstrap icons
+              ),
               connect.static(config.app)
             ];
           }
@@ -412,7 +416,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'images/**/*.{webp}',
-            'styles/fonts/**/*.*'
+            'fonts/**/*.*'
           ]
         }, {
           expand: true,
@@ -421,15 +425,17 @@ module.exports = function (grunt) {
           src: ['**/*.*']
         }, {
           expand: true,
-          cwd: '.',
-          src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-          dest: '<%= config.dist %>'
-        }, {
-          expand: true,
           cwd: '<%= config.build.dist %>/styles',
           dest: '<%= config.dist %>/styles',
           src: '**/*.css'
+        }, {
+          expand: true,
+          flatten: true,
+          cwd: '.',
+          src: ['bower_components/Ionicons/fonts/*', 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+          dest: '<%= config.dist %>/fonts/'
         }
+
         ]
       }
     },

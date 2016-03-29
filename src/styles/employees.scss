@@ -6,7 +6,7 @@
 
   #add-employee {
     margin-bottom: 20px;
-    min-height: 420px;
+    min-height: 423px;
 
     color: #bbbbbb;
 
@@ -58,11 +58,26 @@
         h3.employee-name {
           color: #888888;
         }
+
+        li i {
+          color: #888888;
+        }
       }
     }
 
-    .label-default {
-      background-color: $brand-warning;
+    li {
+      padding-right: 0;
+      padding-left: 0;
+
+      .label-default {
+        background-color: $brand-warning;
+      }
+
+      i {
+        font-size: 23px;
+        color: #FFB636;
+        vertical-align: middle;
+      }
     }
 
     .options {
@@ -128,6 +143,11 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .apps {
+        min-height: 23px;
+        text-align: center;
       }
     }
 

@@ -2,8 +2,14 @@
 
   <div class="container-fluid">
 
-    <div class="row" ng-hide="$stateParams.envelope">
-      Invite only ;(
+    <div class="row sad-message" ng-hide="$stateParams.envelope">
+      <div class="col-xs-6 col-md-offset-3">
+        <span class="sad-face"><i class="ionicons ion-sad-outline"></i></span>
+        <p>Sorry, we are invite only at the moment</p>
+        <a id="okay-button" ui-sref="public.teaser.landing" class="btn btn-default btn-lg" role="button">
+          Okay!
+        </a>
+      </div>
     </div>
 
     <div class="row" ng-show="$stateParams.envelope">
