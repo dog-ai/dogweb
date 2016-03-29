@@ -5,6 +5,7 @@
 #employees-view {
 
   #add-employee {
+    margin-bottom: 20px;
     min-height: 420px;
 
     color: #bbbbbb;
@@ -101,13 +102,15 @@
     .caption {
 
       h3.employee-name {
+        min-height: 25px;
+
         text-align: center;
 
         font-size: 20px;
         color: $brand-primary;
 
-        margin-top: 15px;
-        margin-bottom: 5px;
+        margin-top: 14px;
+        margin-bottom: 3px;
 
         white-space: nowrap;
         overflow: hidden;
