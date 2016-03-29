@@ -6,9 +6,9 @@
       <div class="thumbnail">
 
         <div>
-          <a>
+          <a href="" ng-click="openEditAppModal(companyApp)">
             <div class="image">
-              <img ng-src="{{apps.findThumbnailUrlById(companyApp.$id)}}"
+              <img ng-src="{{apps.findThumbnailUrlById(companyApp.$id) || '//:0'}}"
                    fallback-src
                    alt="{{companyApp.$id}}" width="120" height="120"/>
             </div>
@@ -17,12 +17,13 @@
           <div class="panel">
             <div class="caption">
               <h3>{{apps.findNameById(companyApp.$id)}}</h3>
-              <p>{{apps.findDescriptionById(companyApp.$id) || '//:0'}}</p>
+              <p>{{apps.findDescriptionById(companyApp.$id)}}</p>
             </div>
 
             <div class="switch">
               <input id="cmn-toggle-{{companyApp.$id}}" type="checkbox" class="cmn-toggle cmn-toggle-round"
-                     ng-model="companyApp.is_enabled" ng-change="companyApp.setEnabled(companyApp.is_enabled)">
+                     ng-model="companyApp.is_enabled"
+                     ng-change="toggleApp(companyApp)">
               <label for="cmn-toggle-{{companyApp.$id}}">
               </label>
             </div>

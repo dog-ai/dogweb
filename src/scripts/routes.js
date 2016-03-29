@@ -271,7 +271,7 @@ angular.module('dogweb')
         })
         .state('private.content.company.apps', {
           url: "/apps",
-          templateUrl: "/views/private/content/company/apps.html",
+          templateUrl: "/views/private/content/company/apps/apps.html",
           controller: 'AppsController',
           resolve: {
             companyApps: ['company', 'CompanyAppList', function (company, CompanyAppList) {

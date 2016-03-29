@@ -3,13 +3,13 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyAppFactory", function ($firebaseObject) {
+  .factory("CompanyAppFactory", function ($firebaseObject, moment) {
     return $firebaseObject.$extend({
 
-      setEnabled: function (enabled) {
-        this.is_enabled = enabled;
+      $save: function () {
+        this.updated_date = moment().format();
 
-        return this.$save();
+        return $firebaseObject.prototype.$save.apply(this, arguments);
       }
 
     });

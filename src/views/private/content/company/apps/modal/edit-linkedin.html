@@ -1,0 +1,23 @@
+<form name="form" role="form"
+      ng-submit="save()"
+      ng-model-options="{updateOn: 'submit'}">
+
+  <div class="modal-header">
+    <h4 class="modal-title">Configure {{app.name}}</h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label for="companyPageUrl">Company page URL</label>
+      <input id="companyPageUrl" name="companyPageUrl" type="text" class="form-control"
+             ng-model="companyApp.company_page_url" required/>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
+    <button type="submit" class="btn btn-primary">Yes, save changes</button>
+  </div>
+</form>

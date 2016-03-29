@@ -1,0 +1,35 @@
+<form name="form" role="form"
+      ng-submit="save()"
+      ng-model-options="{updateOn: 'submit'}">
+
+  <div class="modal-header">
+    <h4 class="modal-title">Configure {{app.name}}</h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label for="apiToken">API token</label>
+      <input id="apiToken" name="apiToken" type="text" class="form-control"
+             ng-model="companyApp.api_token" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" class="form-control"
+             ng-model="companyApp.username"/>
+    </div>
+
+    <div class="form-group">
+      <label for="defaultChannel">Default channel</label>
+      <input id="defaultChannel" name="defaultChannel" type="text" class="form-control"
+             ng-model="companyApp.default_channel" required/>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
+    <button type="submit" class="btn btn-primary">Yes, save changes</button>
+  </div>
+</form>
