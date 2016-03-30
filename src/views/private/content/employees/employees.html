@@ -42,7 +42,7 @@
               <h4 class="employee-headline">{{employee.professional_headline}}</h4>
 
               <ul class="list-inline apps">
-                <li ng-show="employee.linkedin_profile_url">
+                <li ng-show="employee.linkedin_profile_url && apps['linkedin'].is_enabled">
                   <i class="ionicons ion-social-linkedin"></i>
                 </li>
                 <li ng-show="employee.is_present">

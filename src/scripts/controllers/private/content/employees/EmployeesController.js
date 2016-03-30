@@ -20,6 +20,7 @@ angular.module('dogweb')
   }])
 
   .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $uibModal, moment) {
+    $scope.apps = company.apps;
     $scope.yesterday = moment().subtract(1, 'day').toDate();
     $scope.employees = [];
     $scope.employeePerformances = {};

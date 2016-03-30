@@ -1,6 +1,7 @@
 <form name="form" role="form"
-      ng-submit="save()"
-      ng-model-options="{updateOn: 'submit'}">
+      ng-submit="save()">
+
+  <!-- can't seem to use ng-model-options at form level because it break oi-select directive -->
 
   <div class="modal-header">
     <h4 class="modal-title">Edit employee</h4>
@@ -10,20 +11,24 @@
     <div class="form-group">
       <label for="fullName">Name</label>
       <input id="fullName" name="fullName" type="text" class="form-control" required
-             ng-model="employee.full_name"/>
+             ng-model="employee.full_name"
+             ng-model-options="{updateOn: 'submit'}"
+      />
     </div>
 
     <div class="form-group">
       <label for="pictureUrl">Picture URL</label>
       <input id="pictureUrl" name="pictureUrl" type="text" class="form-control"
-             ng-model="employee.picture_url"/>
+             ng-model="employee.picture_url"
+             ng-model-options="{updateOn: 'submit'}"/>
     </div>
 
     <div class="form-group disabled">
       <label for="linkedInProfileUrl">LinkedIn Profile URL</label>
       <input id="linkedInProfileUrl" name="linkedInProfileUrl" type="text" class="form-control"
              ng-model="employee.linkedin_profile_url"
-             ng-disabled="{{!apps['linkedin'].is_enabled}}"/>
+             ng-disabled="{{!apps['linkedin'].is_enabled}}"
+             ng-model-options="{updateOn: 'submit'}"/>
 
     </div>
 
