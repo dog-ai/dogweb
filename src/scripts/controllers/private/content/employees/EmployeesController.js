@@ -138,7 +138,7 @@ angular.module('dogweb')
             .then(function () {
               if (employee.linkedin_profile_url) {
                 employee.id = employeeId;
-                var task = {event: 'person:employee:profile:linkedin', data: {employee: {id: employeeId}}};
+                var task = {event: 'social:linkedin:profile:import', data: {employee: {id: employeeId}}};
                 return company.addTask(task);
               }
             })
@@ -292,7 +292,7 @@ angular.module('dogweb')
         })
         .then(function () {
           if ($scope.form.linkedInProfileUrl.$dirty) {
-            var task = {event: 'person:employee:profile:linkedin', data: {employee: {id: employee.$id}}};
+            var task = {event: 'social:linkedin:profile:import', data: {employee: {id: employee.$id}}};
             return company.addTask(task);
           }
         })

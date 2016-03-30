@@ -6,7 +6,7 @@
 
 angular.module('dogweb')
 
-  .controller('AppsController', function ($scope, apps, companyApps, lodash, $uibModal) {
+  .controller('AppsController', function ($scope, company, apps, companyApps, lodash, $uibModal) {
     $scope.apps = apps;
     $scope.companyApps = companyApps;
 
@@ -20,6 +20,7 @@ angular.module('dogweb')
         controller: 'EditModalController',
         size: 'md',
         resolve: {
+          company: company,
           app: function () {
             return lodash.find(apps, {$id: companyApp.$id});
           },
@@ -49,12 +50,21 @@ angular.module('dogweb')
 
   })
 
-  .controller('EditModalController', function ($scope, app, companyApp, $uibModalInstance) {
+  .controller('EditModalController', function ($scope, company, app, companyApp, $uibModalInstance) {
     $scope.app = app;
     $scope.companyApp = companyApp;
 
     $scope.save = function () {
       return companyApp.$save()
+        .then(function () {
+          if ($scope.form.companyPageUrl.$dirty) {
+            var task = {
+              event: 'social:linkedin:company:import',
+              data: {app: {company_page_url: companyApp.company_page_url}}
+            };
+            return company.addTask(task);
+          }
+        })
         .then($uibModalInstance.close);
     };
   })
