@@ -9,8 +9,8 @@
       </button>
     </div>
 
-    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3"
-         ng-repeat-start="employee in employees | orderBy: ['-is_present']">
+
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" ui-scroll="employee in employees" buffer-size="7" adapter="employeesAdapter">
       <div class="thumbnail" ng-class="{'not-present': !employee.is_present}">
 
         <div>
@@ -31,6 +31,7 @@
         <div>
           <a href="#/employees/{{employee.$id}}">
 
+            <!-- loading-src is breaking the 2-way binding of the thumbnail image -->
             <img ng-src="{{employee.picture_url || '//:0'}}"
                  fallback-src
                  alt="{{employee.full_name}}"
@@ -54,20 +55,18 @@
           </a>
         </div>
 
-        <!--<button class="btn btn-default btn-xs" ng-click="employee.performances_collapsed = !employee.performances_collapsed">Show KPIs</button>-->
-        <!--uib-collapse="employee.performances_collapsed"-->
         <div class="performance-indicator">
-          <div class="performance-indicator-previous" ng-show="employeePerformances[employee.$id].performances">
+          <div class="performance-indicator-previous" ng-show="employee._performances">
             <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-left"></i></button>
           </div>
 
           <div class="performance-indicator-slide no-performance-indicator"
-               ng-hide="employeePerformances[employee.$id].performances">
+               ng-hide="employee._performances">
             No performance available yet ;(
           </div>
 
-          <div class="performance-indicator-slide" ng-show="employeePerformances[employee.$id].performances">
+          <div class="performance-indicator-slide" ng-show="employee._performances">
             <slick autoplay="true"
                    autoplay-speed="3000"
                    infinite="true"
@@ -81,47 +80,48 @@
               <div>
                 <small>Average present hours per day</small>
                 <div class="performance-indicator-value average-total-duration">
-                  {{employeePerformances[employee.$id].performances.presence.average_total_duration | secondsToDateTime
+                  {{employee._performances.presence.average_total_duration | secondsToDateTime
                   | date:'H'}} hours
                   <i class="glyphicon"
-                     ng-class="employeePerformances[employee.$id].performances.presence.average_total_duration > employeePerformances[employee.$id].performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                     ng-class="employee._performances.presence.average_total_duration > employee._performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
                 </div>
-                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
                 </small>
               </div>
               <div>
                 <small>Average check-in time</small>
                 <div class="performance-indicator-value average-start-time">
-                  {{employeePerformances[employee.$id].performances.presence.average_start_time | secondsToDateTime |
+                  {{employee._performances.presence.average_start_time | secondsToDateTime |
                   date:'HH:mm'}}
                   <i class="glyphicon"
-                     ng-class="employeePerformances[employee.$id].performances.presence.average_start_time > employeePerformances[employee.$id].performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                     ng-class="employee._performances.presence.average_start_time > employee._performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
                 </div>
-                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
                 </small>
               </div>
 
               <div>
                 <small>Average check-out time</small>
                 <div class="performance-indicator-value average-end-time">
-                  {{employeePerformances[employee.$id].performances.presence.average_end_time | secondsToDateTime |
+                  {{employee._performances.presence.average_end_time | secondsToDateTime |
                   date:'HH:mm'}}
                   <i class="glyphicon"
-                     ng-class="employeePerformances[employee.$id].performances.presence.average_end_time > employeePerformances[employee.$id].performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                     ng-class="employee._performances.presence.average_end_time > employee._performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
                 </div>
-                <small>{{employeePerformances[employee.$id].performances.presence | performanceIndicatorValuePeriod}}
+                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
                 </small>
               </div>
             </slick>
           </div>
 
-          <div class="performance-indicator-next" ng-show="employeePerformances[employee.$id].performances">
+          <div class="performance-indicator-next" ng-show="employee._performances">
             <button id="next{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-right"></i></button>
           </div>
         </div>
 
       </div>
+
     </div>
 
     <div class="clearfix" ng-if="$index+1 % 4 == 0 && $index+1 != 1"></div>

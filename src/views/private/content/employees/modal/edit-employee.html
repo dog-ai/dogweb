@@ -1,7 +1,6 @@
 <form name="form" role="form"
       ng-submit="save()">
-
-  <!-- can't seem to use ng-model-options at form level because it break oi-select directive -->
+  <!-- can't seem to use ng-model-options at form level because it breaks oi-select directive -->
 
   <div class="modal-header">
     <h4 class="modal-title">Edit employee</h4>
@@ -47,7 +46,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
     <button type="submit" class="btn btn-primary">Yes, save changes</button>
   </div>
 </form>

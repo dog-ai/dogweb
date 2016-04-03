@@ -284,10 +284,8 @@ angular.module('dogweb')
           templateUrl: "/views/private/content/employees/employees.html",
           controller: 'EmployeesController',
           resolve: {
-            employees: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
-              return $firebaseArray(Ref.child('companies/' + company.$id + '/employees')).$loaded().then(function (employees) {
-                return employees;
-              });
+            employees: ['company', 'CompanyEmployeeList', function (company, CompanyEmployeeList) {
+              return new CompanyEmployeeList(company.$id).$loaded();
             }]
           }
         })

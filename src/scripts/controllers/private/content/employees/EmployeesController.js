@@ -19,35 +19,12 @@ angular.module('dogweb')
     };
   }])
 
-  .controller('EmployeesController', function ($scope, company, employees, Ref, $firebaseObject, lodash, $uibModal, moment) {
+  .controller('EmployeesController', function ($scope, company, employees, lodash, $uibModal) {
     $scope.apps = company.apps;
-    $scope.yesterday = moment().subtract(1, 'day').toDate();
-    $scope.employees = [];
-    $scope.employeePerformances = {};
+    $scope.employees = employees;
 
-    employees.$watch(function (event) {
-      switch (event.event) {
-        case 'child_added':
-          _retrieveEmployee(event.key).then(function (employee) {
-            $scope.employees.push(employee);
-          });
-          break;
-        case 'child_removed':
-          lodash.remove($scope.employees, function (employee) {
-            return event.key == employee.$id;
-          });
-
-          delete $scope.employeePerformances[event.key];
-          break;
-        default:
-      }
-    });
-
-    angular.forEach(employees, function (employee) {
-      _retrieveEmployee(employee.$id).then(function (employee) {
-        $scope.employees.push(employee);
-      });
-    });
+    $scope.employeesAdapter = {};
+    employees.setAdapter($scope.employeesAdapter);
 
     $scope.openAddNewEmployeeModal = function () {
       $uibModal.open({
@@ -56,7 +33,10 @@ angular.module('dogweb')
         controller: 'AddEmployeeModalController',
         size: 'sm',
         resolve: {
-          company: company
+          company: company,
+          employees: function () {
+            return employees;
+          }
         }
       }).result.finally(function () {
 
@@ -101,28 +81,9 @@ angular.module('dogweb')
 
       });
     };
-
-    function _retrieveEmployee(employeeId) {
-      return $firebaseObject(Ref.child('company_employees/' + company.$id + '/' + employeeId)).$loaded().then(function (employee) {
-        return $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + employeeId + '/presence/_stats')).$loaded().then(function (_stats) {
-          if (_stats.$value !== null) {
-            $scope.employeePerformances[employee.$id] = {
-              performances_collapsed: true,
-              performances: {
-                presence: _stats
-              }
-            };
-          }
-
-          return employee;
-        })
-      });
-    }
-
   })
 
-  .controller('AddEmployeeModalController', function ($scope, company, $q, Ref, $firebaseObject, $timeout, $uibModalInstance) {
-
+  .controller('AddEmployeeModalController', function ($scope, company, employees, $uibModalInstance) {
     $scope.apps = company.apps;
 
     $scope.addNewEmployee = function (employee) {
@@ -133,51 +94,15 @@ angular.module('dogweb')
       employee.updated_date = now.format();
       employee.company_id = company.$id;
 
-      _createEmployee(employee)
+      return employees.$add(employee)
         .then(function (employeeId) {
-          _addEmployeeToCompany(employeeId, company.$id)
-            .then(function () {
-              if (employee.linkedin_profile_url) {
-                employee.id = employeeId;
-                var task = {event: 'social:linkedin:profile:import', data: {employee_id: employee.$id, employee_linkedin_profile_url: employee.linkedin_profile_url}};
-                return company.addTask(task);
-              }
-            })
+          if (employee.linkedin_profile_url) {
+            var task = {event: 'social:linkedin:profile:import', data: {employee_id: employeeId, employee_linkedin_profile_url: employee.linkedin_profile_url}};
+            return company.addTask(task);
+          }
         })
         .then($uibModalInstance.close);
     };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
-    };
-
-    function _createEmployee(employee) {
-      var employeesRef = Ref.child('company_employees/' + company.$id), def = $q.defer();
-      var employeeRef = employeesRef.push(employee, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve(employeeRef.key());
-          }
-        });
-      });
-      return def.promise;
-    }
-
-    function _addEmployeeToCompany(employeeId, companyId) {
-      var companyEmployeeRef = Ref.child('companies/' + companyId + '/employees/' + employeeId), def = $q.defer();
-      companyEmployeeRef.set(true, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
-    }
   })
 
   .controller('EditEmployeeModalController', function ($scope, company, employee, employeeDevices, companyDevices, $q, Ref, $firebaseObject, $timeout, $uibModalInstance, lodash) {
@@ -244,9 +169,7 @@ angular.module('dogweb')
 
       var now = moment();
 
-      employee.updated_date = now.format();
-
-      employee.$save()
+      return employee.$save()
         .then(function () {
           if ($scope.form.employeeDevices.$dirty) {
 
@@ -298,10 +221,6 @@ angular.module('dogweb')
           }
         })
         .then($uibModalInstance.close);
-    };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
     };
 
     function _createDevice(device) {
@@ -369,206 +288,14 @@ angular.module('dogweb')
       });
       return def.promise;
     }
-
-    /*
-     .controller('AddDeviceToEmployeeModalController', function ($scope, employee, company, availableDevices, availableMacAddresses, $q, Ref, $firebaseObject, $state, $timeout, $uibModalInstance, lodash) {
-     $scope.employee = employee;
-     $scope.devices = [];
-     $scope.device = {};
-     $scope.mac_addresses = [];
-
-     angular.forEach(availableDevices, function (device) {
-     _retrieveDevice(device.$id).then(function (device) {
-     if (device.employee_id === undefined) {
-     $scope.devices.push(device);
-     }
-     });
-     });
-
-     angular.forEach(availableMacAddresses, function (mac_address) {
-     _retrieveMacAddress(mac_address.$id).then(function (mac_address) {
-     if (mac_address.device_id === undefined) {
-     $scope.mac_addresses.push(mac_address);
-     }
-     });
-     });
-
-     $scope.validateNewDevice = function (device) {
-     return $scope.newDeviceForm.$valid;
-     };
-
-
-     $scope.addNewDeviceToEmployee = function (device, employee) {
-     var now = new moment();
-
-     device.created_date = now.format();
-     device.updated_date = now.format();
-     device.company_id = company.$id;
-     device.employee_id = employee.$id;
-
-     var macAddressIds = device.mac_addresses;
-     delete device['mac_addresses'];
-
-     _createDevice(device).then(function (deviceId) {
-     _addDeviceToEmployee(deviceId, employee.$id).then(function () {
-     employee.updated_date = now.format();
-     });
-
-     _addDeviceToCompany(deviceId, device.company_id).then(function () {
-     //company.updated_date = now.format();
-     $uibModalInstance.close();
-     });
-
-     angular.forEach(macAddressIds, function (macAddressId) {
-     _addMacAddressToDevice(macAddressId, deviceId).then(function () {
-     _updateDevice(deviceId, {updated_date: now.format()});
-     });
-     _updateMacAddress(macAddressId, {updated_date: now.format(), device_id: deviceId});
-     });
-     });
-     };
-
-     $scope.validateDevice = function (device) {
-     return !$scope.deviceForm.$pristine && $scope.deviceForm.$valid;
-     };
-
-     $scope.addDeviceToEmployee = function (device, employee) {
-     var now = moment();
-
-     _addDeviceToEmployee(device.$id, employee.$id).then(function () {
-     employee.updated_date = now.format();
-     _updateDevice(device.$id, {updated_date: now.format(), employee_id: employee.$id});
-     $uibModalInstance.close();
-     });
-     };
-
-     $scope.cancel = function () {
-     $uibModalInstance.dismiss();
-     };
-
-     function _retrieveDevice(deviceId) {
-     return $firebaseObject(Ref.child('devices/' + deviceId)).$loaded().then(function (device) {
-     return device;
-     });
-     }
-
-     function _createDevice(device) {
-     var devicesRef = Ref.child('devices'), def = $q.defer();
-     var deviceRef = devicesRef.push(device, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve(deviceRef.key());
-     }
-     });
-     });
-     return def.promise;
-     }
-
-     function _addMacAddressToDevice(macAddressId, deviceId) {
-     var deviceMacAddressRef = Ref.child('devices/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
-     deviceMacAddressRef.set(true, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve();
-     }
-     });
-     });
-     return def.promise;
-     }
-
-     function _addDeviceToCompany(deviceId, companyId) {
-     var companyDeviceRef = Ref.child('companies/' + companyId + '/devices/' + deviceId), def = $q.defer();
-     companyDeviceRef.set(true, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve();
-     }
-     });
-     });
-     return def.promise;
-     }
-
-     function _addDeviceToEmployee(deviceId, employeeId) {
-     var companyDeviceRef = Ref.child('employees/' + employeeId + '/devices/' + deviceId), def = $q.defer();
-     companyDeviceRef.set(true, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve();
-     }
-     });
-     });
-     return def.promise;
-     }
-
-     function _updateDevice(deviceId, device) {
-     var deviceRef = Ref.child('devices/' + deviceId), def = $q.defer();
-     deviceRef.update(device, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve();
-     }
-     });
-     });
-     return def.promise;
-     }
-
-     function _retrieveMacAddress(macAddressId) {
-     return $firebaseObject(Ref.child('mac_addresses/' + macAddressId)).$loaded().then(function (mac_address) {
-     return mac_address;
-     });
-     }
-
-     function _updateMacAddress(macAddressId, macAdress) {
-     var macAddressRef = Ref.child('mac_addresses/' + macAddressId), def = $q.defer();
-     macAddressRef.update(macAdress, function (error) {
-     $timeout(function () {
-     if (error) {
-     def.reject(error);
-     } else {
-     def.resolve();
-     }
-     });
-     });
-     return def.promise;
-     }
-     })
-
-
-     */
   })
 
-  .controller('RemoveEmployeeModalController', function ($scope, company, employees, employee, $uibModalInstance, lodash) {
-
+  .controller('RemoveEmployeeModalController', function ($scope, company, employee, employees, $uibModalInstance) {
     $scope.employee = employee;
 
-    $scope.removeEmployee = function (employee) {
-      _removeEmployeeFromCompany(employee.$id, company.$id).then(function () {
-        _deleteEmployee(employee).then(function () {
-        });
-        $uibModalInstance.close();
-      });
+    $scope.removeEmployee = function () {
+      return employees.$remove(employee.$id)
+        .then($uibModalInstance.close);
     };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
-    };
-
-    function _deleteEmployee(employee) {
-      return employee.$remove();
-    }
-
-    function _removeEmployeeFromCompany(employeeId) {
-      return employees.$remove(lodash.find(employees, {$id: employeeId}));
-    }
   })
 ;
