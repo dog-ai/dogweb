@@ -13,7 +13,7 @@
           <th>Last seen</th>
           <th></th>
         </tr>
-        <tr ng-repeat="device in devices | orderBy:['-last_presence_date', 'is_present']">
+        <tr ui-scroll="device in devices" buffer-size="5" adapter="devicesAdapter">
           <td>{{device.name}}</td>
           <td>{{device.manufacturer}}</td>
           <td>{{device.type}}</td>
@@ -49,8 +49,6 @@
       </div>
 
     </div>
-
-    Unrecognized MAC addresses: {{companyMacAddresses.length}}
 
     <div class="col-md-6 hide">
       Total: {{companyMacAddresses.length}}

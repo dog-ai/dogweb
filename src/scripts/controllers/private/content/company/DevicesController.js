@@ -4,65 +4,13 @@
 
 'use strict';
 
-/**
- * @ngdoc function
- * @name dogweb.controller:DevicesCtrl
- * @description
- * # DevicesCtrl
- * Controller of the dogweb
- */
 angular.module('dogweb')
 
-  .controller('DevicesController', function ($scope, user, company, companyDevices, companyMacAddresses, Ref, $firebaseObject, $uibModal, lodash) {
+  .controller('DevicesController', function ($scope, user, company, devices, CompanyEmployee, $uibModal) {
+    $scope.devices = devices;
 
-    $scope.devices = [];
-    $scope.companyMacAddresses = [];
-
-    companyDevices.$watch(function (event) {
-      switch (event.event) {
-        case 'child_added':
-          _retrieveDevice(event.key).then(function (device) {
-            $scope.devices.push(device);
-          });
-          break;
-        case 'child_removed':
-          lodash.remove($scope.devices, function (device) {
-            return event.key == device.$id;
-          });
-          break;
-        default:
-      }
-    });
-
-    companyMacAddresses.$watch(function (event) {
-      switch (event.event) {
-        case 'child_added':
-          _retrieveMacAddress(event.key).then(function (macAddress) {
-            $scope.companyMacAddresses.push(macAddress);
-          });
-          break;
-        case 'child_removed':
-          lodash.remove($scope.companyMacAddresses, function (macAddress) {
-            return event.key == macAddress.$id;
-          });
-          break;
-        default:
-      }
-    });
-
-    angular.forEach(companyDevices, function (device) {
-      _retrieveDevice(device.$id).then(function (device) {
-        $scope.devices.push(device);
-      });
-    });
-
-    angular.forEach(companyMacAddresses, function (mac_address) {
-      _retrieveMacAddress(mac_address.$id).then(function (mac_address) {
-        if (mac_address.device_id === undefined) {
-          $scope.companyMacAddresses.push(mac_address);
-        }
-      });
-    });
+    $scope.devicesAdapter = {};
+    devices.setAdapter($scope.devicesAdapter);
 
     $scope.openAddDeviceModal = function () {
 
@@ -74,11 +22,11 @@ angular.module('dogweb')
         resolve: {
           company: company,
           companyDevices: function () {
-            return companyDevices;
+            return devices;
           },
-          companyMacAddresses: function () {
-            return $scope.companyMacAddresses;
-          }
+          companyMacAddresses: ['CompanyMacAddressList', function (CompanyMacAddressList) {
+            return new CompanyMacAddressList(company.$id).$loaded();
+          }]
         }
       }).result.finally(function () {
 
@@ -86,7 +34,6 @@ angular.module('dogweb')
     };
 
     $scope.openEditDeviceModal = function (device) {
-
       $uibModal.open({
         animation: true,
         templateUrl: '/views/private/content/company/modal/edit-device.html',
@@ -95,12 +42,17 @@ angular.module('dogweb')
         resolve: {
           company: company,
           device: device,
-          deviceMacAddresses: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('company_devices/' + company.$id + '/' + device.$id + '/mac_addresses')).$loaded();
+          companyMacAddresses: ['CompanyMacAddressList', function (CompanyMacAddressList) {
+            return new CompanyMacAddressList(company.$id).$loaded();
           }],
-          companyMacAddresses: function () {
-            return $scope.companyMacAddresses;
-          }
+          deviceMacAddresses: ['CompanyMacAddressList', 'lodash', function (CompanyMacAddressList, lodash) {
+            return new CompanyMacAddressList(company.$id).$loaded()
+              .then(function (companyMacAddresses) {
+                return lodash.filter(companyMacAddresses, function (companyMacAddress) {
+                  return lodash.includes(lodash.keys(device.mac_addresses), companyMacAddress.$id);
+                });
+              });
+          }]
         }
       }).result.finally(function () {
 
@@ -115,35 +67,31 @@ angular.module('dogweb')
         size: 'sm',
         resolve: {
           company: company,
-          device: device,
-          companyDevices: function () {
-            return companyDevices;
+          companyEmployee: function () {
+            if (device.employee_id) {
+              return new CompanyEmployee(company.$id, device.employee_id).$loaded();
+            }
           },
-          deviceMacAddresses: ['Ref', '$firebaseArray', function (Ref, $firebaseArray) {
-            return $firebaseArray(Ref.child('company_devices/' + company.$id + '/' + device.$id + '/mac_addresses')).$loaded();
-          }],
+          companyDevices: function () {
+            return devices;
+          },
+          device: device,
+          deviceMacAddresses: ['CompanyMacAddressList', 'lodash', function (CompanyMacAddressList, lodash) {
+            return new CompanyMacAddressList(company.$id).$loaded()
+              .then(function (companyMacAddresses) {
+                return lodash.filter(companyMacAddresses, function (companyMacAddress) {
+                  return lodash.includes(lodash.keys(device.mac_addresses), companyMacAddress.$id);
+                });
+              });
+          }]
         }
       }).result.finally(function () {
 
       });
     };
-
-    function _retrieveDevice(deviceId) {
-      return $firebaseObject(Ref.child('company_devices/' + company.$id + '/' + deviceId)).$loaded().then(function (device) {
-        return device;
-      });
-    }
-
-    function _retrieveMacAddress(macAddressId) {
-      return $firebaseObject(Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId)).$loaded().then(function (mac_address) {
-        return mac_address;
-      });
-    }
-
   })
 
-  .controller('AddDeviceModalController', function ($scope, company, companyMacAddresses, $q, Ref, $firebaseObject, $timeout, $uibModalInstance, lodash) {
-
+  .controller('AddDeviceModalController', function ($scope, company, companyDevices, companyMacAddresses, CompanyDevice, $uibModalInstance) {
     $scope.companyMacAddresses = companyMacAddresses;
 
     $scope.addDevice = function (device, deviceMacAddresses) {
@@ -154,271 +102,73 @@ angular.module('dogweb')
       device.company_id = company.$id;
       device.is_manual = true;
 
-      _createDevice(device).then(function (deviceId) {
-        angular.forEach(deviceMacAddresses, function (macAddress) {
-          _addMacAddressToDevice(macAddress.$id, deviceId).then(function () {
-            _updateMacAddress(macAddress.$id, {updated_date: now.format(), device_id: deviceId});
-          });
-        });
-
-        _addDeviceToCompany(deviceId, company.$id).then(function () {
-          $uibModalInstance.close();
-        });
-
-      });
+      return companyDevices.addDevice(device)
+        .then(function (device) {
+          if (deviceMacAddresses) {
+            return device.addMacAddresses(deviceMacAddresses);
+          }
+        })
+        .then($uibModalInstance.close);
     };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
-    };
-
-    function _createDevice(device) {
-      var devicesRef = Ref.child('company_devices/' + company.$id), def = $q.defer();
-      var deviceRef = devicesRef.push(device, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve(deviceRef.key());
-          }
-        });
-      });
-      return def.promise;
-    }
-
-    function _addMacAddressToDevice(macAddressId, deviceId) {
-      var deviceMacAddressRef = Ref.child('company_devices/' + company.$id + '/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
-      deviceMacAddressRef.set(true, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
-    }
-
-    function _addDeviceToCompany(deviceId, companyId) {
-      var companyDeviceRef = Ref.child('companies/' + companyId + '/devices/' + deviceId), def = $q.defer();
-      companyDeviceRef.set(true, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
-    }
-
-    function _updateMacAddress(macAddressId, macAddress) {
-      var deviceRef = Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId), def = $q.defer();
-      deviceRef.update(macAddress, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
-    }
   })
 
-  .controller('EditDeviceModalController', function ($scope, company, device, deviceMacAddresses, companyMacAddresses, $q, Ref, $firebaseObject, $timeout, $uibModalInstance, lodash) {
-
+  .controller('EditDeviceModalController', function ($scope, company, companyMacAddresses, device, deviceMacAddresses, $uibModalInstance, lodash) {
     $scope.device = device;
-    $scope.deviceMacAddresses = [];
     $scope.companyMacAddresses = companyMacAddresses;
 
-    deviceMacAddresses.$watch(function (event) {
-      switch (event.event) {
-        case 'child_added':
-          _retrieveMacAddress(event.key).then(function (macAddress) {
-            $scope.deviceMacAddresses.push(macAddress);
-          });
-          break;
-        case 'child_removed':
-          lodash.remove($scope.deviceMacAddresses, function (macAddress) {
-            return event.key == macAddress.$id;
-          });
-          break;
-        default:
-      }
+    // angular.copy does not work
+    $scope.deviceMacAddresses = lodash.map(deviceMacAddresses, function (macAddress) {
+      return macAddress;
     });
 
-    angular.forEach(deviceMacAddresses, function (macAddress) {
-      _retrieveMacAddress(macAddress.$id).then(function (macAddress) {
-        $scope.deviceMacAddresses.push(macAddress);
-      });
-    });
-
-    $scope.saveChanges = function (device) {
+    $scope.editDevice = function (device) {
       if ($scope.form.$invalid) {
         return;
       }
 
       if ($scope.form.$pristine) {
-        $uibModalInstance.close();
+        return $uibModalInstance.close();
       }
 
-      var now = moment();
+      return device.$save()
+        .then(function () {
+          if ($scope.form.deviceMacAddresses.$dirty) {
 
-      device.updated_date = now.format();
-
-      device.$save().then(function () {
-        if ($scope.form.deviceMacAddresses.$dirty) {
-
-          var macAddressesToRemove = lodash.filter(deviceMacAddresses, function (macAddress) {
-            return !lodash.findWhere($scope.deviceMacAddresses, {$id: macAddress.$id});
-          });
-
-          angular.forEach(macAddressesToRemove, function (macAddress) {
-            _removeMacAddressFromDevice(macAddress.$id).then(function () {
-              _updateMacAddress(macAddress.$id, {updated_date: now.format(), device_id: null});
+            var macAddressesToRemove = lodash.filter(deviceMacAddresses, function (macAddress) {
+              return !lodash.find($scope.deviceMacAddresses, {$id: macAddress.$id});
             });
-          });
 
-          var macAddressesToAdd = lodash.filter($scope.deviceMacAddresses, function (macAddress) {
-            return !lodash.findWhere(deviceMacAddresses, {$id: macAddress.$id});
-          });
-
-          angular.forEach(macAddressesToAdd, function (macAddress) {
-            _addMacAddressToDevice(macAddress.$id, device.$id).then(function () {
-              _updateMacAddress(macAddress.$id, {updated_date: now.format(), device_id: device.$id});
+            var macAddressesToAdd = lodash.filter($scope.deviceMacAddresses, function (macAddress) {
+              return !lodash.find(deviceMacAddresses, {$id: macAddress.$id});
             });
-          });
 
-          $uibModalInstance.close();
-        }
-      });
-    };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
-    };
-
-    function _addMacAddressToDevice(macAddressId, deviceId) {
-      var deviceMacAddressRef = Ref.child('company_devices/' + company.$id + '/' + deviceId + '/mac_addresses/' + macAddressId), def = $q.defer();
-      deviceMacAddressRef.set(true, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
+            return device.removeMacAddresses(macAddressesToRemove)
+              .then(function () {
+                return device.addMacAddresses(macAddressesToAdd);
+              });
           }
-        });
-      });
-      return def.promise;
-    }
-
-    function _removeMacAddressFromDevice(macAddressId) {
-      return deviceMacAddresses.$remove(lodash.find(deviceMacAddresses, {$id: macAddressId}));
-    }
-
-    function _updateMacAddress(macAddressId, macAddress) {
-      var deviceRef = Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId), def = $q.defer();
-      deviceRef.update(macAddress, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
-    }
-
-    function _retrieveMacAddress(macAddressId) {
-      return $firebaseObject(Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId)).$loaded().then(function (mac_address) {
-        return mac_address;
-      });
-    }
-
+        })
+        .then($uibModalInstance.close);
+    };
   })
 
-  .controller('RemoveDeviceModalController', function ($scope, company, device, companyDevices, deviceMacAddresses, $q, Ref, $firebaseObject, $state, $timeout, $uibModalInstance, lodash) {
-
+  .controller('RemoveDeviceModalController', function ($scope, company, companyEmployee, device, deviceMacAddresses, companyDevices, $uibModalInstance) {
     $scope.device = device;
 
     $scope.removeDevice = function () {
 
-      if (device.employee_id !== undefined) {
-
-        angular.forEach(deviceMacAddresses, function (macAddress) {
-          _removeMacAddressFromDevice(macAddress.$id).then(function () {
-            var now = moment();
-            _updateMacAddress(macAddress.$id, {updated_date: now.format(), device_id: null});
-          });
-        });
-
-        _removeDeviceFromEmployee(device.$id, device.employee_id).then(function () {
-          _removeDeviceFromCompany(device.$id).then(function () {
-            device.$remove().then(function () {
-              $uibModalInstance.close();
-            });
-          });
-        });
-      } else {
-        _removeDeviceFromCompany(device.$id, device.company_id).then(function () {
-
-          angular.forEach(deviceMacAddresses, function (macAddress) {
-            _removeMacAddressFromDevice(macAddress.$id).then(function () {
-              var now = moment();
-              _updateMacAddress(macAddress.$id, {updated_date: now.format(), device_id: null});
-            });
-          });
-
-          device.$remove().then(function () {
-            $uibModalInstance.close();
-          });
-        });
+      if (companyEmployee) {
+        companyEmployee.removeDevice(device.$id);
       }
-    };
 
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
-    };
-
-    function _removeDeviceFromCompany(deviceId) {
-      return companyDevices.$remove(lodash.find(companyDevices, {$id: deviceId}));
-    }
-
-    function _removeDeviceFromEmployee(deviceId, employeeId) {
-      var deviceRef = Ref.child('company_employees/' + company.$id + '/' + employeeId + '/devices/' + deviceId), def = $q.defer();
-      deviceRef.remove(function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
-    }
-
-    function _removeMacAddressFromDevice(macAddressId) {
-      return deviceMacAddresses.$remove(lodash.find(deviceMacAddresses, {$id: macAddressId}));
-    }
-
-    function _updateMacAddress(macAddressId, macAddress) {
-      var deviceRef = Ref.child('company_mac_addresses/' + company.$id + '/' + macAddressId), def = $q.defer();
-      deviceRef.update(macAddress, function (error) {
-        $timeout(function () {
-          if (error) {
-            def.reject(error);
-          } else {
-            def.resolve();
-          }
-        });
-      });
-      return def.promise;
+      return companyDevices.removeDevice(device.$id)
+        .then(function () {
+          return device.removeMacAddresses(deviceMacAddresses);
+        })
+        .then(function () {
+          return device.$remove();
+        })
+        .then($uibModalInstance.close);
     }
 
   })

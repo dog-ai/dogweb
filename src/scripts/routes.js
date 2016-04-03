@@ -244,15 +244,8 @@ angular.module('dogweb')
           templateUrl: "/views/private/content/company/devices.html",
           controller: 'DevicesController',
           resolve: {
-            companyDevices: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
-              return $firebaseArray(Ref.child('companies/' + company.$id + '/devices')).$loaded().then(function (companyDevices) {
-                return companyDevices;
-              });
-            }],
-            companyMacAddresses: ['$rootScope', 'user', 'Ref', '$firebaseArray', 'company', function ($rootScope, user, Ref, $firebaseArray, company) {
-              return $firebaseArray(Ref.child('companies/' + company.$id + '/mac_addresses')).$loaded().then(function (companyMacAddresses) {
-                return companyMacAddresses;
-              });
+            devices: ['company', 'CompanyDeviceList', function (company, CompanyDeviceList) {
+              return new CompanyDeviceList(company.$id).$loaded();
             }]
           }
         })

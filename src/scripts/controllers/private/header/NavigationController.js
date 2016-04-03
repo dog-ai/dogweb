@@ -26,7 +26,7 @@ angular.module('dogweb')
 
       $uibModal.open({
         animation: true,
-        templateUrl: '/views/private/modal/switch-company.html',
+        templateUrl: '/views/private/header/modal/switch-company.html',
         controller: 'SwitchCompanyModalController',
         size: 'sm',
         resolve: {
@@ -45,7 +45,7 @@ angular.module('dogweb')
 
   })
 
-  .controller('SwitchCompanyModalController', function ($scope, user, company, userCompanies, $q, Ref, $firebaseObject, $state, $stateParams, $timeout, $uibModalInstance, lodash) {
+  .controller('SwitchCompanyModalController', function ($scope, user, company, userCompanies, Ref, $firebaseObject, $state, $stateParams, $timeout, $uibModalInstance, lodash) {
     $scope.companies = [];
     $scope.selectedCompany = {};
 

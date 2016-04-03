@@ -47,6 +47,12 @@ angular.module('dogweb')
         return $firebaseObject.prototype.$save.apply(this, arguments);
       },
 
+      removeDevice: function (deviceId) {
+        delete this.devices[deviceId];
+
+        return this.$save();
+      },
+
       toJSON: function () {
         return $firebaseUtils.toJSON(stripUnderscorePrefixedKeys(this));
       }
