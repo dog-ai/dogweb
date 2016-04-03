@@ -45,10 +45,10 @@ angular.module('dogweb')
         },
 
         get: function (index, count, callback) {
-          var result = lodash.toArray(this.$list);
+          var companyMacAddresses = lodash.toArray(this.$list);
 
-          var promises = lodash.map(result.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (macAddress) {
-            return macAddress.$loaded();
+          var promises = lodash.map(companyMacAddresses.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (companyMacAddress) {
+            return companyMacAddress.$loaded();
           });
 
           Promise.all(promises)
@@ -57,6 +57,22 @@ angular.module('dogweb')
 
         setAdapter: function (adapter) {
           this._adapter = adapter;
+        },
+
+        findAllByDeviceId: function (deviceId) {
+          return Ref.child('company_mac_addresses/' + companyId).orderByChild('device_id').equalTo(deviceId)
+            .once('value')
+            .then(function (snapshot) {
+              if (snapshot.exists()) {
+                var companyMacAddresses = [];
+
+                snapshot.forEach(function (child) {
+                  companyMacAddresses.push(new CompanyMacAddress(companyId, child.key()));
+                });
+
+                return companyMacAddresses;
+              }
+            })
         }
 
       })(companyMacAddresssRef);

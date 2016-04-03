@@ -25,7 +25,7 @@ angular.module('dogweb')
             return devices;
           },
           companyMacAddresses: ['CompanyMacAddressList', function (CompanyMacAddressList) {
-            return new CompanyMacAddressList(company.$id).$loaded();
+            return new CompanyMacAddressList(company.$id).findAllByDeviceId(null);
           }]
         }
       }).result.finally(function () {
@@ -43,15 +43,10 @@ angular.module('dogweb')
           company: company,
           device: device,
           companyMacAddresses: ['CompanyMacAddressList', function (CompanyMacAddressList) {
-            return new CompanyMacAddressList(company.$id).$loaded();
+            return new CompanyMacAddressList(company.$id).findAllByDeviceId(null);
           }],
-          deviceMacAddresses: ['CompanyMacAddressList', 'lodash', function (CompanyMacAddressList, lodash) {
-            return new CompanyMacAddressList(company.$id).$loaded()
-              .then(function (companyMacAddresses) {
-                return lodash.filter(companyMacAddresses, function (companyMacAddress) {
-                  return lodash.includes(lodash.keys(device.mac_addresses), companyMacAddress.$id);
-                });
-              });
+          deviceMacAddresses: ['CompanyMacAddressList', function (CompanyMacAddressList) {
+            return new CompanyMacAddressList(company.$id).findAllByDeviceId(device.$id);
           }]
         }
       }).result.finally(function () {
@@ -76,13 +71,8 @@ angular.module('dogweb')
             return devices;
           },
           device: device,
-          deviceMacAddresses: ['CompanyMacAddressList', 'lodash', function (CompanyMacAddressList, lodash) {
-            return new CompanyMacAddressList(company.$id).$loaded()
-              .then(function (companyMacAddresses) {
-                return lodash.filter(companyMacAddresses, function (companyMacAddress) {
-                  return lodash.includes(lodash.keys(device.mac_addresses), companyMacAddress.$id);
-                });
-              });
+          deviceMacAddresses: ['CompanyMacAddressList', function (CompanyMacAddressList) {
+            return new CompanyMacAddressList(company.$id).findAllByDeviceId(device.$id);
           }]
         }
       }).result.finally(function () {

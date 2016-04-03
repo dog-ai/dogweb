@@ -24,7 +24,6 @@ angular.module('dogweb')
             _this.mac_addresses[macAddress.$id] = true;
 
             macAddress.device_id = _this.$id;
-            macAddress.updated_date = moment().format();
             macAddress.$save();
           }
         });
@@ -40,7 +39,6 @@ angular.module('dogweb')
             delete _this.mac_addresses[macAddress.$id];
 
             delete macAddress.device_id;
-            macAddress.updated_date = moment().format();
             macAddress.$save();
           }
         });
