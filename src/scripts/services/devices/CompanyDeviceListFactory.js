@@ -28,15 +28,10 @@ angular.module('dogweb')
           if (this._adapter) {
             this._adapter.prepend([device]);
           }
-
           return device;
         },
 
-        $$updated: function () {
-
-          // TODO: forcing a reload might not be efficient
-          this._adapter.reload();
-
+        $$updated: function (snapshot) {
           return false;
         },
 

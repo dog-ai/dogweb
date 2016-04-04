@@ -32,10 +32,6 @@ angular.module('dogweb')
         },
 
         $$updated: function () {
-
-          // TODO: forcing a reload might not be efficient
-          this._adapter.reload();
-
           return false;
         },
 
