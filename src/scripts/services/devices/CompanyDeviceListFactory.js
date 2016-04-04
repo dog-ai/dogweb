@@ -11,7 +11,9 @@ angular.module('dogweb')
         addDevice: function (device) {
           return Ref.child('/company_devices/' + companyId).push(device)
             .then(function (companyDeviceRef) {
-              return companyDevicesRef.child(companyDeviceRef.key()).set(true)
+
+              // Firebase.ServerValue.TIMESTAMP will push the new device to the end of the list
+              return companyDevicesRef.child(companyDeviceRef.key()).setWithPriority(true, Firebase.ServerValue.TIMESTAMP)
                 .then(function () {
                   var companyDevice = new CompanyDevice(companyId, companyDeviceRef.key());
                   companyDevice = lodash.extend(companyDevice, device);
@@ -28,6 +30,14 @@ angular.module('dogweb')
           }
 
           return device;
+        },
+
+        $$updated: function () {
+
+          // TODO: forcing a reload might not be efficient
+          this._adapter.reload();
+
+          return false;
         },
 
         removeDevice: function (deviceId) {

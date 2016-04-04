@@ -3,7 +3,7 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyEmployeeListFactory", function ($firebaseArray, CompanyEmployee, lodash, Ref) {
+  .factory("CompanyEmployeeListFactory", function ($firebaseArray, $firebaseUtils, CompanyEmployee, lodash, Ref) {
     return function (companyId, companyEmployeesRef) {
       return $firebaseArray.$extend({
         _adapter: undefined,
@@ -11,7 +11,10 @@ angular.module('dogweb')
         $add: function (employee) {
           return Ref.child('/company_employees/' + companyId).push(employee)
             .then(function (companyEmployeeRef) {
-              return companyEmployeesRef.child(companyEmployeeRef.key()).set(true)
+
+              // Firebase.ServerValue.TIMESTAMP will push the new employee to the end of the list
+              return companyEmployeesRef.child(companyEmployeeRef.key())
+                .setWithPriority(true, Firebase.ServerValue.TIMESTAMP)
                 .then(function () {
                   return companyEmployeeRef.key();
                 });
@@ -22,10 +25,18 @@ angular.module('dogweb')
           var employee = new CompanyEmployee(companyId, snapshot.key());
 
           if (this._adapter) {
-            this._adapter.prepend([employee]);
+            this._adapter.append([employee]);
           }
 
           return employee;
+        },
+
+        $$updated: function () {
+
+          // TODO: forcing a reload might not be efficient
+          this._adapter.reload();
+
+          return false;
         },
 
         $remove: function (employeeId) {
