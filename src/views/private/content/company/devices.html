@@ -1,10 +1,11 @@
 <div id="devices-view">
 
-  <div class="row">
+  <div class="row devices">
 
-    <div class="col-md-6 col-md-offset-3">
+    <!-- Devices -->
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
 
-      <table class="table table-bordered">
+      <table class="table table-hover">
         <tr>
           <th>Name</th>
           <th>Manufacturer</th>
@@ -51,24 +52,6 @@
 
     </div>
 
-    <div class="col-md-6 hide">
-      Total: {{companyMacAddresses.length}}
-      <table class="table table-bordered">
-        <tr>
-          <th>Vendor</th>
-          <th>Address</th>
-          <th>First seen</th>
-          <th>Last seen</th>
-        </tr>
-        <tr ng-repeat="companyMacAddress in companyMacAddresses">
-          <td>{{companyMacAddress.vendor}}</td>
-          <td>{{companyMacAddress.address}}</td>
-          <td am-time-ago="companyMacAddress.created_date"></td>
-          <td am-time-ago="companyMacAddress.last_presence_date">
-        </tr>
-      </table>
-
-    </div>
   </div>
 
 </div>

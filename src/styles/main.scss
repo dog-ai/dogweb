@@ -8,6 +8,8 @@
 @import "employees";
 @import "employee";
 @import "apps";
+@import "users";
+@import "devices";
 
 .dropdown-menu {
   -webkit-border-radius: 0px !important;
@@ -43,6 +45,11 @@ body {
 
 .gravatar {
   padding: 9px 9px !important;
+}
+
+th, td {
+  border: none !important;
+  vertical-align: middle !important;
 }
 
 

@@ -1,19 +1,19 @@
 <div id="users-view">
 
   <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
 
-      <div class="row">
-        <div class="col-md-12">
-          <legend>Users</legend>
+      <!-- Users -->
+      <div class="row users">
+        <div class="col-xs-12">
 
-          <table class="table table-bordered">
+          <table class="table table-hover">
             <tbody>
 
             <tr>
               <th>Name</th>
               <th>E-mail</th>
-              <th>Date added</th>
+              <th>Added</th>
               <th>Last seen</th>
               <th></th>
             </tr>
@@ -21,7 +21,10 @@
                 buffer-size='5'
                 adapter="companyUsersAdapter">
 
-              <td>{{user.full_name}}</td>
+              <td>
+                <gravatar-image email="{{user.email_address}}" full-name="{{user.full_name}}" size="32"></gravatar-image>
+                {{user.full_name}}
+              </td>
               <td>{{user.email_address}}</td>
               <td am-time-ago="user.created_date"></td>
               <td am-time-ago="user.last_seen_date"></td>
@@ -41,21 +44,19 @@
 
             </tbody>
           </table>
-
         </div>
       </div>
-
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
           <button class="btn btn-primary" ng-click="openInviteUserModal()">Invite user</button>
         </div>
       </div>
 
-      <div class="row" ng-show="companyInvites.getSize()" ng-cloak>
+      <!-- Invites -->
+      <div class="row invites" ng-show="companyInvites.getSize()" ng-cloak>
         <div class="col-md-12">
-          <legend>Invites</legend>
 
-          <table class="table table-bordered">
+          <table class="table table-hover">
             <tbody>
 
             <tr>
@@ -67,7 +68,9 @@
                 buffer-size='5'
                 adapter="companyInvitesAdapter">
 
-              <td>{{invite.email_address}}</td>
+              <td>
+                {{invite.email_address}}
+              </td>
               <td am-time-ago="invite.created_date"></td>
               <td>
                 <div class="btn-group pull-right" uib-dropdown>
