@@ -20,7 +20,7 @@ angular.module('dogweb')
 
     return $firebaseObject.$extend({
 
-      $loaded: function () {
+      /*$loaded: function () {
         var _this = this;
 
         return $firebaseObject.prototype.$loaded.apply(this, arguments)
@@ -39,7 +39,7 @@ angular.module('dogweb')
                 return employee;
               });
           });
-      },
+      },*/
 
       $save: function () {
         this.updated_date = moment().format();

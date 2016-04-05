@@ -2,7 +2,7 @@
 
   <div class="row employees">
 
-    <div class="hidden-xs col-xs-12 col-sm-4 col-md-3 col-lg-3">
+    <div class="hidden-xs col-xs-12 col-sm-6 col-md-4 col-lg-4">
       <button id="add-employee" class="btn btn-default btn-block" ng-click="openAddNewEmployeeModal()">
         <i class="ionicons ion-plus-circled"></i>
         <p>Add employee</p>
@@ -10,7 +10,8 @@
     </div>
 
 
-   <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3" ui-scroll="employee in employees" buffer-size="8" adapter="employeesAdapter">
+   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"
+        ui-scroll="employee in employees" buffer-size="8" adapter="employeesAdapter">
 
       <div class="thumbnail" ng-class="{'not-present': !employee.is_present}">
 
@@ -56,7 +57,7 @@
           </a>
         </div>
 
-        <div class="performance-indicator">
+        <!--<div class="performance-indicator">
           <div class="performance-indicator-previous" ng-show="employee._performances">
             <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-left"></i></button>
@@ -119,7 +120,7 @@
             <button id="next{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
               class="glyphicon glyphicon-menu-right"></i></button>
           </div>
-        </div>
+        </div>-->
 
       </div>
 
