@@ -4,14 +4,6 @@
 
 'use strict';
 
-/**
- * @ngdoc overview
- * @name dogweb
- * @description
- * # dogweb
- *
- * Main module of the application.
- */
 angular.module('dogweb', [
   'constants',
   'ngAnimate',

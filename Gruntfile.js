@@ -89,7 +89,7 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= config.app %>/**/*.html',
-          '<%= config.build.server %>/styles/main.css',
+          '<%= config.build.server %>/styles/app.css',
           '<%= config.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -276,7 +276,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          '<%= config.build.dist %>/styles/main.css': '<%= config.app %>/styles/main.scss'
+          '<%= config.build.dist %>/styles/app.css': '<%= config.app %>/styles/app.scss'
         }
       },
       server: {
@@ -284,7 +284,7 @@ module.exports = function (grunt) {
           sourceMap: true
         },
         files: {
-          '<%= config.build.server %>/styles/main.css': '<%= config.app %>/styles/main.scss'
+          '<%= config.build.server %>/styles/app.css': '<%= config.app %>/styles/app.scss'
         }
       }
     },

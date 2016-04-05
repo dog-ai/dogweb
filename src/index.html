@@ -32,8 +32,8 @@
   <!-- endbower -->
   <!-- endbuild -->
 
-  <!-- build:css(var/tmp/build/dist) styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
+  <!-- build:css(var/tmp/build/dist) styles/app.css -->
+  <link rel="stylesheet" href="styles/app.css">
   <!-- endbuild -->
 
   <link rel="shortcut icon" href="favicon.ico"/>
@@ -89,18 +89,18 @@
 <!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js({var/tmp/build/dist,src}) scripts/scripts.js -->
+<!-- build:js({var/tmp/build/dist,src}) scripts/app.js -->
 <script src="scripts/app.js"></script>
+<script src="scripts/config.js"></script>
+<script src="scripts/routes.js"></script>
 <script src="scripts/constants.js"></script>
 <script src="scripts/angularfire/config.js"></script>
 <script src="scripts/angularfire/firebase.ref.js"></script>
 <script src="scripts/filters/reverse.js"></script>
 <script src="scripts/angularfire/auth.js"></script>
-<script src="scripts/directives/ngShowAuth.js"></script>
-<script src="scripts/directives/ngHideAuth.js"></script>
+
 <script src="scripts/directives/gravatarImage.js"></script>
 <script src="scripts/directives/angular.dcb-img-fallback.js"></script>
-<script src="scripts/routes.js"></script>
 <script src="scripts/controllers/public/LogInController.js"></script>
 <script src="scripts/controllers/public/ForgotPasswordController.js"></script>
 <script src="scripts/controllers/public/SignUpController.js"></script>
