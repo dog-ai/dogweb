@@ -34,6 +34,10 @@ angular.module('dogweb')
           return companyMacAddresssRef.child(macAddressId).remove();
         },
 
+        getSize: function () {
+          return this.$list.length;
+        },
+
         $$removed: function (snapshot) {
           this._adapter.applyUpdates(function (item) {
             if (snapshot.key() === item.$id) {

@@ -5,8 +5,11 @@
 angular.module('dogweb')
   .factory("CompanyInviteFactory", function ($firebaseObject) {
     return $firebaseObject.$extend({
-      getId: function () {
-        return this.$id;
+
+      $save: function () {
+        this.updated_date = moment().format();
+
+        return $firebaseObject.prototype.$save.apply(this, arguments);
       }
     });
   });

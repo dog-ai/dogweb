@@ -3,8 +3,8 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyUser", function (Ref, CompanyUserFactory) {
+  .factory("User", function (Ref, UserFactory) {
     return function (userId) {
-      return new CompanyUserFactory(Ref.child('/users/' + userId));
+      return new UserFactory(Ref.child('/users/' + userId));
     }
   });

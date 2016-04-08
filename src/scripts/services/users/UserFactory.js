@@ -3,7 +3,7 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyUserFactory", function ($firebaseObject, moment, lodash) {
+  .factory("UserFactory", function ($firebaseObject, moment, lodash) {
     return $firebaseObject.$extend({
 
       $save: function () {

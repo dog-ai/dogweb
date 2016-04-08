@@ -7,7 +7,7 @@
 angular.module('dogweb')
   .controller('InviteController', function ($scope, user, invite, inviteCompanyUsers, inviteCompanyInvites, $state, lodash) {
 
-    inviteCompanyUsers.$add(user)
+    inviteCompanyUsers.addUser(user)
       .then(function () {
         return user.addCompany(invite.company.id)
           .then(function () {

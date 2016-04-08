@@ -5,7 +5,6 @@
 angular.module('dogweb')
   .factory("CompanyInviteList", function (Ref, CompanyInviteListFactory) {
     return function (companyId) {
-      return new CompanyInviteListFactory(companyId, Ref.child('companies/' + companyId + '/invites'))
-        .$loaded();
+      return new CompanyInviteListFactory(companyId, Ref.child('companies/' + companyId + '/invites'));
     }
   });

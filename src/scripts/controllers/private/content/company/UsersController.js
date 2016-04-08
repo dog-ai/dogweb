@@ -5,15 +5,10 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('UsersController', function ($scope, user, company, companyUsers, companyInvites, $uibModal, lodash) {
+  
+  .controller('UsersController', function ($scope, user, company, companyUsers, companyInvites, $uibModal) {
     $scope.companyUsers = companyUsers;
     $scope.companyInvites = companyInvites;
-
-    $scope.companyUsersAdapter = {};
-    companyUsers.setAdapter($scope.companyUsersAdapter);
-
-    $scope.companyInvitesAdapter = {};
-    companyInvites.setAdapter($scope.companyInvitesAdapter);
 
     $scope.openRemoveUserModal = function (user) {
       $uibModal.open({
@@ -22,6 +17,7 @@ angular.module('dogweb')
         controller: 'RemoveUserModalController',
         size: 'sm',
         resolve: {
+          company: company,
           companyUsers: function () {
             return companyUsers;
           },
@@ -48,18 +44,22 @@ angular.module('dogweb')
       });
     };
 
-    $scope.removeInvite = function (invite) {
-      return companyInvites.$remove(lodash.find(companyInvites, {$id: invite.getId()}))
+    $scope.removeInvite = function (companyInvite) {
+      return companyInvites.removeInvite(companyInvite.$id)
+        .then(function () {
+          return companyInvite.$remove();  
+        })
     };
   })
 
-  .controller('RemoveUserModalController', function ($scope, companyUsers, user, $uibModalInstance, lodash) {
+  .controller('RemoveUserModalController', function ($scope, company, companyUsers, user, $uibModalInstance) {
     $scope.user = user;
 
-    $scope.cancel = $uibModalInstance.dismiss;
-
     $scope.removeUser = function (user) {
-      return companyUsers.$remove(lodash.find(companyUsers, {$id: user.$id}))
+      return companyUsers.removeUser(user.$id)
+        .then(function () {
+          return user.removeCompany(company.$id);
+        })
         .then($uibModalInstance.close);
     };
   })
@@ -77,26 +77,17 @@ angular.module('dogweb')
       invite.created_date = now.format();
       invite.user = {id: user.$id, full_name: user.full_name};
       invite.company = {id: company.$id, name: company.name};
-      invite.url = $location.protocol() + "://" + $location.host() + ":" +
-        ($location.port() == 80 ? '' : $location.port()) + '/#/invite';
-
-      var companyInvite = new CompanyInvite();
-      companyInvite = lodash.extend(companyInvite, invite);
-
-      companyInvites.$add(companyInvite)
-        .then(function (companyInviteRef) {
-          invite.id = companyInviteRef.key();
+      invite.url = $location.protocol() + "://" + $location.host() + ":" + ($location.port() == 80 ? '' : $location.port()) + '/#/invite';
+      
+      return companyInvites.addInvite(invite)
+        .then(function (companyInvite) {
+          invite.id = companyInvite.$id;
 
           var task = {event: 'user:invite', data: {invite: invite}};
           return company.addTask(task);
+          
         })
-        .then(function () {
-          $uibModalInstance.close();
-        })
-    };
-
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
+        .then($uibModalInstance.close);
     };
   })
 

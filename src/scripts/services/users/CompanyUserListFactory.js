@@ -3,59 +3,25 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyUserListFactory", function ($firebaseArray, CompanyUser, lodash) {
+  .factory("CompanyUserListFactory", function ($firebaseArray, User, lodash) {
     return function (companyId, companyUsersRef) {
       return $firebaseArray.$extend({
-        _adapter: undefined,
 
-        $add: function (user) {
-          if (user.$id) {
-            return companyUsersRef.child(user.$id).set(true)
-              .then(function () {
-                return companyUsersRef.child(user.$id);
-              });
-          }
+        addUser: function (user) {
+          // Firebase.ServerValue.TIMESTAMP will push the new user to the end of the list
+          return companyUsersRef.child(user.$id).setWithPriority(true, Firebase.ServerValue.TIMESTAMP);
         },
-
+        
         $$added: function (snapshot) {
-          var user = new CompanyUser(snapshot.key());
-
-          if (this._adapter) {
-            this._adapter.prepend([user]);
-          }
-
-          return user;
+          return new User(snapshot.key());
         },
 
-        $$removed: function (snapshot) {
-          this._adapter.applyUpdates(function (item) {
-            if (snapshot.key() === item.$id) {
-              return [];
-            }
-          });
-
-          return this.$getRecord(snapshot.key()).$loaded()
-            .then(function (user) {
-              return user.removeCompany(companyId);
-            })
-            .then(function () {
-              return true;
-            })
+        getSize: function () {
+          return this.$list.length;
         },
 
-        get: function (index, count, callback) {
-          var result = lodash.toArray(this.$list);
-
-          var promises = lodash.map(result.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (user) {
-            return user.$loaded();
-          });
-
-          Promise.all(promises)
-            .then(callback);
-        },
-
-        setAdapter: function (adapter) {
-          this._adapter = adapter;
+        removeUser: function (userId) {
+          return companyUsersRef.child(userId).remove();
         }
 
       })(companyUsersRef);

@@ -6,7 +6,7 @@
 
 angular.module('dogweb')
 
-  .controller('SignUpController', function ($scope, auth, Auth, emailAddress, CompanyUser, $q, Ref, $timeout, CompanyUserList, lodash, $state, $stateParams) {
+  .controller('SignUpController', function ($scope, auth, Auth, emailAddress, User, $q, Ref, $timeout, lodash, $state, $stateParams) {
     $scope.$stateParams = $stateParams;
 
     $scope.user = {
@@ -38,15 +38,15 @@ angular.module('dogweb')
           return Auth.$authWithPassword({email: user.email_address, password: user.password}, {rememberMe: true});
         })
         .then(function (auth) {
-          var companyUser = new CompanyUser(auth.uid);
-          lodash.extend(companyUser, user);
-          delete companyUser.password;
+          var _user = new User(auth.uid);
+          lodash.extend(_user, user);
+          delete _user.password;
 
           var now = moment();
-          companyUser.created_date = now.format();
-          companyUser.is_enabled = true;
+          _user.created_date = now.format();
+          _user.is_enabled = true;
 
-          return companyUser.$save();
+          return _user.$save();
         });
     }
 

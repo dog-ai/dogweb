@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('dogweb')
-  .controller('LogInController', function ($scope, Auth, CompanyUser, $state, $stateParams) {
+  .controller('LogInController', function ($scope, Auth, User, $state, $stateParams) {
     $scope.$stateParams = $stateParams;
 
     $scope.authenticate = function (email, password) {
@@ -15,7 +15,7 @@ angular.module('dogweb')
 
       Auth.$authWithPassword({email: email, password: password}, {rememberMe: true})
         .then(function (auth) {
-          return CompanyUser(auth.uid).$loaded();
+          return User(auth.uid).$loaded();
         })
         .then(function (user) {
           if (user.is_enabled) {

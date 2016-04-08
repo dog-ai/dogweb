@@ -5,6 +5,6 @@
 angular.module('dogweb')
   .factory("CompanyAppList", function (Ref, CompanyAppListFactory) {
     return function (companyId) {
-      return new CompanyAppListFactory(companyId, Ref.child('companies/' + companyId + '/apps')).$loaded();
+      return new CompanyAppListFactory(companyId, Ref.child('companies/' + companyId + '/apps'));
     }
   });

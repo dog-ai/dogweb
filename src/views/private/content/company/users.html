@@ -1,7 +1,7 @@
 <div id="users-view">
 
   <div class="row">
-    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
 
       <!-- Users -->
       <div class="row users">
@@ -17,9 +17,7 @@
               <th>Last seen</th>
               <th></th>
             </tr>
-            <tr ui-scroll="user in companyUsers"
-                buffer-size='5'
-                adapter="companyUsersAdapter">
+            <tr ng-repeat="user in companyUsers">
 
               <td>
                 <gravatar-image email="{{user.email_address}}" full-name="{{user.full_name}}" size="32"></gravatar-image>
@@ -64,9 +62,7 @@
               <th>Date invited</th>
               <th></th>
             </tr>
-            <tr ui-scroll="invite in companyInvites"
-                buffer-size='5'
-                adapter="companyInvitesAdapter">
+            <tr ng-repeat="invite in companyInvites">
 
               <td>
                 {{invite.email_address}}

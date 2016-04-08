@@ -40,10 +40,11 @@ angular.module('dogweb')
                   if ($stateParams.envelope) {
                     try {
                       var envelope = JSON.parse(decodeURIComponent(escape($base64.decode(decodeURIComponent($stateParams.envelope)))));
-                      return new CompanyInvite().$load(envelope.company.id, envelope.invite.id).then(function (companyInvite) {
-                        var invite = companyInvite.created_date ? companyInvite : {};
-                        return invite.email_address;
-                      });
+                      return new CompanyInvite(envelope.company.id, envelope.invite.id).$loaded()
+                        .then(function (companyInvite) {
+                          var invite = companyInvite.created_date ? companyInvite : {};
+                          return invite.email_address;
+                        });
                     } catch (ignored) {
                     }
                   }
@@ -137,7 +138,7 @@ angular.module('dogweb')
               controller: 'NotificationsController',
               resolve: {
                 companyNotifications: ['company', 'CompanyNotificationList', function (company, CompanyNotificationList) {
-                  return new CompanyNotificationList(company.$id);
+                  return new CompanyNotificationList(company.$id).$loaded();
                 }]
 
               }
@@ -147,15 +148,15 @@ angular.module('dogweb')
             }
           },
           resolve: {
-            user: ['auth', 'CompanyUser', function (auth, CompanyUser) {
-              return new CompanyUser(auth.uid).$loaded();
+            user: ['auth', 'User', function (auth, User) {
+              return new User(auth.uid).$loaded();
             }],
             company: ['user', 'lodash', 'Company', function (user, lodash, Company) {
               var companyId = lodash.keys(user.companies).length > 1 ? user.primary_company : lodash.keys(user.companies)[0];
-              return new Company(companyId);
+              return new Company(companyId).$loaded();
             }],
             apps: ['auth', 'AppList', function (auth, AppList) {
-              return new AppList();
+              return new AppList().$loaded();
             }]
           }
         })
@@ -186,25 +187,26 @@ angular.module('dogweb')
               if ($stateParams.envelope) {
                 try {
                   var envelope = JSON.parse(decodeURIComponent(escape($base64.decode(decodeURIComponent($stateParams.envelope)))));
-                  return new CompanyInvite().$load(envelope.company.id, envelope.invite.id).then(function (companyInvite) {
-                    var invite = companyInvite.created_date ? companyInvite : undefined;
+                  return new CompanyInvite(envelope.company.id, envelope.invite.id).$loaded()
+                    .then(function (companyInvite) {
+                      var invite = companyInvite.created_date ? companyInvite : undefined;
 
-                    if (!invite) {
-                      $state.go('private.content.dashboard');
-                    } else {
-                      return invite;
-                    }
-                  });
+                      if (!invite) {
+                        $state.go('private.content.dashboard');
+                      } else {
+                        return invite;
+                      }
+                    });
                 } catch (ignored) {
                   $state.go('private.content.dashboard');
                 }
               }
             }],
             inviteCompanyUsers: ['company', 'CompanyUserList', 'invite', function (company, CompanyUserList, invite) {
-              return new CompanyUserList(invite.company.id);
+              return new CompanyUserList(invite.company.id).$loaded();
             }],
             inviteCompanyInvites: ['company', 'CompanyInviteList', 'invite', function (company, CompanyInviteList, invite) {
-              return new CompanyInviteList(invite.company.id);
+              return new CompanyInviteList(invite.company.id).$loaded();
             }]
           }
         })
@@ -240,10 +242,10 @@ angular.module('dogweb')
           controller: 'UsersController',
           resolve: {
             companyUsers: ['company', 'CompanyUserList', function (company, CompanyUserList) {
-              return new CompanyUserList(company.$id);
+              return new CompanyUserList(company.$id).$loaded();
             }],
             companyInvites: ['company', 'CompanyInviteList', function (company, CompanyInviteList) {
-              return new CompanyInviteList(company.$id);
+              return new CompanyInviteList(company.$id).$loaded();
             }]
           }
         })
@@ -253,7 +255,7 @@ angular.module('dogweb')
           controller: 'AppsController',
           resolve: {
             companyApps: ['company', 'CompanyAppList', function (company, CompanyAppList) {
-              return new CompanyAppList(company.$id);
+              return new CompanyAppList(company.$id).$loaded();
             }]
           }
         })
@@ -280,7 +282,7 @@ angular.module('dogweb')
                 .then(function (stats) {
                   return {
                     presence: {
-                    'all-time': stats
+                      'all-time': stats
                     }
                   }
                 });

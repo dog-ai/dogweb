@@ -88,7 +88,6 @@ angular.module('dogweb')
       var now = new moment();
 
       device.created_date = now.format();
-      device.updated_date = now.format();
       device.company_id = company.$id;
       device.is_manual = true;
 

@@ -37,6 +37,10 @@ angular.module('dogweb')
           return true;
         },
 
+        getSize: function () {
+          return this.$list.length;
+        },
+
         /*$$moved: function (snapshot, prevChild) {
           $firebaseArray.prototype.$$moved.apply(this, arguments);
           $firebaseArray.prototype.$$process.apply(this, ['child_moved', this.$getRecord(snapshot.key()), prevChild]);

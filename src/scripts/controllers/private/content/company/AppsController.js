@@ -10,9 +10,6 @@ angular.module('dogweb')
     $scope.apps = apps;
     $scope.companyApps = companyApps;
 
-    $scope.adapter = {};
-    companyApps.setAdapter($scope.adapter);
-
     $scope.openEditAppModal = function (companyApp) {
       return $uibModal.open({
         animation: true,
@@ -47,7 +44,6 @@ angular.module('dogweb')
         return companyApp.$save();
       }
     };
-
   })
 
   .controller('EditModalController', function ($scope, company, app, companyApp, $uibModalInstance) {

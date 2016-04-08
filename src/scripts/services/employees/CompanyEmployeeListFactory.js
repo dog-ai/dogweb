@@ -31,6 +31,10 @@ angular.module('dogweb')
           return employee;
         },
 
+        getSize: function () {
+          return this.$list.length;
+        },
+
         $$updated: function () {
           // do not update array items
           return true;

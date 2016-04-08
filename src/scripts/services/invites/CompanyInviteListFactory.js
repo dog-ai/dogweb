@@ -3,83 +3,38 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyInviteListFactory", function ($firebaseArray, CompanyInvite, lodash) {
+  .factory("CompanyInviteListFactory", function ($firebaseArray, CompanyInvite, lodash, Ref) {
     return function (companyId, companyInvitesRef) {
       return $firebaseArray.$extend({
-        _adapter: undefined,
 
-        $add: function (invite) {
-          var companyInvite = new CompanyInvite();
-          companyInvite = lodash.extend(companyInvite, invite);
+        addInvite: function (invite) {
+          return Ref.child('/company_invites/' + companyId).push(invite)
+            .then(function (companyInviteRef) {
 
-          if (companyInvite.getId()) {
-            return companyInvitesRef.child(companyInvite.getId()).set(true)
-              .then(function () {
-                return companyInvitesRef.child(companyInvite.getId())
-              });
-          } else {
-            return companyInvite.$save(companyId)
-              .then(function () {
-                return companyInvitesRef.child(companyInvite.getId()).set(true)
-              })
-              .then(function () {
-                return companyInvitesRef.child(companyInvite.getId())
-              });
-          }
+              // Firebase.ServerValue.TIMESTAMP will push the new invite to the end of the list
+              return companyInvitesRef.child(companyInviteRef.key()).setWithPriority(true, Firebase.ServerValue.TIMESTAMP)
+                .then(function () {
+                  var companyInvite = new CompanyInvite(companyId, companyInviteRef.key());
+                  companyInvite = lodash.extend(companyInvite, invite);
+                  return companyInvite;
+                });
+            });
         },
-
+        
         $$added: function (snapshot) {
-          var _this = this;
-
-          var invite = new CompanyInvite();
-          invite.setId(snapshot.key());
-
-          return invite.$load(companyId, invite.getId())// TODO: work-around for ui-scroll with tables
-            .then(function (companyInvite) {
-              if (_this._adapter) {
-                _this._adapter.append([companyInvite]);
-              }
-
-              return invite;
-            });
-        },
-
-        $$removed: function (snapshot) {
-          if (this._adapter) {
-            this._adapter.applyUpdates(function (item) {
-              if (snapshot.key() === item.getId()) {
-                return [];
-              }
-            });
-          }
-
-          return new CompanyInvite().$remove(companyId, snapshot.key())
-            .then(function () {
-              return true;
-            })
-        },
-
-        $$getKey: function (invite) {
-          return invite.getId();
+          return new CompanyInvite(companyId, snapshot.key());
         },
 
         getSize: function () {
           return this.$list.length;
         },
 
-        get: function (index, count, callback) {
-          var result = lodash.toArray(this.$list);
-
-          var promises = lodash.map(result.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (companyInvite) {
-            return angular.extend(companyInvite.$load(companyId, companyInvite.getId()), companyInvite);
-          });
-
-          Promise.all(promises)
-            .then(callback)
+        $$updated: function () {
+          return true;
         },
 
-        setAdapter: function (adapter) {
-          this._adapter = adapter;
+        removeInvite: function (inviteId) {
+          return companyInvitesRef.child(inviteId).remove();
         }
 
       })(companyInvitesRef);

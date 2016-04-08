@@ -5,6 +5,6 @@
 angular.module('dogweb')
   .factory("CompanyUserList", function (Ref, CompanyUserListFactory) {
     return function (companyId) {
-      return new CompanyUserListFactory(companyId, Ref.child('companies/' + companyId + '/users')).$loaded();
+      return new CompanyUserListFactory(companyId, Ref.child('companies/' + companyId + '/users'));
     }
   });
