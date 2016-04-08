@@ -272,16 +272,19 @@ angular.module('dogweb')
           templateUrl: "/views/private/content/employees/employee.html",
           controller: 'EmployeeController',
           resolve: {
-            employee: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', 'user', 'company', function ($rootScope, Ref, $stateParams, $firebaseObject, user, company) {
-              return $firebaseObject(Ref.child('company_employees/' + company.$id + '/' + $stateParams.id)).$loaded().then(function (employee) {
-                return employee;
-              });
+            employee: ['company', '$stateParams', 'CompanyEmployee', function (company, $stateParams, CompanyEmployee) {
+              return new CompanyEmployee(company.$id, $stateParams.id).$loaded();
             }],
-            alltimeStats: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', 'user', 'company', function ($rootScope, Ref, $stateParams, $firebaseObject, user, company) {
-              return $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + $stateParams.id + '/presence/_stats')).$loaded().then(function (_stats) {
-                return _stats;
-              });
-            }],
+            performance: ['$rootScope', 'Ref', '$stateParams', '$firebaseObject', 'user', 'company', function ($rootScope, Ref, $stateParams, $firebaseObject, user, company) {
+              return $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + $stateParams.id + '/presence/_stats')).$loaded()
+                .then(function (stats) {
+                  return {
+                    presence: {
+                    'all-time': stats
+                    }
+                  }
+                });
+            }]
           }
         });
     }])

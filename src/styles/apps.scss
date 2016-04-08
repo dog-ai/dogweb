@@ -6,8 +6,8 @@
 
   .thumbnail {
     padding-top: 0px;
-    border: none;
-    //border-color: #eeeeee;
+    border: 1px solid #ddd;
+    border-radius: 3px;
 
     a {
 
@@ -18,7 +18,7 @@
 
       .image {
         background-color: #eeeeee;
-        border-bottom: solid #eeeeee 1px;
+        border-bottom: solid #ddd 1px;
         margin: 0 -4px;
         padding: 20px 4px;
 
@@ -34,8 +34,7 @@
     }
 
     .panel {
-      margin: 0px -4px -4px -4px;
-      border-top: solid $gray-lighter 0.15em;
+      margin: 0px -4px 0px -4px;
       box-shadow: none;
     }
 

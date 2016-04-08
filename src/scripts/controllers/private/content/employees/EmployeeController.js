@@ -4,15 +4,8 @@
 
 'use strict';
 
-/**
- * @ngdoc function
- * @name dogweb.controller:EmployeesCtrl
- * @description
- * # EmployeesCtrl
- * Controller of the dogweb
- */
 angular.module('dogweb')
-  .controller('EmployeeController', function ($scope, user, company, employee, alltimeStats, Ref, $firebaseObject, $firebaseArray, lodash) {
+  .controller('EmployeeController', function ($scope, user, company, employee, performance, Ref, $firebaseObject, $firebaseArray, lodash) {
 
     $scope.employee = employee;
     $scope.presences = [];
@@ -145,8 +138,8 @@ angular.module('dogweb')
     };
 
     $scope.heatmap = {
-      start: moment().subtract(3, 'month').startOf('month'),
-      minDate: moment().subtract(Math.floor(moment().endOf('month').diff(moment(alltimeStats.period_start_date), 'months', true)), 'month').startOf('month'),
+      start: moment().startOf('month'),
+      minDate: moment().subtract(Math.floor(moment().endOf('month').diff(moment(performance.presence['all-time'].period_start_date), 'months', true)), 'month').startOf('month'),
       maxDate: moment().endOf('month'),
       legend: [2, 4, 6, 8, 10],
       onClick: function (date, value) {
@@ -171,10 +164,10 @@ angular.module('dogweb')
       }
     };
 
-    $scope.heatmap.range = 4;
+    $scope.heatmap.range = 1;
     $scope.heatmap.data = {};
 
-    var date = moment(alltimeStats.period_start_date);
+    var date = moment(performance.presence['all-time'].period_start_date);
     while (date.isBefore(moment(), 'month') || date.isSame(moment(), 'month')) {
 
       $firebaseObject(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM') + '/_stats')).$loaded().then(function (_stats) {

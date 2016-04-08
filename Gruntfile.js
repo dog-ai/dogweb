@@ -117,10 +117,6 @@ module.exports = function (grunt) {
                 '/src/styles',
                 connect.static('./src/styles')
               ),
-              connect().use(
-                '/fonts',
-                connect.static('./bower_components/bootstrap-sass-official/assets/fonts/bootstrap') // temp solution until i remove bootstrap icons
-              ),
               connect.static(config.app)
             ];
           }
@@ -432,7 +428,7 @@ module.exports = function (grunt) {
           expand: true,
           flatten: true,
           cwd: '.',
-          src: ['bower_components/Ionicons/fonts/*', 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+          src: ['bower_components/Ionicons/fonts/*'],
           dest: '<%= config.dist %>/fonts/'
         }
 

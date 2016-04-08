@@ -6,7 +6,7 @@ angular.module('dogweb')
   .factory("CompanyEmployeeListFactory", function ($firebaseArray, $firebaseUtils, CompanyEmployee, lodash, Ref) {
     return function (companyId, companyEmployeesRef) {
       return $firebaseArray.$extend({
-        _adapter: undefined,
+        /*_adapter: undefined,*/
 
         $add: function (employee) {
           return Ref.child('/company_employees/' + companyId).push(employee)
@@ -24,15 +24,16 @@ angular.module('dogweb')
         $$added: function (snapshot) {
           var employee = new CompanyEmployee(companyId, snapshot.key());
 
-          if (this._adapter) {
+          /*if (this._adapter) {
             this._adapter.append([employee]);
-          }
+          }*/
 
           return employee;
         },
 
         $$updated: function () {
-          return false;
+          // do not update array items
+          return true;
         },
 
         $remove: function (employeeId) {
@@ -52,7 +53,7 @@ angular.module('dogweb')
           return true;
         },
 
-        get: function (index, count, callback) {
+        /*get: function (index, count, callback) {
           var result = lodash.toArray(this.$list);
 
           var promises = lodash.map(result.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (employee) {
@@ -65,7 +66,7 @@ angular.module('dogweb')
 
         setAdapter: function (adapter) {
           this._adapter = adapter;
-        }
+        }*/
 
       })(companyEmployeesRef);
     }

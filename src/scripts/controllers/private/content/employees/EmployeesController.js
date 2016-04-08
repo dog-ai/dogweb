@@ -23,8 +23,8 @@ angular.module('dogweb')
     $scope.apps = company.apps;
     $scope.employees = employees;
 
-    $scope.employeesAdapter = {};
-    employees.setAdapter($scope.employeesAdapter);
+    /*$scope.employeesAdapter = {};
+    employees.setAdapter($scope.employeesAdapter);*/
 
     $scope.openAddNewEmployeeModal = function () {
       $uibModal.open({

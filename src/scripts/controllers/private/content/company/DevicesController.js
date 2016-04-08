@@ -9,8 +9,8 @@ angular.module('dogweb')
   .controller('DevicesController', function ($scope, user, company, devices, CompanyEmployee, $uibModal) {
     $scope.devices = devices;
 
-    $scope.devicesAdapter = {};
-    devices.setAdapter($scope.devicesAdapter);
+    /*$scope.devicesAdapter = {};
+    devices.setAdapter($scope.devicesAdapter);*/
 
     $scope.openAddDeviceModal = function () {
 

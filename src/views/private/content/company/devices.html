@@ -3,7 +3,7 @@
   <div class="row devices">
 
     <!-- Devices -->
-    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
+    <div class="col-xs-12 col-md-8 col-md-offset-2">
 
       <table class="table table-hover">
         <tr>
@@ -15,28 +15,29 @@
           <th></th>
         </tr>
 
-        <tr ui-scroll="device in devices" buffer-size="5" adapter="devicesAdapter">
+        <!--<tr ui-scroll="device in devices" buffer-size="5" adapter="devicesAdapter">-->
+        <tr ng-repeat="device in devices | orderBy:['-is_present', '-last_presence_date']">
           <td>{{device.name}}</td>
           <td>{{device.manufacturer}}</td>
           <td>{{device.type}}</td>
           <td>{{device.os}}</td>
           <td>
-            <div ng-if="device.is_present">Just now</div>
+            <div ng-if="device.is_present">Just now <span am-time-ago="device.last_presence_date"></span></div>
             <div ng-if="!device.is_present"><span am-time-ago="device.last_presence_date"></span></div>
           </td>
           <td hidden am-time-ago="device.last_presence_date">
           <td>
             <div class="btn-group" uib-dropdown>
               <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
-                <span class="glyphicon glyphicon-cog"></span>
+                <i class="ionicons ion-gear-b"></i>
               </button>
               <ul class="uib-dropdown-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem"><a href="" ng-click="openEditDeviceModal(device)"><span
-                  class="glyphicon glyphicon-pencil"></span> Edit</a>
+                <li role="menuitem"><a href="" ng-click="openEditDeviceModal(device)">
+                  <i class="ionicons ion-edit"></i> Edit</a>
                 </li>
                 <li role="separator" class="divider"></li>
-                <li role="menuitem"><a href="" ng-click="openRemoveDeviceModal(device)"><span
-                  class="glyphicon glyphicon-trash"></span> Remove</a>
+                <li role="menuitem"><a href="" ng-click="openRemoveDeviceModal(device)">
+                  <i class="ionicons ion-ios-trash-outline"></i> Remove</a>
                 </li>
               </ul>
             </div>

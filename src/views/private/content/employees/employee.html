@@ -1,147 +1,209 @@
 <div id="employee-view">
 
   <div class="row">
-    <div class="col-md-3 col-md-offset-8">
-      <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    <div class="hidden-xs hidden-sm col-md-3 profile">
 
-        <input type="daterange" class="form-control"
-               ng-model="daterange"
-               format="YYYY/MM/DD"
-               separator="-"
-               ranges="ranges"
-               opens="left"
-          />
+      <div class="thumbnail">
+          <!-- loading-src is breaking the 2-way binding of the thumbnail image -->
+          <img ng-src="{{employee.picture_url || '//:0'}}"
+               fallback-src
+               alt="{{employee.full_name}}"
+               class="img-circle"
+               width="160" height="160"/>
 
+          <div class="caption">
+            <h3 class="employee-name">{{employee.full_name}}</h3>
+            <h4 class="employee-headline">{{employee.professional_headline}}</h4>
+          </div>
+
+        <div class="information">
+          <p><i class="ionicons ion-eye"></i> Last seen <span am-time-ago="employee.last_presence_date"></span></p>
+          <p><i class="ionicons ion-clock"></i> Added on {{employee.created_date | amDateFormat:'MMMM D, YYYY'}}</p>
+        </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6 data">
+
+      <!--<div class="row">
+        <div class="col-md-8 performance-indicator">
+          <div class="performance-indicator-previous">
+            <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
+                    class="glyphicon glyphicon-menu-left"></i></button>
+          </div>
+
+          <div class="performance-indicator-slide no-performance-indicator"
+               ng-hide="employee._performances">
+            No performance available yet ;(
+          </div>
+
+          <div class="performance-indicator-slide">
+            <slick autoplay="true"
+                   autoplay-speed="3000"
+                   infinite="true"
+                   slides-to-show="1"
+                   slides-to-scroll=1"
+                   draggable="false"
+                   touch-move="false"
+                   swipe="false"
+                   prev-arrow="#previous{{employee.$id}}PerformanceIndicator"
+                   next-arrow="#next{{employee.$id}}PerformanceIndicator">
+              <div>
+                <small>Average present hours per day</small>
+                <div class="performance-indicator-value average-total-duration">
+                  {{employee._performances.presence.average_total_duration | secondsToDateTime
+                  | date:'H'}} hours
+                  <i class="glyphicon"
+                     ng-class="employee._performances.presence.average_total_duration > employee._performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                </div>
+                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
+                </small>
+              </div>
+              <div>
+                <small>Average check-in time</small>
+                <div class="performance-indicator-value average-start-time">
+                  {{employee._performances.presence.average_start_time | secondsToDateTime |
+                  date:'HH:mm'}}
+                  <i class="glyphicon"
+                     ng-class="employee._performances.presence.average_start_time > employee._performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                </div>
+                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
+                </small>
+              </div>
+
+              <div>
+                <small>Average check-out time</small>
+                <div class="performance-indicator-value average-end-time">
+                  {{employee._performances.presence.average_end_time | secondsToDateTime |
+                  date:'HH:mm'}}
+                  <i class="glyphicon"
+                     ng-class="employee._performances.presence.average_end_time > employee._performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
+                </div>
+                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
+                </small>
+              </div>
+            </slick>
+          </div>
+
+          <div class="performance-indicator-next">
+            <button id="next{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
+                    class="glyphicon glyphicon-menu-right"></i></button>
+          </div>
+        </div>
+      </div>-->
+
+      <!-- Chart -->
+      <div class="row">
+        <div id="performance-chart" class="col-md-12">
+          <c3chart bindto-id="chart1"
+                   padding-left="15"
+                   padding-right="15"
+                   chart-data="presences"
+                   chart-columns="[{'id': 'is_present', 'type': 'area-step', 'name': 'Presence'}]"
+                   chart-x="{'id': 'created_date'}"
+                   transition-duration="0">
+
+            <chart-size chart-height="125" chart-width="500"/>
+
+            <chart-line step-type="step-after"/>
+
+            <chart-axis>
+              <chart-axis-x axis-id="created_date"
+                            axis-min="daterange.startDate"
+                            axis-max="daterange.endDate"
+                            type="timeseries">
+
+                <chart-axis-x-tick tick-fit="false"
+                                   tick-values="tickValues"
+                                   tick-format-function="formatTick"/>
+
+              </chart-axis-x>
+
+              <chart-axis-y show="false"/>
+            </chart-axis>
+
+            <chart-tooltip
+                    title-format-function="formatTooltipTitle"
+                    value-format-function="formatTooltipValue"/>
+
+          </c3chart>
+        </div>
       </div>
+
+    </div>
+
+    <div class="col-md-3 time">
+
+      <!-- Date range picker -->
+      <div class="row">
+        <div class="col-md-12 performance-daterange">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="ionicons ion-ios-calendar"></i></i></span>
+
+            <input type="daterange" class="form-control"
+                   ng-model="daterange"
+                   format="YYYY/MM/DD"
+                   separator="-"
+                   ranges="ranges"
+                   opens="left"
+            />
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar heatmap -->
+      <div class="row">
+        <div class="col-md-12 performance-heatmap">
+          <button id="heatmap-previous" class="btn btn-default btn-small cal-heatmap-previous">
+            <i class="ionicons ion-chevron-left"></i>
+          </button>
+
+          <cal-heatmap
+                  domain="month"
+                  sub-domain="x_day"
+                  range="{{heatmap.range}}"
+                  cell-size="26"
+                  cell-padding="10"
+                  cal-heatmap-tooltip="true"
+                  domain-dynamic-dimension="true"
+                  domain-gutter="12"
+
+                  display-legend="true"
+                  legend="{{heatmap.legend}}"
+
+                  item-name="hour"
+                  sub-domain-text-format="%d"
+
+                  data="heatmap.data"
+                  start="{{heatmap.start | amDateFormat:'YYYY/MM/DD'}}"
+                  min-date="{{heatmap.minDate | amDateFormat:'YYYY/MM/DD'}}"
+                  max-date="{{heatmap.maxDate | amDateFormat:'YYYY/MM/DD'}}"
+                  consider-missing-data-as-zero="false"
+                  highlight="daterange.startDate"
+
+                  animation-duration="200"
+                  item-namespace="domainDynamicDimension"
+                  next-selector="#heatmap-next"
+                  previous-selector="#heatmap-previous"
+
+                  on-click="heatmap.onClick(date, value)"
+                  on-complete="heatmap.onComplete()"
+                  after-load-data="heatmap.afterLoadData(data)"
+                  on-min-domain-reached="heatmap.onMinDomainReached(reached)"
+                  on-max-domain-reached="heatmap.onMaxDomainReached(reached)">
+          </cal-heatmap>
+
+          <button id="heatmap-next" class="btn btn-default btn-small cal-heatmap-next">
+            <i class="ionicons ion-chevron-right"></i>
+          </button>
+
+        </div>
+      </div>
+
     </div>
   </div>
-
-  <div class="row" style="margin-top: 60px;">
-    <div class="col-md-1 col-md-offset-1">
-
-      <button id="heatmap-previous" class="btn btn-default btn-small cal-heatmap-previous">
-        <i class="glyphicon glyphicon-menu-left"></i>
-      </button>
-
-    </div>
-
-    <div class="col-md-8">
-      <cal-heatmap
-        domain="month"
-        sub-domain="x_day"
-        range="{{heatmap.range}}"
-        cell-size="21"
-        cal-heatmap-tooltip="true"
-        domain-dynamic-dimension="true"
-        domain-gutter="12"
-
-        display-legend="true"
-        legend="{{heatmap.legend}}"
-
-        item-name="hour"
-        sub-domain-text-format="%d"
-
-        data="heatmap.data"
-        start="{{heatmap.start | amDateFormat:'YYYY/MM/DD'}}"
-        min-date="{{heatmap.minDate | amDateFormat:'YYYY/MM/DD'}}"
-        max-date="{{heatmap.maxDate | amDateFormat:'YYYY/MM/DD'}}"
-        consider-missing-data-as-zero="false"
-        highlight="daterange.startDate"
-
-        animation-duration="200"
-        item-namespace="domainDynamicDimension"
-        next-selector="#heatmap-next"
-        previous-selector="#heatmap-previous"
-
-        on-click="heatmap.onClick(date, value)"
-        on-complete="heatmap.onComplete()"
-        after-load-data="heatmap.afterLoadData(data)"
-        on-min-domain-reached="heatmap.onMinDomainReached(reached)"
-        on-max-domain-reached="heatmap.onMaxDomainReached(reached)"
-        >
-      </cal-heatmap>
-    </div>
-
-    <div class="col-md-2">
-      <button id="heatmap-next" class="btn btn-default btn-small cal-heatmap-next">
-        <i class="glyphicon glyphicon-menu-right"></i>
-      </button>
-
-    </div>
-  </div>
-
-  <!--<div class="row hide">
-    <div class="col-md-2 col-md-offset-2">
-      <p>Single day: none</p>
-
-      <p>Range of days: number of work days</p>
-    </div>
-    <div class="col-md-2">
-      <p>Single day: none</p>
-
-      <p>Range of days: number of uninterruptable working days</p>
-    </div>
-    <div class="col-md-2">
-      <p>Single day: none</p>
-
-      <p>Range of days: number of absent days</p>
-    </div>
-  </div>-->
-
-  <div class="row" style="margin-top: 60px;">
-    <div id="performance-chart" class="col-md-8 col-md-offset-2">
-      <c3chart bindto-id="chart1"
-               padding-left="15"
-               padding-right="15"
-               chart-data="presences"
-               chart-columns="[{'id': 'is_present', 'type': 'area-step', 'name': 'Presence'}]"
-               chart-x="{'id': 'created_date'}"
-               transition-duration="0">
-
-        <chart-size chart-height="150" chart-width="700"/>
-
-        <chart-line step-type="step-after"/>
-
-        <chart-axis>
-          <chart-axis-x axis-id="created_date"
-                        axis-min="daterange.startDate"
-                        axis-max="daterange.endDate"
-                        type="timeseries">
-
-            <chart-axis-x-tick tick-fit="false"
-                               tick-values="tickValues"
-                               tick-format-function="formatTick"/>
-
-          </chart-axis-x>
-
-          <chart-axis-y show="false"/>
-        </chart-axis>
-
-        <chart-tooltip
-          title-format-function="formatTooltipTitle"
-          value-format-function="formatTooltipValue"/>
-
-      </c3chart>
-    </div>
-  </div>
-
-  <!--<div class="row hide">
-    <div class="col-md-2 col-md-offset-2">
-      <p>Single day: total_duration</p>
-
-      <p>Range of days: Average of total_durations</p>
-    </div>
-    <div class="col-md-2">
-      <p>Single day: start hour</p>
-
-      <p>Range of days: average start hour</p>
-    </div>
-    <div class="col-md-2">
-      <p>Single day: finish hour</p>
-
-      <p>Range of days: Average finish hour</p>
-    </div>
-  </div>-->
 
 </div>

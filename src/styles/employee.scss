@@ -4,166 +4,257 @@
 
 #employee-view {
 
-  .daterangepicker .ranges li {
-    -webkit-border-radius: 0px !important;
-    -moz-border-radius: 0px !important;
-    border-radius: 0px !important;
+  .profile {
+    text-align: center;
 
-  }
+    .thumbnail {
+      background-color: transparent;
+      border: none;
+      //border-radius: 3px;
 
-  .daterangepicker.opensleft:after,
-  .daterangepicker.opensleft:before {
-    content: none;
-  }
+      img.img-circle {
+        margin-top: 35px;
+        height: 160px;
 
-  #performance-chart {
-    svg {
-      display: block;
-      margin: auto;
-    }
-
-    .c3-axis-x {
-      path, line {
-        stroke: #cccccc;
+        background-color: $brand-primary;
+        border: solid $brand-primary 3px;
       }
 
-      text {
-        fill: #999999;
+      .caption {
+
+        h3.employee-name {
+          min-height: 25px;
+
+          text-align: center;
+
+          font-size: 20px;
+          color: $brand-primary;
+
+          margin-top: 14px;
+          margin-bottom: 3px;
+
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        h4.employee-headline {
+          font-size: 16px;
+          min-height: 17px;
+          text-align: center;
+          color: #ccc;
+          font-weight: 400;
+          margin-top: 0;
+
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .information {
+        margin: 20px 15px 0 15px;
+
+        text-align: left;
+
+
+        p {
+          color: #999;
+          margin: 0 0 5px;
+        }
+
+        i {
+          font-size: 18px;
+          margin-right: 5px;
+          color: $brand-primary;
+          vertical-align: middle;
+        }
       }
     }
 
-    path {
-      &.c3-line-is-present {
-        stroke: $brand-primary !important;
+  }
+
+  .data {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: white;
+
+    min-height: 80%;
+    min-height: 80vh;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+
+    #performance-chart {
+      svg {
+        display: block;
+        margin: auto;
       }
 
-      &.c3-area-is-present {
-        fill: #76DCE5 !important;
+      .c3-axis-x {
+        path, line {
+          stroke: #cccccc;
+        }
+
+        text {
+          fill: #999999;
+        }
+      }
+
+      path {
+        &.c3-line-is-present {
+          stroke: $brand-primary !important;
+        }
+
+        &.c3-area-is-present {
+          fill: #76DCE5 !important;
+
+        }
+      }
+
+      .c3-legend-item-is-present {
+        text {
+          fill: #888888;
+
+        }
+
+        .c3-legend-item-tile {
+          fill: $brand-primary !important;
+        }
 
       }
     }
+  }
 
-    .c3-legend-item-is-present {
-      text {
-        fill: #888888;
+  .time {
+    .performance-daterange {
+      .input-group-addon {
+        border-radius: 3px 0 0 3px;
+
+        i {
+          font-size: 16px;
+        }
+      }
+
+      input {
+        border-radius: 0 3px 3px 0;
+      }
+
+      .daterangepicker .ranges li {
+        -webkit-border-radius: 0px !important;
+        -moz-border-radius: 0px !important;
+        border-radius: 0px !important;
 
       }
 
-      .c3-legend-item-tile {
-        fill: $brand-primary !important;
+      .daterangepicker.opensleft:after,
+      .daterangepicker.opensleft:before {
+        content: none;
+      }
+    }
+
+    .performance-heatmap {
+      margin-top: 20px;
+
+      text-align: center;
+
+      cal-heatmap {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
       }
 
+      .cal-heatmap-container {
+        margin: auto;
+      }
+
+      .cal-heatmap-container .q1 {
+        background-color: #DDF6F8;
+        fill: #DDF6F8;
+
+        & + .subdomain-text {
+          fill: white;
+        }
+      }
+
+      .cal-heatmap-container .q2 {
+        background-color: #BAEDF2;
+        fill: #BAEDF2;
+
+        & + .subdomain-text {
+          fill: white;
+        }
+      }
+
+      .cal-heatmap-container .q3 {
+        background-color: #98E4EB;
+        fill: #98E4EB;
+
+        & + .subdomain-text {
+          fill: white;
+        }
+      }
+
+      .cal-heatmap-container .q4 {
+        background-color: #76DCE5;
+        fill: #76DCE5;
+
+        & + .subdomain-text {
+          fill: white;
+        }
+      }
+
+      .cal-heatmap-container .q5 {
+        background-color: #54D3DE;
+        fill: #54D3DE;
+
+        & + .subdomain-text {
+          fill: white;
+        }
+      }
+
+      .cal-heatmap-container .q6 {
+        background-color: #2DC9D7;
+        fill: #2DC9D7;
+
+        & + .subdomain-text {
+          fill: white;
+        }
+      }
+
+      .cal-heatmap-container rect.now {
+        stroke: #444
+      }
+
+      .cal-heatmap-container text.now {
+        fill: #444;
+        font-weight: 800
+      }
+
+      .cal-heatmap-previous,
+      .cal-heatmap-next {
+        padding: 0;
+        color: #aaa;
+        border: none;
+        min-height: 140px;
+        background-color: $gray-lighter;
+
+        &:hover {
+          color: #666;
+          background-color: $gray-lighter;
+        }
+      }
+
+      .cal-heatmap-previous {
+        float: left;
+      }
+
+      .cal-heatmap-next {
+
+        float: right;
+      }
     }
   }
-
-  /*
-  html {
-    position: relative;
-    min-height: 100%;
-  }
-
-  body {
-    margin-bottom: 60px;
-  }
-
-  .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-  }
-  */
-
-  cal-heatmap {
-    position: initial !important;
-  }
-
-  .cal-heatmap-container {
-    margin: auto;
-  }
-
-  .cal-heatmap-container .q1 {
-    background-color: #DDF6F8;
-    fill: #DDF6F8;
-
-    & + .subdomain-text {
-      fill: white;
-    }
-  }
-
-  .cal-heatmap-container .q2 {
-    background-color: #BAEDF2;
-    fill: #BAEDF2;
-
-    & + .subdomain-text {
-      fill: white;
-    }
-  }
-
-  .cal-heatmap-container .q3 {
-    background-color: #98E4EB;
-    fill: #98E4EB;
-
-    & + .subdomain-text {
-      fill: white;
-    }
-  }
-
-  .cal-heatmap-container .q4 {
-    background-color: #76DCE5;
-    fill: #76DCE5;
-
-    & + .subdomain-text {
-      fill: white;
-    }
-  }
-
-  .cal-heatmap-container .q5 {
-    background-color: #54D3DE;
-    fill: #54D3DE;
-
-    & + .subdomain-text {
-      fill: white;
-    }
-  }
-
-  .cal-heatmap-container .q6 {
-    background-color: #2DC9D7;
-    fill: #2DC9D7;
-
-    & + .subdomain-text {
-      fill: white;
-    }
-  }
-
-  .cal-heatmap-container rect.now {
-    stroke: #444
-  }
-
-  .cal-heatmap-container text.now {
-    fill: #444;
-    font-weight: 800
-  }
-
-  .cal-heatmap-previous,
-  .cal-heatmap-next {
-    color: #aaa;
-    border: none;
-    min-height: 140px;
-    background-color: $gray-lighter;
-
-    &:hover {
-      color: #666;
-      background-color: $gray-lighter;
-    }
-  }
-
-  .cal-heatmap-previous {
-    float: right;
-  }
-
-  .slick-loading .slick-list {
-    background: none;
-  }
-
 }

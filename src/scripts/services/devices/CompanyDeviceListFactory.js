@@ -6,7 +6,7 @@ angular.module('dogweb')
   .factory("CompanyDeviceListFactory", function ($firebaseArray, CompanyDevice, lodash, Ref) {
     return function (companyId, companyDevicesRef) {
       return $firebaseArray.$extend({
-        _adapter: undefined,
+        /*_adapter: undefined,*/
 
         addDevice: function (device) {
           return Ref.child('/company_devices/' + companyId).push(device)
@@ -25,15 +25,43 @@ angular.module('dogweb')
         $$added: function (snapshot) {
           var device = new CompanyDevice(companyId, snapshot.key());
 
-          if (this._adapter) {
+          /*if (this._adapter) {
             this._adapter.prepend([device]);
-          }
+          }*/
+          
           return device;
         },
 
-        $$updated: function (snapshot) {
-          return false;
+        $$updated: function () {
+          // do not update array items
+          return true;
         },
+
+        /*$$moved: function (snapshot, prevChild) {
+          $firebaseArray.prototype.$$moved.apply(this, arguments);
+          $firebaseArray.prototype.$$process.apply(this, ['child_moved', this.$getRecord(snapshot.key()), prevChild]);
+          var result = lodash.toArray(this.$list);
+
+          var _this = this;
+
+          if (this._adapter) {
+            this._adapter.applyUpdates(function (item, scope, element, index) {
+              if (result[index - 1]) {
+                return [result[index - 1]];
+              } else {
+                console.log("ERROR");
+                console.log("index=" + index + " result.length=" + result.length);
+              }
+            });
+
+        
+            });
+
+            this._adapter.reload();
+          }
+
+          return false;
+        },*/
 
         removeDevice: function (deviceId) {
           return companyDevicesRef.child(deviceId).remove();
@@ -49,7 +77,7 @@ angular.module('dogweb')
           return true;
         },
 
-        get: function (index, count, callback) {
+        /*get: function (index, count, callback) {
           var result = lodash.toArray(this.$list);
 
           var promises = lodash.map(result.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (device) {
@@ -62,7 +90,7 @@ angular.module('dogweb')
 
         setAdapter: function (adapter) {
           this._adapter = adapter;
-        }
+        }*/
 
       })(companyDevicesRef);
     }

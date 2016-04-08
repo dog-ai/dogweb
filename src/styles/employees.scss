@@ -7,7 +7,6 @@
   #add-employee {
     margin-bottom: 20px;
     min-height: 333px;
-
     color: #bbbbbb;
 
     i {
@@ -19,8 +18,9 @@
 
       border-color: #dddddd;
       border-style: dashed;
-      border-width: 2px;
+      border-width: 1px;
       background-color: #fbfaf8;
+      border-radius: 3px;
     }
 
     &:hover {
@@ -32,8 +32,7 @@
 
   .thumbnail {
     background-color: white;
-    border: none;
-    //border-color: #eeeeee;
+    border-radius: 3px;
 
     &.not-present {
       opacity: 0.7;
@@ -65,18 +64,20 @@
       }
     }
 
-    li {
-      padding-right: 0;
-      padding-left: 0;
+    .apps {
+      li {
+        padding-right: 0;
+        padding-left: 0;
 
-      .label-default {
-        background-color: $brand-warning;
-      }
+        .label-default {
+          background-color: $brand-warning;
+        }
 
-      i {
-        font-size: 23px;
-        color: #FFB636;
-        vertical-align: middle;
+        i {
+          font-size: 23px;
+          color: #FFB636;
+          vertical-align: middle;
+        }
       }
     }
 
@@ -88,7 +89,7 @@
         border: none;
 
         i {
-          font-size: 18px;
+          font-size: 22px;
         }
 
         &:hover, &:focus {
@@ -97,6 +98,11 @@
           box-shadow: none;
           background-color: white;
         }
+      }
+
+      .dropdown-menu i {
+        margin-right: 3px;
+        font-size: 14px;
       }
     }
 
