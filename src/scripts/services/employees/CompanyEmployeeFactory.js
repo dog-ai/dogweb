@@ -3,7 +3,7 @@
  */
 
 angular.module('dogweb')
-  .factory("CompanyEmployeeFactory", function ($firebaseObject, $firebaseUtils, moment, Ref) {
+  .factory("CompanyEmployeeFactory", function ($firebaseObject, $firebaseUtils, moment, lodash, Ref) {
 
     function stripUnderscorePrefixedKeys(data) {
       if (!angular.isObject(data)) {
@@ -45,6 +45,22 @@ angular.module('dogweb')
         this.updated_date = moment().format();
 
         return $firebaseObject.prototype.$save.apply(this, arguments);
+      },
+
+      removeDevices: function (devices) {
+        var _this = this;
+
+        lodash.forEach(devices, function (device) {
+
+          if (device.$id) {
+            delete _this.devices[device.$id];
+
+            delete device.employee_id;
+            device.$save();
+          }
+        });
+
+        return this.$save();
       },
 
       removeDevice: function (deviceId) {

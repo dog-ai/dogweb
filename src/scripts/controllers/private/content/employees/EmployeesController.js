@@ -72,10 +72,13 @@ angular.module('dogweb')
         size: 'sm',
         resolve: {
           company: company,
-          employees: function () {
+          companyEmployees: function () {
             return employees;
           },
-          employee: employee
+          employee: employee,
+          employeeDevices: ['CompanyDeviceList', function (CompanyDeviceList) {
+            return new CompanyDeviceList(company.$id).findAllByEmployeeId(employee.$id);
+          }]
         }
       }).result.finally(function () {
 
@@ -290,11 +293,18 @@ angular.module('dogweb')
     }
   })
 
-  .controller('RemoveEmployeeModalController', function ($scope, company, employee, employees, $uibModalInstance) {
+  .controller('RemoveEmployeeModalController', function ($scope, company, companyEmployees, employee, employeeDevices, $uibModalInstance) {
     $scope.employee = employee;
 
     $scope.removeEmployee = function () {
-      return employees.$remove(employee.$id)
+
+      return companyEmployees.removeEmployee(employee.$id)
+        .then(function () {
+          return employee.removeDevices(employeeDevices)
+        })
+        .then(function () {
+          return employee.$remove();
+        })
         .then($uibModalInstance.close);
     };
   })

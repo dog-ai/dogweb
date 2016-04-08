@@ -36,14 +36,11 @@ angular.module('dogweb')
           return true;
         },
 
-        $remove: function (employeeId) {
-          return companyEmployeesRef.child(employeeId).remove()
-            .then(function () {
-              return Ref.child('/company_employees/' + companyId + '/' + employeeId).remove()
-            });
+        removeEmployee: function (employeeId) {
+          return companyEmployeesRef.child(employeeId).remove();
         },
 
-        $$removed: function (snapshot) {
+        /*$$removed: function (snapshot) {
           this._adapter.applyUpdates(function (item) {
             if (snapshot.key() === item.$id) {
               return [];
@@ -51,7 +48,7 @@ angular.module('dogweb')
           });
 
           return true;
-        },
+        },*/
 
         /*get: function (index, count, callback) {
           var result = lodash.toArray(this.$list);

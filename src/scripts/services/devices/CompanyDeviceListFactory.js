@@ -67,7 +67,23 @@ angular.module('dogweb')
           return companyDevicesRef.child(deviceId).remove();
         },
 
-        $$removed: function (snapshot) {
+        findAllByEmployeeId: function (employeeId) {
+          return Ref.child('company_devices/' + companyId).orderByChild('employee_id').equalTo(employeeId)
+            .once('value')
+            .then(function (snapshot) {
+              if (snapshot.exists()) {
+                var companyDevices = [];
+
+                snapshot.forEach(function (child) {
+                  companyDevices.push(new CompanyDevice(companyId, child.key()));
+                });
+
+                return companyDevices;
+              }
+            })
+        }
+
+        /*$$removed: function (snapshot) {
           this._adapter.applyUpdates(function (item) {
             if (snapshot.key() === item.$id) {
               return [];
@@ -75,7 +91,7 @@ angular.module('dogweb')
           });
 
           return true;
-        },
+        },*/
 
         /*get: function (index, count, callback) {
           var result = lodash.toArray(this.$list);
