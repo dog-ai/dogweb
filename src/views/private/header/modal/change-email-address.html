@@ -1,0 +1,24 @@
+<form name="form" role="form">
+  <div class="modal-header">
+    <h4 class="modal-title">Change e-mail address</h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required ng-model="password" class="form-control" autocomplete="off"/>
+    </div>
+
+    <div class="form-group">
+      <label for="emailAddress">E-mail address</label>
+      <input id="emailAddress" name="emailAddress" type="text" required ng-model="emailAddress" class="form-control" autocomplete="off"/>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
+    <button type="button" class="btn btn-primary" ng-click="save(password, emailAddress)">Yes, change</button>
+  </div>
+</form>

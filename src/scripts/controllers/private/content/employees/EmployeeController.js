@@ -31,6 +31,11 @@ angular.module('dogweb')
       var startDate = moment(daterange.startDate);
       var endDate = moment(daterange.endDate);
 
+      // clear presences
+      if ($scope.presences.length > 0) {
+        $scope.presences = [];
+      }
+
       if (endDate.diff(startDate, 'days') < 1) {
         $scope.tickValues = [
           startDate.clone().startOf('day').toDate(),
@@ -55,7 +60,9 @@ angular.module('dogweb')
       var date = startDate.clone();
 
       while (date.isSame(startDate) || date.isAfter(startDate) && date.isBefore(endDate) || date.isSame(endDate)) {
+
         $firebaseArray(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded().then(function (presences) {
+
           if (presences.length > 0) {
 
             for (var i = 0; i < presences.length; i++) {
@@ -66,6 +73,7 @@ angular.module('dogweb')
               // prettify start of day by placing an opposite presence
               if (i == 0) {
                 $scope.presences.push({
+                  _first: true,
                   created_date: moment(presences[i].created_date).startOf('day'),
                   is_present: !presences[i].is_present
                 });
@@ -106,6 +114,28 @@ angular.module('dogweb')
               }
 
             }
+
+
+            // estimate presence data
+            for (i = 0; i < $scope.presences.length; i++) {
+              if (i === 0 && !$scope.presences[i]._first && !$scope.presences[i]._last) {
+                $scope.presences[i].duration = true;
+              } else if (!$scope.presences[i]._first && !$scope.presences[i]._last) {
+                if (i+1 < $scope.presences.length && !$scope.presences[i].is_present && moment($scope.presences[i+1].created_date).diff(moment($scope.presences[i].created_date), 'minute') < 90) {
+                  $scope.presences[i].duration = true;
+
+                } else {
+                  $scope.presences[i].duration = false;
+
+                }
+
+              }
+
+              if (i+1 === $scope.presences.length) {
+                $scope.presences[i].duration = false;
+              }
+            }
+
           }
 
         });

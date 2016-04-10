@@ -110,22 +110,42 @@
 
       path {
         &.c3-line-is-present {
-          stroke: $brand-primary !important;
+          stroke: transparent !important;
         }
 
         &.c3-area-is-present {
-          fill: #76DCE5 !important;
+          fill: #BAEDF2 !important;
+          opacity: 1 !important;
+        }
 
+        &.c3-line-duration {
+          stroke: transparent !important;
+        }
+
+        &.c3-area-duration {
+          fill: #DDF6F8 !important;
+          opacity: 1 !important;
         }
       }
 
       .c3-legend-item-is-present {
         text {
-          fill: #888888;
+          fill: $text-color;
         }
 
         .c3-legend-item-tile {
-          fill: $brand-primary !important;
+          fill: #BAEDF2 !important;
+        }
+
+      }
+
+      .c3-legend-item-duration {
+        text {
+          fill: $text-color;
+        }
+
+        .c3-legend-item-tile {
+          fill: #DDF6F8 !important;
         }
 
       }

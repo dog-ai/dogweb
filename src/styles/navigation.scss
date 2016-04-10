@@ -67,11 +67,12 @@
 
     .badge.notifications {
       background-color: $brand-danger;
-      position: absolute;
-      left: 82px;
-      top: 10px;
-      font-size: 10px;
+      position: relative;
+      right: 5px;
+      top: -10px;
+      font-size: 8px;
       line-height: 12px;
+      float: right;
     }
 
     .navbar-header a {

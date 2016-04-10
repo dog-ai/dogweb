@@ -43,6 +43,34 @@ angular.module('dogweb')
       });
     };
 
+    $scope.openChangePasswordModal = function () {
+      return $uibModal.open({
+        animation: true,
+        templateUrl: '/views/private/header/modal/change-password.html',
+        controller: 'ChangePasswordModalController',
+        size: 'sm',
+        resolve: {
+          user: user
+        }
+      }).result.finally(function () {
+
+      });
+    };
+
+    $scope.openChangeEmailAddressModal = function () {
+      return $uibModal.open({
+        animation: true,
+        templateUrl: '/views/private/header/modal/change-email-address.html',
+        controller: 'ChangeEmailAddressModalController',
+        size: 'sm',
+        resolve: {
+          user: user
+        }
+      }).result.finally(function () {
+
+      });
+    };
+
   })
 
   .controller('SwitchCompanyModalController', function ($scope, user, company, userCompanies, Ref, $firebaseObject, $state, $stateParams, $timeout, $uibModalInstance, lodash) {
@@ -102,6 +130,32 @@ angular.module('dogweb')
 
     $scope.cancel = function () {
       $uibModalInstance.dismiss();
+    };
+  })
+
+  .controller('ChangePasswordModalController', function ($scope, user, Auth, $uibModalInstance) {
+
+    $scope.save = function (oldPassword, newPassword) {
+      return Auth.$changePassword({email: user.email, oldPassword: oldPassword, newPassword: newPassword})
+        .then(function () {
+
+          return user.$save();
+        })
+        .then($uibModalInstance.close)
+    };
+  })
+
+  .controller('ChangeEmailAddressModalController', function ($scope, user, Auth) {
+    
+    $scope.save = function (password, emailAddress) {
+
+      return Auth.$changeEmail({password: password, newEmail: emailAddress, oldEmail: user.email_address})
+        .then(function () {
+          user.email_address = emailAddress;
+          
+          return user.$save();
+        })
+        .then($uibModalInstance.close);
     };
   })
 
