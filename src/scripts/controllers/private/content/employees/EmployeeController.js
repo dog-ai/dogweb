@@ -160,11 +160,11 @@ angular.module('dogweb')
     };
 
     $scope.formatTooltipValue = function (data) {
-      return data == 1;
+      // omit tooltip value
     };
 
     $scope.formatTooltipTitle = function (data) {
-      return moment(data).format('HH:mm');
+      return moment(data).format('dddd [at] H:mm');
     };
 
     $scope.heatmap = {

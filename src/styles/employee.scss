@@ -149,6 +149,34 @@
         }
 
       }
+
+      .c3-tooltip-container {
+        padding: 1px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+
+        .c3-tooltip {
+          opacity: 1;
+
+          box-shadow: none;
+
+          tr {
+            padding: 1px;
+            border: none;
+          }
+
+          th {
+            font-size: 12px;
+            font-weight: $font-weight;
+            background-color: white;
+            color: #999;
+          }
+        }
+      }
+
+
     }
   }
 

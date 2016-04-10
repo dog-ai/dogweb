@@ -87,8 +87,29 @@
 }
 
 #login-view {
+  .account {
+    min-height: 65%;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+
+    text-align: center;
+  }
+
   .no-account {
+    font-weight: $font-weight;
     margin-top: 30px;
+  }
+}
+
+#forgot-password-view {
+  .email-reset {
+    min-height: 65%;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+
+    text-align: center;
   }
 }
 
@@ -110,5 +131,14 @@
       font-size: 21px;
       font-weight: 200;
     }
+  }
+
+  .use-invite {
+    min-height: 65%;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+
+    text-align: center;
   }
 }

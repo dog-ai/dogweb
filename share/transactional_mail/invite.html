@@ -96,12 +96,26 @@
     margin: 0 auto;
     Margin: 0 auto;
     text-align: inherit;
+
+    -moz-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
+    -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
   }
 
   table.row {
     padding: 0;
     width: 100%;
     position: relative;
+  }
+
+  tbody.invite {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px;
+  }
+
+  table.row.footer {
   }
 
   table.container table.row {
@@ -697,9 +711,9 @@
   }
 
   body, table.body, h1, h2, h3, h4, h5, h6, p, td, th, a {
-    color: #0a0a0a;
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: normal;
+    color: #999;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
     padding: 0;
     margin: 0;
     Margin: 0;
@@ -710,8 +724,8 @@
   h1, h2, h3, h4, h5, h6 {
     color: inherit;
     word-wrap: normal;
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: normal;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
     margin-bottom: 10px;
     Margin-bottom: 10px;
   }
@@ -760,7 +774,7 @@
     margin-bottom: 8px;
     Margin-top: 4px;
     Margin-bottom: 8px;
-    font-weight: normal;
+    font-weight: 300;
     line-height: 1.4;
     color: #8a8a8a;
   }
@@ -856,9 +870,9 @@
   }
 
   table.button table td a {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 300;
     color: #fefefe;
     text-decoration: none;
     display: inline-block;
@@ -877,7 +891,7 @@
 
   table.button.tiny table a {
     font-size: 10px;
-    font-weight: normal;
+    font-weight: 300;
   }
 
   table.button.small table td, table.button.small table a {
@@ -997,13 +1011,13 @@
   th.callout-inner.primary {
     background: #def0fc;
     border: 1px solid #444444;
-    color: #0a0a0a;
+    color: #999;
   }
 
   th.callout-inner.secondary {
     background: #ebebeb;
     border: 1px solid #444444;
-    color: #0a0a0a;
+    color: #999;
   }
 
   th.callout-inner.success {
@@ -1336,10 +1350,10 @@
     <td class="center" align="center" valign="top">
       <center data-parsed="">
         <table class="container body text-center">
-          <tbody>
+          <tbody class="invite">
           <tr>
             <td><br>
-              <center data-parsed=""><img src="https://dog.ai/images/logo.e9063f2b.png" height="128" alt=""
+              <center data-parsed=""><img src="https://dog.ai/images/logo.f06baa39.png" height="128" alt=""
                                           align="center" class="text-center"></center>
               <br>
               <table class="row">

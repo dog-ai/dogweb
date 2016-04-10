@@ -81,7 +81,7 @@ angular.module('dogweb')
           }
         })
         .state('public.forgot', {
-          url: "/forgot",
+          url: "/forgot?to&envelope",
           views: {
             'header': {
               templateUrl: '/views/public/navigation.html'
@@ -90,11 +90,13 @@ angular.module('dogweb')
               templateUrl: "/views/public/forgot-password.html",
               controller: 'ForgotPasswordController',
               resolve: {
-                auth: ["Auth", '$state', function (Auth, $state) {
+                auth: ["Auth", '$state', '$stateParams', function (Auth, $state, $stateParams) {
                   return Auth.$waitForAuth().then(function (auth) {
-                    if (auth !== null) {
-                      $state.go('private.content.dashboard');
+                    if (auth) {
+                      var stateName = $stateParams.to || 'private.content.dashboard';
+                      $state.go(stateName, $stateParams);
                     }
+                    return auth;
                   });
                 }]
               }
@@ -210,7 +212,7 @@ angular.module('dogweb')
             }]
           }
         })
-        .state('private.content.company.dogs', {
+        .state('private.content.company.dog', {
           url: "/dog",
           templateUrl: "/views/private/content/company/dog/dog.html",
           controller: 'DogController',

@@ -11,7 +11,8 @@
  * Manages authentication to any active providers.
  */
 angular.module('dogweb')
-  .controller('ForgotPasswordController', function ($scope, Auth) {
+  .controller('ForgotPasswordController', function ($scope, Auth, $stateParams) {
+    $scope.$stateParams = $stateParams;
 
     $scope.reset = function (email) {
       if ($scope.form.$invalid) {

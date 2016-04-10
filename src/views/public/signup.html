@@ -1,25 +1,23 @@
-<div id="signup-view">
-
-  <div class="container-fluid">
+<div id="signup-view" class="container-fluid">
 
     <div class="row sad-message" ng-hide="$stateParams.envelope">
-      <div class="col-xs-6 col-md-offset-3">
+      <div class="col-xs-12 col-sm-4 col-sm-offset-4">
         <span class="sad-face"><i class="ionicons ion-sad-outline"></i></span>
         <p>Sorry, we are invite only at the moment</p>
-        <a id="okay-button" ui-sref="public.teaser.landing" class="btn btn-default btn-lg" role="button">
+        <a id="okay-button" ui-sref="public.login" class="btn btn-default btn-lg" role="button">
           Okay!
         </a>
       </div>
     </div>
 
-    <div class="row" ng-show="$stateParams.envelope">
-      <div class="col-md-4 col-md-offset-4">
-        <legend>Sign Up</legend>
+    <div class="row use-invite" ng-show="$stateParams.envelope">
+      <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+        <legend hidden>Sign Up</legend>
         <form name="form" role="form" novalidate>
 
           <div class="form-group">
-            <label for="name">Name <span>*</span></label>
-            <input id="name" required name="name" type="text" ng-model="user.full_name" class="form-control"/>
+            <label for="name" hidden>Name <span>*</span></label>
+            <input id="name" required name="name" type="text" ng-model="user.full_name" class="form-control input-lg"/>
 
             <div class="help-block" ng-messages="form.name.$error"
                  ng-show="(form.$submitted || form.name.$touched) && form.name.$invalid" ng-cloak>
@@ -28,8 +26,8 @@
           </div>
 
           <div class="form-group" ng-hide="$stateParams.envelope">
-            <label for="email">E-mail <span>*</span></label>
-            <input id="email" name="email" type="email" ng-model="user.email_address" class="form-control"/>
+            <label for="email" hidden>E-mail <span>*</span></label>
+            <input id="email" name="email" type="email" ng-model="user.email_address" class="form-control input-lg"/>
 
             <div class="help-block" ng-messages="form.email.$error"
                  ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
@@ -40,9 +38,9 @@
           </div>
 
           <div class="form-group">
-            <label for="password">Password <span>*</span></label>
+            <label for="password" hidden>Password <span>*</span></label>
             <input id="password" required name="password" type="password" ng-model="user.password"
-                   class="form-control"/>
+                   class="form-control input-lg"/>
 
             <div class="help-block" ng-messages="form.password.$error"
                  ng-show="(form.$submitted || form.password.$touched) && form.password.$invalid" ng-cloak>
@@ -50,12 +48,17 @@
             </div>
           </div>
 
-          <p>
+          <p hidden>
             * required information
           </p>
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <p>
+                <button class="btn btn-default btn-lg btn-block" ui-sref="public.login($stateParams)">Go back</button>
+              </p>
+            </div>
+            <div class="col-md-8">
               <p>
                 <button class="btn btn-primary btn-lg btn-block" ng-click="register(user, company)">Sign
                   up
@@ -67,8 +70,6 @@
         <p ng-show="error" class="bg-danger">{{error}}</p>
       </div>
     </div>
-
-  </div>
 
 
 </div>
