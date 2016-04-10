@@ -1,94 +1,81 @@
 <div id="users-view">
 
   <div class="row">
-    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
 
-      <!-- Users -->
-      <div class="row users">
-        <div class="col-xs-12">
+    <!-- User/invite list -->
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 
-          <table class="table table-hover">
-            <tbody>
-
-            <tr>
-              <th>Name</th>
-              <th>E-mail</th>
-              <th>Added</th>
-              <th>Last seen</th>
-              <th></th>
-            </tr>
-            <tr ng-repeat="user in companyUsers">
-
-              <td>
-                <gravatar-image email="{{user.email_address}}" full-name="{{user.full_name}}" size="32"></gravatar-image>
-                {{user.full_name}}
-              </td>
-              <td>{{user.email_address}}</td>
-              <td am-time-ago="user.created_date"></td>
-              <td am-time-ago="user.last_seen_date"></td>
-              <td>
-                <div class="btn-group pull-right" uib-dropdown>
-                  <button type="button" class="btn btn-primary" uib-dropdown-toggle>
-                    <i class="ionicons ion-gear-b"></i>
-                  </button>
-                  <ul class="uib-dropdown-menu" role="menu">
-                    <li role="menuitem"><a href="" ng-click="openRemoveUserModal(user)">
-                      <i class="ionicons ion-ios-trash-outline"></i> Remove</a></li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            </tr>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <button class="btn btn-primary" ng-click="openInviteUserModal()">Invite user</button>
-        </div>
+      <!-- Invite user -->
+      <div id="invite-user" class="hidden-xs btn btn-default btn-block" ng-click="openInviteUserModal()">
+        <p><i class="ionicons ion-ios-paperplane"></i> Invite user</p>
       </div>
 
-      <!-- Invites -->
-      <div class="row invites" ng-show="companyInvites.getSize()" ng-cloak>
-        <div class="col-md-12">
+      <!-- User -->
+      <div class="thumbnail" ng-repeat="user in companyUsers | orderBy:['+created_date']"
+           ng-class="{'not-present': !user.isPresent(), 'present': user.isPresent()}">
 
-          <table class="table table-hover">
-            <tbody>
+        <!-- User information -->
+        <ul class="list-inline information">
+          <li>
+            <p>
+              <gravatar-image email="{{user.email_address}}" full-name="{{user.full_name}}" size="32"></gravatar-image>
+              {{user.full_name}}
+            </p>
+          </li>
+          <li><p><i class="ionicons ion-ios-email"></i> {{user.email_address}}</p></li>
+          <li class="hidden-xs hidden-sm hidden-md" ng-show="!user.isPresent()"><p><i class="ionicons ion-eye"></i> Last seen <span am-time-ago="user.last_seen_date"></span></p></li>
+          <li class="hidden-xs"><p><i class="ionicons ion-plus-circled"></i>Added on {{user.created_date | amDateFormat:'MMMM D, YYYY'}}</p></li>
+        </ul>
 
-            <tr>
-              <th>E-mail</th>
-              <th>Date invited</th>
-              <th></th>
-            </tr>
-            <tr ng-repeat="invite in companyInvites">
-
-              <td>
-                {{invite.email_address}}
-              </td>
-              <td am-time-ago="invite.created_date"></td>
-              <td>
-                <div class="btn-group pull-right" uib-dropdown>
-                  <button type="button" class="btn btn-primary" uib-dropdown-toggle>
-                    <i class="ionicons ion-gear-b"></i>
-                  </button>
-                  <ul class="uib-dropdown-menu" role="menu">
-                    <li role="menuitem"><a href="" ng-click="removeInvite(invite)">
-                      <i class="ionicons ion-ios-trash-outline"></i> Remove</a></li>
-                  </ul>
-                </div>
-              </td>
-
-            </tr>
-
-            </tbody>
-          </table>
+        <!-- User options -->
+        <div class="options">
+          <div class="btn-group" uib-dropdown>
+            <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle>
+              <i class="ionicons ion-gear-b"></i>
+            </button>
+            <ul class="uib-dropdown-menu pull-right" role="menu">
+              <li role="menuitem"><a href="" ng-click="openRemoveUserModal(user)">
+                <i class="ionicons ion-ios-trash-outline"></i> Remove</a></li>
+            </ul>
+          </div>
 
         </div>
+
+      </div>
+
+      <!-- Invite -->
+      <div class="thumbnail" ng-cloak ng-repeat="invite in companyInvites | orderBy:['+created_date']">
+
+        <!-- Invite information -->
+        <ul class="list-inline information">
+          <li>
+            <p>
+              <gravatar-image email="{{invite.email_address}}" full-name="{{user.full_name}}" size="32"></gravatar-image>
+              {{invite.full_name}}
+            </p>
+          </li>
+          <li><p><i class="ionicons ion-ios-email"></i> {{invite.email_address}}</p></li>
+          <li><p><i class="ionicons ion-ios-paperplane"></i> Invited on {{invite.created_date | amDateFormat:'MMMM D, YYYY'}}</p></li>
+        </ul>
+
+        <!-- Invite options -->
+        <div class="options">
+          <div class="btn-group" uib-dropdown>
+            <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle>
+              <i class="ionicons ion-gear-b"></i>
+            </button>
+            <ul class="uib-dropdown-menu pull-right" role="menu">
+              <li role="menuitem"><a href="" ng-click="removeInvite(invite)">
+                <i class="ionicons ion-ios-trash-outline"></i> Remove</a></li>
+            </ul>
+          </div>
+
+        </div>
+
       </div>
 
     </div>
+
   </div>
 
 </div>

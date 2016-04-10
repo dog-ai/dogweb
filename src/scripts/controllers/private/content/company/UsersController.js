@@ -32,7 +32,7 @@ angular.module('dogweb')
         animation: true,
         templateUrl: '/views/private/content/company/modal/invite-user.html',
         controller: 'InviteUserModalController',
-        size: null,
+        size: 'md',
         resolve: {
           user: user,
           company: company,

@@ -42,6 +42,10 @@ angular.module('dogweb')
 
           return this.$save();
         }
+      },
+
+      isPresent: function () {
+        return moment(this.last_seen_date).isAfter(moment().subtract(24, 'hour'));
       }
 
     });

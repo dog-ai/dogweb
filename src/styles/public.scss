@@ -8,6 +8,13 @@
 
 #public-view {
 
+  color: #666;
+
+  h1 {
+    color: #333;
+    font-weight: 500;
+  }
+
   .navbar-default {
     background-color: $body-bg;
     border: none;

@@ -2,6 +2,7 @@
 
   <div class="row employees">
 
+    <!-- Add employee -->
     <div class="hidden-xs col-xs-12 col-sm-6 col-md-4 col-lg-4">
       <button id="add-employee" class="btn btn-default btn-block" ng-click="openAddNewEmployeeModal()">
         <i class="ionicons ion-plus-circled"></i>
@@ -9,19 +10,21 @@
       </button>
     </div>
 
+    <!-- Employee -->
     <!--<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"
          ui-scroll="employee in employees" buffer-size="8" adapter="employeesAdapter">-->
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"
          ng-repeat-start="employee in employees | orderBy:['-is_present', '-last_presence_date']">
 
-      <div class="thumbnail" ng-class="{'not-present': !employee.is_present}">
+      <div class="thumbnail" ng-class="{'not-present': !employee.is_present, 'present': employee.is_present}">
 
-        <div>
-          <div class="btn-group options" uib-dropdown>
+        <!-- Employee options -->
+        <div class="options">
+          <div class="btn-group" uib-dropdown>
             <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle>
               <i class="ionicons ion-gear-b"></i>
             </button>
-            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="single-button">
+            <ul class="uib-dropdown-menu" role="menu">
               <li role="menuitem"><a href="" ng-click="openEditEmployeeModal(employee)">
                 <i class="ionicons ion-edit"></i> Edit</a></li>
               <li role="separator" class="divider"></li>
@@ -31,97 +34,30 @@
           </div>
         </div>
 
-        <div>
-          <a href="#/employees/{{employee.$id}}">
+        <a href="#/employees/{{employee.$id}}">
 
-            <!-- loading-src is breaking the 2-way binding of the thumbnail image -->
-            <img ng-src="{{employee.picture_url || '//:0'}}"
-                 fallback-src
-                 alt="{{employee.full_name}}"
-                 class="img-circle"
-                 width="160" height="160"/>
+          <!-- loading-src is breaking the 2-way binding of the thumbnail image -->
+          <img ng-src="{{employee.picture_url || '//:0'}}"
+               fallback-src
+               alt="{{employee.full_name}}"
+               class="img-circle"
+               width="160" height="160"/>
 
-            <div class="caption">
-              <h3 class="employee-name">{{employee.full_name}}</h3>
-              <h4 class="employee-headline">{{employee.professional_headline}}</h4>
+          <div class="caption">
+            <h3 class="employee-name">{{employee.full_name}}</h3>
+            <h4 class="employee-headline">{{employee.professional_headline}}</h4>
 
-              <ul class="list-inline apps">
-                <li ng-show="employee.linkedin_profile_url && apps['linkedin'].is_enabled">
-                  <i class="ionicons ion-social-linkedin"></i>
-                </li>
-                <li ng-show="employee.is_present">
-                  <span class="label label-default">Present</span>
-                </li>
-              </ul>
+            <ul class="list-inline apps">
+              <li ng-show="employee.linkedin_profile_url && apps['linkedin'].is_enabled">
+                <i class="ionicons ion-social-linkedin"></i>
+              </li>
+              <li ng-show="employee.devices && apps['presence'].is_enabled">
+                <span class="label label-default">Presence</span>
+              </li>
+            </ul>
 
-            </div>
-          </a>
-        </div>
-
-        <!--<div class="performance-indicator">
-          <div class="performance-indicator-previous" ng-show="employee._performances">
-            <button id="previous{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
-              class="glyphicon glyphicon-menu-left"></i></button>
           </div>
-
-          <div class="performance-indicator-slide no-performance-indicator"
-               ng-hide="employee._performances">
-            No performance available yet ;(
-          </div>
-
-          <div class="performance-indicator-slide" ng-show="employee._performances">
-            <slick autoplay="true"
-                   autoplay-speed="3000"
-                   infinite="true"
-                   slides-to-show="1"
-                   slides-to-scroll=1"
-                   draggable="false"
-                   touch-move="false"
-                   swipe="false"
-                   prev-arrow="#previous{{employee.$id}}PerformanceIndicator"
-                   next-arrow="#next{{employee.$id}}PerformanceIndicator">
-              <div>
-                <small>Average present hours per day</small>
-                <div class="performance-indicator-value average-total-duration">
-                  {{employee._performances.presence.average_total_duration | secondsToDateTime
-                  | date:'H'}} hours
-                  <i class="glyphicon"
-                     ng-class="employee._performances.presence.average_total_duration > employee._performances.presence.previous_average_total_duration ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
-                </div>
-                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
-                </small>
-              </div>
-              <div>
-                <small>Average check-in time</small>
-                <div class="performance-indicator-value average-start-time">
-                  {{employee._performances.presence.average_start_time | secondsToDateTime |
-                  date:'HH:mm'}}
-                  <i class="glyphicon"
-                     ng-class="employee._performances.presence.average_start_time > employee._performances.presence.previous_average_start_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
-                </div>
-                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
-                </small>
-              </div>
-
-              <div>
-                <small>Average check-out time</small>
-                <div class="performance-indicator-value average-end-time">
-                  {{employee._performances.presence.average_end_time | secondsToDateTime |
-                  date:'HH:mm'}}
-                  <i class="glyphicon"
-                     ng-class="employee._performances.presence.average_end_time > employee._performances.presence.previous_average_end_time ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down'"></i>
-                </div>
-                <small>{{employee._performances.presence | performanceIndicatorValuePeriod}}
-                </small>
-              </div>
-            </slick>
-          </div>
-
-          <div class="performance-indicator-next" ng-show="employee._performances">
-            <button id="next{{employee.$id}}PerformanceIndicator" type="button" class="btn btn-default btn-xs"><i
-              class="glyphicon glyphicon-menu-right"></i></button>
-          </div>
-        </div>-->
+        </a>
 
       </div>
 

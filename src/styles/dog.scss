@@ -1,0 +1,95 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+#dog-view {
+
+  .thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: white;
+
+    min-height: 80%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+
+    &:hover {
+
+      .options {
+        button {
+          opacity: 1;
+        }
+
+      }
+    }
+
+    &.present {
+      border-left: solid $brand-success 4px;
+    }
+
+    &.not-present {
+      border-left: solid $brand-warning 4px;
+    }
+
+    .options {
+      position: absolute;
+      left: 4px;
+
+
+      button {
+        transition: opacity 0.3s ease;
+
+        opacity: 0;
+
+        &:focus {
+          opacity: 1;
+        }
+
+        color: $gray-light;
+        padding: 5px 10px;
+        font-size: 18px;
+        border: none;
+
+        i {
+          font-size: 22px;
+        }
+
+        &:hover, &:focus {
+          color: #cccccc;
+          border: none;
+          box-shadow: none;
+          background-color: white;
+        }
+      }
+
+      .dropdown-menu i {
+        margin-right: 3px;
+        font-size: 14px;
+      }
+    }
+
+    .caption {
+      text-align: center;
+    }
+
+    .information {
+      margin-top: 40px;
+      text-align: left;
+
+      p {
+        font-weight: $font-weight;
+      }
+
+      i {
+        font-size: 18px;
+        margin-right: 5px;
+        color: $brand-primary;
+        vertical-align: middle;
+      }
+    }
+  }
+}

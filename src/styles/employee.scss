@@ -10,7 +10,6 @@
     .thumbnail {
       background-color: transparent;
       border: none;
-      //border-radius: 3px;
 
       img.img-circle {
         margin-top: 35px;
@@ -43,7 +42,6 @@
           min-height: 17px;
           text-align: center;
           color: #ccc;
-          font-weight: 400;
           margin-top: 0;
 
           white-space: nowrap;
@@ -61,6 +59,7 @@
         p {
           color: #999;
           margin: 0 0 5px;
+          font-weight: $font-weight;
         }
 
         i {
@@ -87,7 +86,13 @@
     align-items: center;
     justify-content: center;
 
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+
     #performance-chart {
+      text {
+        font-weight: $font-weight;
+      }
+
       svg {
         display: block;
         margin: auto;
@@ -117,7 +122,6 @@
       .c3-legend-item-is-present {
         text {
           fill: #888888;
-
         }
 
         .c3-legend-item-tile {
@@ -164,6 +168,39 @@
         position: relative;
         display: inline-block;
         vertical-align: middle;
+
+        .ch-tooltip {
+          font-weight: $font-weight;
+          background-color: white;
+          color: #999 !important;
+
+          border: 1px solid #ddd;
+          border-radius: 3px;
+
+          box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+
+          &:after {
+            border-top-color: white;
+          }
+
+          &:before {
+            position: absolute;
+
+            width: 0;
+            height: 0;
+            border: solid transparent;
+            content: "";
+
+            border-top-color: #ddd;
+            border-width: 7px 7px 0;
+            padding: 0;
+            display: block;
+            bottom: -8px;
+            left: 50%;
+            margin-left: -7px;
+          }
+        }
+
       }
 
       .cal-heatmap-container {

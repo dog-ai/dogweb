@@ -9,7 +9,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="email">E-mail</label>
-          <input id="email" required name="email" type="email" ng-model="invite.email_address" class="form-control"/>
+          <input id="email" required name="email" type="email" ng-model="invite.email_address" class="form-control" autocomplete="off"/>
 
           <div class="help-block" ng-messages="form.email.$error"
                ng-show="(form.$submitted || form.email.$touched) && form.email.$invalid" ng-cloak>
@@ -21,7 +21,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" ng-click="cancel()">No, wait</button>
+        <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
         <a type="button" class="btn btn-primary" wz-next>Yes, continue</a>
       </div>
     </wz-step>

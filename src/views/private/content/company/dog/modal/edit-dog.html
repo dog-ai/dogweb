@@ -1,0 +1,32 @@
+<form name="form" role="form"
+      ng-submit="save()"
+      ng-model-options="{updateOn: 'submit'}">
+
+  <div class="modal-header">
+    <h4 class="modal-title">Edit dog</h4>
+  </div>
+
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" class="form-control" required autocomplete="off"
+             ng-model="dog.name"
+             ng-model-options="{updateOn: 'submit'}"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="timezone">Timezone</label>
+      <input id="timezone" name="timezone" type="text" class="form-control" required autocomplete="off"
+             ng-model="dog.timezone"
+             ng-model-options="{updateOn: 'submit'}"
+      />
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
+    <button type="submit" class="btn btn-primary">Yes, save changes</button>
+  </div>
+</form>

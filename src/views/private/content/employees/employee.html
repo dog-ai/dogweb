@@ -17,8 +17,10 @@
           </div>
 
         <div class="information">
-          <p><i class="ionicons ion-eye"></i> Last seen <span am-time-ago="employee.last_presence_date"></span></p>
-          <p><i class="ionicons ion-clock"></i> Added on {{employee.created_date | amDateFormat:'MMMM D, YYYY'}}</p>
+          <p ng-show="employee.last_presence_date"><i class="ionicons ion-eye"></i> Last seen <span am-time-ago="employee.last_presence_date"></span></p>
+          <p ng-hide="employee.last_presence_date"><i class="ionicons ion-eye"></i> Never seen before</p>
+          <p><i class="ionicons ion-plus-circled"></i> Added on {{employee.created_date | amDateFormat:'MMMM D, YYYY'}}</p>
+          <p ng-show="employee.linkedin_last_import_date"><i class="ionicons ion-social-linkedin"></i> LinkedIn last synced <span am-time-ago="employee.linkedin_last_import_date"></span></p>
         </div>
 
         </div>

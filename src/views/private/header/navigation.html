@@ -1,4 +1,5 @@
-<div class="navbar navbar-default" role="navigation">
+<div id="navigation-view" class="navbar navbar-default" role="navigation">
+
   <div class="container-fluid">
 
     <div class="navbar-header">
@@ -9,7 +10,7 @@
         <span class="icon-bar"></span>
       </button>
 
-      <a class="navbar-brand text-hide" href="#/">dog.ai</a>
+      <a class="navbar-brand text-hide" href="#/dashboard">dog.ai</a>
       <span class="badge brand">beta</span>
     </div>
 
@@ -25,7 +26,8 @@
       <!-- Right navigation -->
       <ul class="nav navbar-nav navbar-right">
 
-        <li ui-view="notifications" class="dropdown notifications-dropdown" ng-show="company.created_date"></li>
+        <!-- Notifications -->
+        <li ui-view="notifications" id="notifications-view" class="dropdown notifications-dropdown" ng-show="company.created_date"></li>
 
         <!-- Shop -->
         <li ng-hide="company.created_date" class="disabled">
@@ -39,7 +41,7 @@
             {{company.name}}
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/dogs">Dogs</a></li>
+            <li><a href="#/dog">Dog</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#/apps">Apps</a></li>
             <li><a href="#/users">Users</a></li>

@@ -9,7 +9,7 @@
   <div class="modal-body">
     <div class="form-group">
       <label for="fullName">Name</label>
-      <input id="fullName" name="fullName" type="text" class="form-control" required
+      <input id="fullName" name="fullName" type="text" class="form-control" required autocomplete="off"
              ng-model="employee.full_name"
              ng-model-options="{updateOn: 'submit'}"
       />
@@ -17,14 +17,14 @@
 
     <div class="form-group">
       <label for="pictureUrl">Picture URL</label>
-      <input id="pictureUrl" name="pictureUrl" type="text" class="form-control"
+      <input id="pictureUrl" name="pictureUrl" type="text" class="form-control" autocomplete="off"
              ng-model="employee.picture_url"
              ng-model-options="{updateOn: 'submit'}"/>
     </div>
 
     <div class="form-group disabled">
       <label for="linkedInProfileUrl">LinkedIn Profile URL</label>
-      <input id="linkedInProfileUrl" name="linkedInProfileUrl" type="text" class="form-control"
+      <input id="linkedInProfileUrl" name="linkedInProfileUrl" type="text" class="form-control" autocomplete="off"
              ng-model="employee.linkedin_profile_url"
              ng-disabled="{{!apps['linkedin'].is_enabled}}"
              ng-model-options="{updateOn: 'submit'}"/>
@@ -33,7 +33,7 @@
 
     <div class="form-group">
       <label>Devices</label>
-      <oi-select id="employeeDevices" name="employeeDevices" multiple
+      <oi-select id="employeeDevices" name="employeeDevices" multiple autocomplete="off"
                  ng-model="employeeDevices"
                  oi-options="device.name for device in companyDevices track by device.$id"
                  oi-select-options="{

@@ -10,22 +10,75 @@
 @import "apps";
 @import "users";
 @import "devices";
+@import "dog";
+@import "navigation";
+@import "notifications";
+
+::selection {
+  color: white;
+  background: $brand-primary;
+}
+
+::-moz-selection {
+  color: white;
+  background: $brand-warning
+}
 
 .dropdown-menu {
-  -webkit-border-radius: 0px !important;
-  -moz-border-radius: 0px !important;
-  border-radius: 0px !important;
+  border-radius: 3px !important;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+
+  li > a {
+    font-weight: $font-weight;
+    color: $text-color;
+
+    &:hover {
+      color: $text-color;
+    }
+  }
+}
+
+/*.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}*/
+
+.modal-header {
+  border-bottom: none;
+  padding: 30px 15px 0 15px;
+
+  .modal-title {
+    color: $brand-primary;
+    text-align: center;
+  }
 }
 
 .modal-content {
-  -webkit-border-radius: 0px !important;
-  -moz-border-radius: 0px !important;
-  border-radius: 0px !important;
+  border: 1px solid #ddd;
+  border-radius: 3px !important;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+}
+
+.modal-footer {
+  border-top: none;
 }
 
 .btn {
   white-space: normal !important;
   word-wrap: break-word;
+
+  &.active.focus,
+  &.active:focus,
+  &.focus,
+  &:active.focus,
+  &:active:focus,
+  &:focus {
+    outline: 0;
+  }
+}
+
+.btn-default {
+  color: $text-color;
 }
 
 .browsehappy {
@@ -33,6 +86,53 @@
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
+}
+
+form label {
+  font-weight: $font-weight;
+}
+
+.form-control {
+  box-shadow: none;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+
+oi-select {
+  &:not([multiple]) {
+
+    &:not(.cleanMode) .select-search:after {
+      border-color: #777 transparent transparent;
+    }
+
+    .select-search-list-item_selection {
+      color: #777;
+      font-weight: $font-weight;
+    }
+  }
+
+  &.open .select-search {
+    border-bottom: none;
+  }
+
+  &.focused .select-search {
+    border-color: $brand-primary;
+    box-shadow: none;
+  }
+
+  .select-dropdown {
+    color: #777;
+    border-color: $brand-primary;
+    font-weight: $font-weight;
+    box-shadow: none;
+  }
+}
+
+input {
+  font-weight: $font-weight;
 }
 
 html {

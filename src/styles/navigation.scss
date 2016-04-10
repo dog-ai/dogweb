@@ -1,0 +1,126 @@
+/*
+ * Copyright (C) 2016, Hugo Freire <hugo@dog.ai>. All rights reserved.
+ */
+
+#navigation-view {
+
+  &.navbar-default {
+    border: none;
+
+    .dropdown-menu {
+
+      &:after, &:before {
+        position: absolute;
+        display: inline-block;
+        content:'';
+      }
+
+      &:after {
+        top: -10px;
+        right: 29%;
+        border-right: 12px solid transparent;
+        border-bottom: 12px solid white;
+        border-left: 12px solid transparent;
+      }
+
+      &:before {
+        top: -12px;
+        right: 29%;
+        border-right: 12px solid transparent;
+        border-bottom: 12px solid #ddd;
+        border-left: 12px solid transparent;
+      }
+    }
+
+    .navbar-collapse {
+      border-color: $gray-light;
+      box-shadow: none;
+    }
+
+    .navbar-toggle {
+      border-color: $brand-primary;
+
+      .icon-bar {
+        background-color: $brand-primary;
+      }
+
+      &:hover,
+      &:focus {
+        border-color: $brand-primary;
+        background-color: $gray-lighter;
+
+        .icon-bar {
+          background-color: $brand-primary;
+        }
+      }
+    }
+
+    .badge.brand {
+      position: absolute;
+      top: 4px;
+      left: -19px;
+      transform: rotate(-45deg);
+      width: 60px;
+      background-color: #BA55D3;
+      font-size: 8px;
+    }
+
+    .badge.notifications {
+      background-color: $brand-danger;
+      position: absolute;
+      left: 82px;
+      top: 10px;
+      font-size: 10px;
+      line-height: 12px;
+    }
+
+    .navbar-header a {
+
+      &.navbar-brand {
+        background: url(../images/logo.png) center/contain no-repeat;
+        width: 80px;
+        height: 35px;
+        margin-top: 6px;
+        font-size: 0px;
+      }
+    }
+
+    .navbar-nav > li > a {
+      font-size: 15px;
+      font-weight: 300;
+      color: $brand-primary;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .navbar-nav > li.dropdown {
+
+      &.open > a {
+        background: none;
+      }
+
+      &> a {
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+    .navbar-nav > li.active > a {
+      color: $brand-primary;
+      background-color: $gray-lighter;
+    }
+
+    .navbar-nav > li.disabled > a {
+    }
+
+    .navbar-nav .img-circle {
+      border: solid $brand-primary 1px;
+      margin-right: 5px;
+    }
+
+  }
+}

@@ -9,21 +9,36 @@ $brand-info: #5bc0de;
 $brand-warning: #FFB636;
 $brand-danger: #EF5F31;
 
-$gray-light: #EEEEEE;
+$gray-light: #e6e6e6;
 $gray-lighter: #FBFAF8;
 
-$navbar-default-color: #ffffff;
-$navbar-default-bg: $brand-primary;
+$navbar-default-color: $brand-primary;
+$navbar-default-bg: $gray-lighter;
 $navbar-default-border: #eeeeee;
 $navbar-border-radius: none;
+
+$btn-primary-border: $brand-primary;
+
+$border-radius-base: none;
+$border-radius-large: none;
+$border-radius-small: none;
+
+$font-weight: 300;
+$headings-font-weight: $font-weight;
 
 //$body-bg: $gray-lighter;
 $body-bg: white;
 
-$btn-primary-border: $brand-primary;
-$border-radius-base: none;
-$border-radius-large: none;
-$border-radius-small: none;
+$text-color: #999;
+
+$border-radius-base: 3px;
+
+$modal-sm: 300px;
+$modal-md: 400px;
+$modal-lg: 600px;
+
+$input-color: #777;
+$input-border-focus: $brand-primary;
 
 $icon-font-path: "../fonts/";
 // bower:scss

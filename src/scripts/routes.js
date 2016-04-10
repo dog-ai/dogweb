@@ -211,19 +211,15 @@ angular.module('dogweb')
           }
         })
         .state('private.content.company.dogs', {
-          url: "/dogs",
-          templateUrl: "/views/private/content/company/dogs.html",
-          controller: 'DogsController',
+          url: "/dog",
+          templateUrl: "/views/private/content/company/dog/dog.html",
+          controller: 'DogController',
           resolve: {
-            dog: ['company', 'Ref', '$firebaseObject', function (company, Ref, $firebaseObject) {
-              if (company.dog_id === undefined) {
-                return undefined;
-              } else {
-                return $firebaseObject(Ref.child('dogs/' + company.dog_id)).$loaded().then(function (dog) {
-                  return dog;
-                });
+            dog: ['company', 'Dog', function (company, Dog) {
+              if (company.dog_id) {
+                return new Dog(company.dog_id).$loaded();
               }
-            }],
+            }]
           }
         })
         .state('private.content.company.devices', {
