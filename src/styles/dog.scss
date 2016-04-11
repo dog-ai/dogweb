@@ -27,11 +27,11 @@
       }
     }
 
-    &.present {
+    &.online {
       border-left: solid $brand-success 4px;
     }
 
-    &.not-present {
+    &.not-online {
       border-left: solid $brand-warning 4px;
     }
 

@@ -10,10 +10,6 @@ angular.module('dogweb')
         this.updated_date = moment().format();
 
         return $firebaseObject.prototype.$save.apply(this, arguments);
-      },
-
-      isPresent: function () {
-        return moment(this.last_seen_date).isAfter(moment().subtract(11, 'minute'));
       }
     });
   });

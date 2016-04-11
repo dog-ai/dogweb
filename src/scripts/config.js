@@ -25,8 +25,8 @@ angular.module('dogweb')
       }
     }])
 
-  .run(['DOG_AI', '$rootScope', '$location', 'Auth', '$state', '$timeout', '$window', 'Ref', '$firebaseObject',
-    function (DOG_AI, $rootScope, $location, Auth, $state, $timeout, $window, Ref, $firebaseObject) {
+  .run(['DOG_AI', '$rootScope', '$location', 'Auth', '$state', '$timeout', '$window', 'User', 'Firebase',
+    function (DOG_AI, $rootScope, $location, Auth, $state, $timeout, $window, User, Firebase) {
 
       $rootScope.$state = $state;
 
@@ -37,33 +37,32 @@ angular.module('dogweb')
         }
 
         if (auth) {
-          var now = moment().format();
-          var userRef = Ref.child('/users/' + auth.uid);
+          var user = new User(auth.uid)
+          user.$loaded()
+            .then(function (user) {
 
-          $firebaseObject(userRef).$loaded().then(function (user) {
-
-            switch (DOG_AI.environment) {
-              case 'production':
-                Rollbar.configure({
-                  payload: {
-                    person: {
-                      username: user.full_name,
-                      id: auth.uid,
-                      email: user.email_address
+              switch (DOG_AI.environment) {
+                case 'production':
+                  Rollbar.configure({
+                    payload: {
+                      person: {
+                        username: user.full_name,
+                        id: auth.uid,
+                        email: user.email_address
+                      }
                     }
-                  }
-                });
-                break;
+                  });
+                  break;
 
-              default:
-            }
+                default:
+              }
 
-          });
+              user.is_online = true;
+              user.last_seen_date = Firebase.ServerValue.TIMESTAMP;
 
-          userRef.update({
-            updated_date: now,
-            last_seen_date: now
-          });
+              return user.$save();
+            });
+          user.$ref().onDisconnect().update({is_online: false, updated_date: Firebase.ServerValue.TIMESTAMP, last_seen_date: Firebase.ServerValue.TIMESTAMP});
         }
       });
 

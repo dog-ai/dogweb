@@ -12,7 +12,7 @@
 
       <!-- User -->
       <div class="thumbnail" ng-repeat="user in companyUsers | orderBy:['+created_date']"
-           ng-class="{'not-present': !user.isPresent(), 'present': user.isPresent()}">
+           ng-class="{'not-online': !user.is_online, 'online': user.is_online}">
 
         <!-- User information -->
         <ul class="list-inline information">
