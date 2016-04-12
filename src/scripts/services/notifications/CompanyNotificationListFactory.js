@@ -11,7 +11,7 @@ angular.module('dogweb')
 
         $$added: function (snapshot) {
           var notification = new CompanyNotification();
-          notification.setId(snapshot.key());
+          notification.$id = snapshot.key();
           notification.setUnread(snapshot.val());
 
           if (notification.isUnread()) {
@@ -19,7 +19,7 @@ angular.module('dogweb')
           }
 
           if (this._adapter) {
-            this._adapter.prepend([notification.$load(companyId, notification.getId())]);
+            this._adapter.prepend([notification.$load(companyId, notification.$id)]);
           }
 
           return notification;
@@ -38,10 +38,6 @@ angular.module('dogweb')
 
         },
 
-        $$getKey: function (notification) {
-          return notification.getId();
-        },
-
         getUnreadCount: function () {
           return this._unreadCount;
         },
@@ -51,13 +47,13 @@ angular.module('dogweb')
         },
 
         isUnread: function (notification) {
-          var index = this.$indexFor(notification.getId());
+          var index = this.$indexFor(notification.$id);
 
           return index > -1 ? this.$list[index].isUnread() : false;
         },
 
         markAsRead: function (notification) {
-          var index = this.$indexFor(notification.getId());
+          var index = this.$indexFor(notification.$id);
           if (index != -1 && this.$list[index].isUnread()) {
             this.$list[index].setUnread(false);
             this.$save(index);
@@ -70,7 +66,7 @@ angular.module('dogweb')
           var result = lodash.reverse(lodash.toArray(this.$list));
 
           var promises = lodash.map(result.slice(index - 1 < 0 ? 0 : index - 1, index - 1 + count), function (companyNotification) {
-            return angular.extend(companyNotification.$load(companyId, companyNotification.getId()), companyNotification);
+            return angular.extend(companyNotification.$load(companyId, companyNotification.$id), companyNotification);
           });
 
           Promise.all(promises)

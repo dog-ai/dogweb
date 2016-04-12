@@ -13,7 +13,7 @@
 
       <!-- Device -->
       <div class="thumbnail"
-           ng-repeat="device in devices | orderBy:['-is_present', '-last_presence_date']"
+           ng-repeat="device in devices | orderBy:['!is_present', '!last_presence_date', '-is_present', '-last_presence_date']"
            ng-class="{'not-present': !device.is_present, 'present': device.is_present}">
 
         <!-- Device information -->

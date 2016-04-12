@@ -14,14 +14,6 @@ angular.module('dogweb')
         return new CompanyNotificationFactory(Ref.child('/company_notifications/' + companyId + '/' + notificationId));
       },
 
-      setId: function (id) {
-        this.$id = id;
-      },
-
-      getId: function () {
-        return this.$id;
-      },
-
       isUnread: function () {
         return this._isUnread;
       },

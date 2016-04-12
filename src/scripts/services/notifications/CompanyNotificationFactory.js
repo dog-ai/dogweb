@@ -5,10 +5,7 @@
 angular.module('dogweb')
   .factory("CompanyNotificationFactory", function ($firebaseObject) {
     return $firebaseObject.$extend({
-      getId: function () {
-        return this.$id;
-      },
-
+      
       getUrl: function () {
         switch (this.module) {
           case 'employee':
