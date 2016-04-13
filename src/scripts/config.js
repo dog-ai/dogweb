@@ -25,18 +25,20 @@ angular.module('dogweb')
       }
     }])
 
-  .run(['DOG_AI', '$rootScope', '$location', 'Auth', '$state', '$timeout', '$window', 'User', 'Firebase',
-    function (DOG_AI, $rootScope, $location, Auth, $state, $timeout, $window, User, Firebase) {
+  .run(['DOG_AI', '$rootScope', '$location', 'Auth', '$state', '$timeout', '$window', 'User', 'Ref', 'Firebase',
+    function (DOG_AI, $rootScope, $location, Auth, $state, $timeout, $window, User, Ref, Firebase) {
 
       $rootScope.$state = $state;
 
       // watch for login status changes and redirect if appropriate
       Auth.$onAuth(function (auth) {
+
         if (!auth && $state.current && $state.current.name && $state.current.name.startsWith('private')) {
           $state.go('public.login');
         }
 
         if (auth) {
+
           var user = new User(auth.uid)
           user.$loaded()
             .then(function (user) {
@@ -57,12 +59,25 @@ angular.module('dogweb')
                 default:
               }
 
-              user.is_online = true;
-              user.last_seen_date = Firebase.ServerValue.TIMESTAMP;
+              // https://www.firebase.com/docs/web/guide/offline-capabilities.html#section-connection-state
+              Ref.child('.info/connected').on('value', function (snapshot) {
+                var connected = snapshot.val();
 
-              return user.$save();
-            });
-          user.$ref().onDisconnect().update({is_online: false, updated_date: Firebase.ServerValue.TIMESTAMP, last_seen_date: Firebase.ServerValue.TIMESTAMP});
+                if (connected) {
+                  user.is_online = true;
+                  user.last_seen_date = Firebase.ServerValue.TIMESTAMP;
+
+                  user.$save();
+
+                  user.$ref().onDisconnect().update({is_online: false, updated_date: Firebase.ServerValue.TIMESTAMP, last_seen_date: Firebase.ServerValue.TIMESTAMP});
+                } else {
+
+                }
+              });
+            })
+
+
+
         }
       });
 
@@ -70,8 +85,6 @@ angular.module('dogweb')
         if (error === "AUTH_REQUIRED") {
           toParams.to = toState.name;
           $state.go('public.login', toParams);
-        } else {
-          console.error(error);
         }
       });
     }
