@@ -52,7 +52,7 @@ angular.module('dogweb')
 
     $scope.save = function () {
       return companyApp.$save()
-        .then(function () {
+        /*.then(function () {
           if ($scope.form.companyPageUrl.$dirty) {
             var task = {
               event: 'social:linkedin:company:import',
@@ -60,7 +60,7 @@ angular.module('dogweb')
             };
             return company.addTask(task);
           }
-        })
+        })*/
         .then($uibModalInstance.close);
     };
   })
