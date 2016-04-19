@@ -136,12 +136,15 @@ angular.module('dogweb')
   .controller('ChangePasswordModalController', function ($scope, user, Auth, $uibModalInstance) {
 
     $scope.save = function (oldPassword, newPassword) {
-      return Auth.$changePassword({email: user.email, oldPassword: oldPassword, newPassword: newPassword})
+      return Auth.$changePassword({email: user.email_address, oldPassword: oldPassword, newPassword: newPassword})
         .then(function () {
 
           return user.$save();
         })
         .then($uibModalInstance.close)
+        .catch(function (error) {
+          console.log(error);
+        });
     };
   })
 

@@ -64,13 +64,14 @@ angular.module('dogweb')
                 var connected = snapshot.val();
 
                 if (connected) {
-                  user.is_online = true;
-                  user.last_seen_date = Firebase.ServerValue.TIMESTAMP;
 
-                  user.$save();
+                  user.$ref().onDisconnect().update({is_online: false, updated_date: Firebase.ServerValue.TIMESTAMP, last_seen_date: Firebase.ServerValue.TIMESTAMP})
+                  .then(function () {
+                    user.is_online = true;
+                    user.last_seen_date = Firebase.ServerValue.TIMESTAMP;
 
-                  user.$ref().onDisconnect().update({is_online: false, updated_date: Firebase.ServerValue.TIMESTAMP, last_seen_date: Firebase.ServerValue.TIMESTAMP});
-                } else {
+                    user.$save();
+                  })
 
                 }
               });

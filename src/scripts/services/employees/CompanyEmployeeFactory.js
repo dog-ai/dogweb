@@ -70,7 +70,6 @@ angular.module('dogweb')
       },
 
       isEstimatedToBePresent: function () {
-        console.log("aqui");
         if (this.last_presence_date && !this.is_present) {
           if (moment(this.last_presence_date).isAfter(moment().subtract(90, 'minute'))) {
             return true;

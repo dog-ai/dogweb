@@ -16,6 +16,8 @@ angular.module('dogweb')
       })
       .then(function () {
         inviteCompanyInvites.$remove(lodash.find(inviteCompanyInvites, {$id: invite.$id}))
+        invite.$remove();
+
         $state.go('private.content.dashboard', null, {reload: true});
       })
     ;
