@@ -69,6 +69,17 @@ angular.module('dogweb')
         return this.$save();
       },
 
+      isEstimatedToBePresent: function () {
+        console.log("aqui");
+        if (this.last_presence_date && !this.is_present) {
+          if (moment(this.last_presence_date).isAfter(moment().subtract(90, 'minute'))) {
+            return true;
+          }
+        }
+
+        return false;
+      },
+
       toJSON: function () {
         return $firebaseUtils.toJSON(stripUnderscorePrefixedKeys(this));
       }

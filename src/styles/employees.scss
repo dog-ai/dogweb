@@ -81,6 +81,19 @@
           color: #888888;
         }
       }
+
+      &.estimated-to-be-present {
+        border-left: solid $brand-warning 4px;
+        opacity: 1;
+        filter: none;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.04);
+
+        a {
+          img {
+            filter: none;
+          }
+        }
+      }
     }
 
     .options {
