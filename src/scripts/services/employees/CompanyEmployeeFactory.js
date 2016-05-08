@@ -47,6 +47,18 @@ angular.module('dogweb')
         return $firebaseObject.prototype.$save.apply(this, arguments);
       },
 
+      $remove: function () {
+        var _this = this;
+
+        return $firebaseObject.prototype.$remove.apply(this, arguments)
+          .then(function () {
+            // remove employee performance
+            var ref = Ref.child('company_employee_performances/' + _this.$ref().parent().key() + '/' + _this.$id);
+
+            return $firebaseObject(ref).$remove();
+          });
+      },
+
       removeDevices: function (devices) {
         var _this = this;
 
