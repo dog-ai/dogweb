@@ -51,7 +51,7 @@ module.exports = function (grunt) {
             environment: 'production'
           },
           ROLLBAR: {
-            access_token: '9301a9f4397246c6b36c87fa224da83a',
+            access_token: process.env.ROLLBAR_API_KEY,
             environment: 'production'
           }
         }
