@@ -2,6 +2,8 @@ dist
 var
 node_modules
 bower_components
+
+.idea
 *.iml
 *.ipr
 *.iws
