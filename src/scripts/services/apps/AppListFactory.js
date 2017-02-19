@@ -25,7 +25,12 @@ angular.module('dogweb')
         if (app) {
           return app.description;
         }
-      }
+      },
 
+      isHidden: function (id) {
+        var app = this.$getRecord(id);
+
+        return app && app.is_hidden
+      }
     });
   });
