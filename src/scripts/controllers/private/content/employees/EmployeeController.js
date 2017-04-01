@@ -74,19 +74,19 @@ angular.module('dogweb')
               if (i == 0) {
                 $scope.presences.push({
                   _first: true,
-                  created_date: moment(presences[i].created_date).startOf('day'),
+                  created_date: moment(presences[ i ].created_date * 1000).startOf('day'),
                   is_present: !presences[i].is_present
                 });
               }
 
-              presences[i].created_date = moment(presences[i].created_date);
+              presences[ i ].created_date = moment(presences[ i ].created_date * 1000);
               if (!lodash.some($scope.presences, {$id: presences[i].$id})) {
                 $scope.presences.push(presences[i]);
               }
 
-              if ((i == (presences.length - 1)) && presences[i].is_present && !moment(presences[i].created_date).isSame(moment(), 'day')) {
+              if ((i == (presences.length - 1)) && presences[ i ].is_present && !moment(presences[ i ].created_date * 1000).isSame(moment(), 'day')) {
                 $scope.presences.push({
-                  created_date: moment(presences[i].created_date).endOf('day'),
+                  created_date: moment(presences[ i ].created_date * 1000).endOf('day'),
                   is_present: false
                 });
               }
@@ -106,7 +106,7 @@ angular.module('dogweb')
                 } else {
                   $scope.presences.push({
                     _last: true,
-                    created_date: moment(employee.updated_date),
+                    created_date: moment(employee.updated_date * 1000),
                     is_present: false
                   });
                 }

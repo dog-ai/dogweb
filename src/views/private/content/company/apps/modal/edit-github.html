@@ -1,0 +1,32 @@
+<form name="form" role="form"
+      ng-submit="save()"
+      ng-model-options="{updateOn: 'submit'}">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Configure {{app.name}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="form-group">
+            <label for="personalAcessToken">Personal access token</label>
+            <input id="personalAcessToken" name="personalAcessToken" type="text"
+                   class="form-control" autocomplete="off"
+                   ng-model="companyApp.api_token"/>
+        </div>
+
+        <div class="form-group">
+            <label for="greenkeeperMergeOwner">Automatically merge Pull Requests from
+                Greenkeeper</label>
+            <input id="greenkeeperMergeOwner" name="greenkeeperMergeOwner" type="text"
+                   class="form-control" autocomplete="off"
+                   ng-model="companyApp.greenkeeper.merge_owner"/>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="$dismiss()">No, wait</button>
+        <button type="submit" class="btn btn-primary">Yes, save changes</button>
+    </div>
+</form>
