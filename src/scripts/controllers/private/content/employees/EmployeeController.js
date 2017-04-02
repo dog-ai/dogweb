@@ -24,83 +24,6 @@ angular.module('dogweb')
       $scope.selectDaterange(daterange);
     });
 
-    function buildPresences (startDate, presences) {
-      var _presences = []
-
-      for (var i = 0; i < presences.length; i++) {
-        if (presences[ i ].$id.indexOf('_') == 0) {
-          break;
-        }
-
-        // prettify start of day by placing an opposite presence
-        if (i == 0) {
-          _presences.push({
-            _first: true,
-            created_date: moment(presences[ i ].created_date * 1000).startOf('day'),
-            is_present: !presences[ i ].is_present
-          });
-        }
-
-        presences[ i ].created_date = moment(presences[ i ].created_date * 1000);
-        if (!lodash.some(_presences, { $id: presences[ i ].$id })) {
-          _presences.push(presences[ i ]);
-        }
-
-        if ((i == (presences.length - 1)) && presences[ i ].is_present && !moment(presences[ i ].created_date * 1000).isSame(moment(), 'day')) {
-          _presences.push({
-            created_date: moment(presences[ i ].created_date * 1000).endOf('day'),
-            is_present: false
-          });
-        }
-      }
-
-      if (startDate.isSame(moment().startOf('day')) && presences[ presences.length - 1 ]._last === undefined) {
-
-        var presence = presences[ presences.length - 1 ];
-        if (presence.is_present) {
-
-          if (employee.is_present) {
-            _presences.push({
-              _last: true,
-              created_date: moment(),
-              is_present: false
-            });
-          } else {
-            _presences.push({
-              _last: true,
-              created_date: moment(employee.updated_date * 1000),
-              is_present: false
-            });
-          }
-
-        }
-
-      }
-
-      return _presences
-    }
-
-    function buildPresenceEstimates (presences) {
-      for (var i = 0; i < presences.length; i++) {
-        if (i === 0 && !presences[ i ]._first && !presences[ i ]._last) {
-          presences[ i ].duration = true;
-        } else if (!presences[ i ]._first && !$scope.presences[ i ]._last) {
-          if (i + 1 < presences.length && !presences[ i ].is_present && moment(presences[ i + 1 ].created_date).diff(moment(presences[ i ].created_date), 'minute') < 90) {
-            presences[ i ].duration = true;
-
-          } else {
-            presences[ i ].duration = false;
-
-          }
-
-        }
-
-        if (i + 1 === presences.length) {
-          presences[ i ].duration = false;
-        }
-      }
-    }
-
     $scope.selectDaterange = function (daterange) {
       if (daterange === undefined || daterange === null || daterange.startDate === null) {
         return
@@ -133,21 +56,94 @@ angular.module('dogweb')
         }
       }
 
+
       var date = startDate.clone();
 
       while (date.isSame(startDate) || date.isAfter(startDate) && date.isBefore(endDate) || date.isSame(endDate)) {
 
-        $firebaseArray(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded()
-          .then(function (presences) {
-            if (presences.length > 0) {
-              $scope.presences = buildPresences(startDate, presences)
+        $firebaseArray(Ref.child('company_employee_performances/' + company.$id + '/' + employee.$id + '/presence/' + date.format('YYYY/MM/DD'))).$loaded().then(function (presences) {
 
-              buildPresenceEstimates($scope.presences)
+          if (presences.length > 0) {
+
+            for (var i = 0; i < presences.length; i++) {
+              if (presences[ i ].$id.indexOf('_') == 0) {
+                break;
+              }
+
+              presences[ i ].created_date = moment(presences[ i ].created_date * 1000);
+
+              // prettify start of day by placing an opposite presence
+              if (i == 0) {
+                $scope.presences.push({
+                  _first: true,
+                  created_date: moment(presences[ i ].created_date).startOf('day'),
+                  is_present: !presences[ i ].is_present
+                });
+              }
+
+              if (!lodash.some($scope.presences, { $id: presences[ i ].$id })) {
+                $scope.presences.push(presences[ i ]);
+              }
+
+              if ((i == (presences.length - 1)) && presences[ i ].is_present && !moment(presences[ i ].created_date).isSame(moment(), 'day')) {
+                $scope.presences.push({
+                  created_date: moment(presences[ i ].created_date).endOf('day'),
+                  is_present: false
+                });
+              }
             }
-          });
+
+            if (startDate.isSame(moment().startOf('day')) && $scope.presences[ $scope.presences.length - 1 ]._last === undefined) {
+
+              var presence = $scope.presences[ $scope.presences.length - 1 ];
+              if (presence.is_present) {
+
+                if (employee.is_present) {
+                  $scope.presences.push({
+                    _last: true,
+                    created_date: moment(),
+                    is_present: false
+                  });
+                } else {
+                  $scope.presences.push({
+                    _last: true,
+                    created_date: moment(employee.updated_date),
+                    is_present: false
+                  });
+                }
+
+              }
+
+            }
+
+            // estimate presence data
+            for (i = 0; i < $scope.presences.length; i++) {
+              if (i === 0 && !$scope.presences[ i ]._first && !$scope.presences[ i ]._last) {
+                $scope.presences[ i ].duration = true;
+              } else if (!$scope.presences[ i ]._first && !$scope.presences[ i ]._last) {
+                if (i + 1 < $scope.presences.length && !$scope.presences[ i ].is_present && moment($scope.presences[ i + 1 ].created_date).diff(moment($scope.presences[ i ].created_date), 'minute') < 90) {
+                  $scope.presences[ i ].duration = true;
+
+                } else {
+                  $scope.presences[ i ].duration = false;
+
+                }
+
+              }
+
+              if (i + 1 === $scope.presences.length) {
+                $scope.presences[ i ].duration = false;
+              }
+            }
+
+          }
+
+        });
 
         date = date.clone().add(1, 'day');
       }
+
+      console.log($scope.presences)
     };
 
     $scope.formatTick = function (tick) {
